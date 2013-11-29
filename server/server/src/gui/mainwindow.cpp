@@ -1,4 +1,4 @@
-#include "../../evse/gui/mainwindow.h"
+#include <evse/gui/mainwindow.hpp>
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
