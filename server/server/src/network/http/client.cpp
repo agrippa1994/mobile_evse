@@ -18,7 +18,9 @@ void evse::network::tcp::http::client::onData(size_t bytes)
     for(auto i : req.getGETValues())
         cout << "GET: " << i.first << " : " << i.second << endl;
     
+
     m_socket.write_some(boost::asio::buffer(rep.createReply()));
+    cout << req.getRequestedFile() << " gesendet" << endl;
 }
 
 void evse::network::tcp::http::client::onDisconnect()

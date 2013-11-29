@@ -41,17 +41,27 @@ HEADERS  += \
 FORMS    += utils/mainwindow.ui
 
 
+
 linux-g++{
     BOOST_DIR = /usr/local/boost_x64
 }
 
 linux-rasp-pi-g++{
+    #Rasperry PI
+    target.path = /home/pi/server
+    TARGET = server
+    INSTALLS += target
+
+    DEFINES += RASPBERRY_PI
+
     BOOST_DIR = /usr/local/boost_arm
 }
 
 BOOST_DIR_LIBS = $$BOOST_DIR/lib/
 
+unix:!macx: LIBS += -lrt
 unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_system.a
+unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_thread.a
 
 # Boost Ordner
 INCLUDEPATH += $$BOOST_DIR

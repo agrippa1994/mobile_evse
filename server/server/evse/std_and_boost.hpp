@@ -16,6 +16,7 @@
 #include <fstream>
 
 // BOOST
+#include <boost/thread.hpp>
 #include <boost/asio.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/regex.h>
