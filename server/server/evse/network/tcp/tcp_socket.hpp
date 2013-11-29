@@ -1,5 +1,5 @@
-#ifndef __HTTP_Server_mani__tcp_socket__
-#define __HTTP_Server_mani__tcp_socket__
+#ifndef TCP_SOCKET_HPP
+#define TCP_SOCKET_HPP
 
 #include <evse/std_and_boost.hpp>
 #include "tcp_server.hpp"

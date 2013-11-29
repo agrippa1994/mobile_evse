@@ -1,14 +1,14 @@
 #include <evse/gui/mainwindow.hpp>
 #include "ui_mainwindow.h"
 
-MainWindow::MainWindow(QWidget *parent) :
+evse::gui::mainwindow::mainwindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 }
 
-MainWindow::~MainWindow()
+evse::gui::mainwindow::~mainwindow()
 {
     delete ui;
 }

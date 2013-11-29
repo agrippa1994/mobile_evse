@@ -1,5 +1,5 @@
-#ifndef __HTTP_Server_mani__script__
-#define __HTTP_Server_mani__script__
+#ifndef SCRIPT_HPP
+#define SCRIPT_HPP
 
 #include <evse/std_and_boost.hpp>
 

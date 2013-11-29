@@ -1,5 +1,5 @@
-#ifndef HTTP_Server_mani_http_server_h
-#define HTTP_Server_mani_http_server_h
+#ifndef SERVER_HPP
+#define SERVER_HPP
 
 #include "../tcp_server.hpp"
 #include "client.hpp"
@@ -10,7 +10,7 @@ namespace evse {
         namespace tcp {
             namespace http{
 
-                class http_server : public tcp_server<http_client>
+                class server : public tcp_server<client>
                 {
                     // Pfad zu den HTML Dateien
                     string m_www;
@@ -20,7 +20,7 @@ namespace evse {
 
 
                 public:
-                    http_server(string port, string www);
+                    server(string port, string www);
 
                     // Gibt den Pfad zur Website zurück
                     const string& getWWW() const { return m_www; }

@@ -1,5 +1,5 @@
-#ifndef HTTP_Server_mani_std_and_boost_h
-#define HTTP_Server_mani_std_and_boost_h
+#ifndef STD_AND_BOOST_HPP
+#define STD_AND_BOOST_HPP
 
 // STD
 #include <iostream>

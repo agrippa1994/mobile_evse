@@ -1,5 +1,5 @@
-#ifndef HTTP_Server_mani_http_client_h
-#define HTTP_Server_mani_http_client_h
+#ifndef CLIENT_HPP
+#define CLIENT_HPP
 
 #include "../tcp_socket.hpp"
 
@@ -8,10 +8,10 @@ namespace evse {
         namespace tcp {
             namespace http{
                 
-            class http_client : public tcp_socket<http_client>
+            class client : public tcp_socket<client>
                 {
                 public:
-                    http_client(class http_server *ptr, boost::asio::ip::tcp::socket socket);
+                    client(class server *ptr, boost::asio::ip::tcp::socket socket);
 
                 protected:
                     // Daten-Callback

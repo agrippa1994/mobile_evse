@@ -6,7 +6,7 @@
 
 bool evse::network::tcp::http::script::exec()
 {
-    http_server *svr = (http_server *)m_reply->getClient()->getServer();
+    server *svr = (server *)m_reply->getClient()->getServer();
     script_manager& mgr = svr->getScriptManager();
     
     for(auto i : mgr.getFunctions())

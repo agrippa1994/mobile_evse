@@ -3,7 +3,7 @@
 #include <evse/network/tcp/http/client.hpp>
 
 
-evse::network::tcp::http::reply::reply(http_client *cl, request& req, const string& www) : m_www(www), m_request(req), m_client(cl)
+evse::network::tcp::http::reply::reply(client *cl, request& req, const string& www) : m_www(www), m_request(req), m_client(cl)
 {
     
 }

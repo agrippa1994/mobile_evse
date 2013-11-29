@@ -1,5 +1,5 @@
-#ifndef __HTTP_Server_mani__request__
-#define __HTTP_Server_mani__request__
+#ifndef REQUEST_HPP
+#define REQUEST_HPP
 
 #include <evse/std_and_boost.hpp>
 
@@ -9,7 +9,7 @@ namespace evse {
             namespace http{
     
                 //forwards
-                class http_client;
+                class client;
                 // typedefs
                 typedef map<string, string> string_map;
 
@@ -28,11 +28,11 @@ namespace evse {
                     string m_mime_type;
 
                     // Pointer zum Client, der den Request erstellt hat
-                    http_client* m_client;
+                    client* m_client;
 
 
                 public:
-                    explicit request(http_client *cl, const string& http_header);
+                    explicit request(client *cl, const string& http_header);
 
                     // HTTP-Header
                     const string& getHTTPHeader() const { return m_http_header; }
@@ -47,7 +47,7 @@ namespace evse {
                     const string& getMIMEType() const { return m_mime_type; }
 
                     // Client Pointer
-                    http_client *getClient() { return m_client; }
+                    client *getClient() { return m_client; }
                 };
     
             }

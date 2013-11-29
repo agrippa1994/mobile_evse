@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef MAINWINDOW_HPP
+#define MAINWINDOW_HPP
 
 #include <QMainWindow>
 
@@ -7,16 +7,22 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
-{
-    Q_OBJECT
+namespace evse {
+    namespace gui {
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    class mainwindow : public QMainWindow
+    {
+        Q_OBJECT
 
-private:
-    Ui::MainWindow *ui;
-};
+    public:
+        explicit mainwindow(QWidget *parent = 0);
+        ~mainwindow();
 
-#endif // MAINWINDOW_H
+    private:
+        Ui::MainWindow *ui;
+    };
+    }
+}
+
+
+#endif

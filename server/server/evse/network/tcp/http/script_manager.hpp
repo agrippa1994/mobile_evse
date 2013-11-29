@@ -1,5 +1,5 @@
-#ifndef __HTTP_Server_mani__script_manager__
-#define __HTTP_Server_mani__script_manager__
+#ifndef SCRIPT_MANAGER_HPP
+#define SCRIPT_MANAGER_HPP
 
 #include <evse/std_and_boost.hpp>
 

@@ -1,13 +1,13 @@
 #include <evse/network/tcp/http/server.hpp>
 
 
-evse::network::tcp::http::http_server::http_server(string port, string www) : tcp_server<http_client>(port), m_www(www)
+evse::network::tcp::http::server::server(string port, string www) : tcp_server<client>(port), m_www(www)
 {
     
 }
 
-void evse::network::tcp::http::http_server::acceptor()
+void evse::network::tcp::http::server::acceptor()
 {
-    add_client(make_shared<http_client>(this, move(m_socket)));
+    add_client(make_shared<client>(this, move(m_socket)));
 }
 

@@ -1,7 +1,7 @@
 #include <evse/network/tcp/http/request.hpp>
 #include <evse/network/tcp/http/client.hpp>
 
-evse::network::tcp::http::request::request(http_client* cl, const string& http_header) : m_http_header(http_header), m_client(cl)
+evse::network::tcp::http::request::request(client *cl, const string& http_header) : m_http_header(http_header), m_client(cl)
 {
     // GET zerlegen
     {
