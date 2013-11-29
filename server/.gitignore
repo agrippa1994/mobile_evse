@@ -1,3 +1,5 @@
 /build-server-Desktop-Debug/
 /build-server-Desktop_x86-Debug/
 /build-server-RasperryPI-Debug/
+
+/build-*
