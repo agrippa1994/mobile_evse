@@ -3,12 +3,14 @@
 
 #include "../tcp_socket.hpp"
 
+#define HTTP_MTU 1024
+
 namespace evse {
     namespace network {
         namespace tcp {
             namespace http{
                 
-            class client : public tcp_socket<client>
+                class client : public tcp_socket<client>
                 {
                 public:
                     client(class server *ptr, boost::asio::ip::tcp::socket socket);
