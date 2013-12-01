@@ -1,6 +1,7 @@
 #include <evse/gui/mainwindow.hpp>
 #include <evse/std_and_boost.hpp>
 #include <evse/network/tcp/http/server.hpp>
+#include <evse/rpi/rpi.hpp>
 
 #include <boost/asio/io_service.hpp>
 
@@ -14,6 +15,17 @@ void start_network()
     {
 #ifdef RASPBERRY_PI
     evse::network::tcp::http::server srv(string("http"), string("/home/pi/server/www/"));
+
+    srv.getScriptManager().add_function("RPI_temperature();", [&](){
+        stringstream ss; ss << evse::rpi::getTemperature();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_core_voltage();", [&](){
+        stringstream ss; ss << evse::rpi::getCoreVoltage();
+        return ss.str();
+    });
+
 #else
     evse::network::tcp::http::server srv(string("http"), string("/home/mani/Arbeitsfläche/evse_www/"));
 #endif

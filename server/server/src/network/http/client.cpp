@@ -6,7 +6,10 @@
 evse::network::tcp::http::client::client(evse::network::tcp::http::server *ptr, boost::asio::ip::tcp::socket socket)
 : tcp_socket<client>(ptr, move(socket))
 {
-    
+    boost::asio::socket_base::send_buffer_size option(65535);
+    m_socket.set_option(option);
+
+
 }
 
 void evse::network::tcp::http::client::onData(size_t bytes)
@@ -33,10 +36,12 @@ void evse::network::tcp::http::client::onData(size_t bytes)
         data_pakets.push_back(tmp);
     }
 
+
     for(string& paket : data_pakets){
-        m_socket.async_write_some(boost::asio::buffer(paket), [&](const boost::system::error_code& error, size_t bytesSendet){
+        m_socket.async_write_some(boost::asio::buffer(paket.c_str(), paket.length()), [&](const boost::system::error_code& error, size_t bytesSendet){
             if(error){
-                cout << "Fehlerhafte Uebertragung: " << error.message() << endl;
+                // TODO
+                cout << "Error: " << error.message() << endl;
             }
         });
     }
@@ -44,5 +49,5 @@ void evse::network::tcp::http::client::onData(size_t bytes)
 
 void evse::network::tcp::http::client::onDisconnect()
 {
-    cout << "Client hat die Verbindung abgebaut" << endl;
+
 }

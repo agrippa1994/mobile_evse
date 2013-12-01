@@ -16,12 +16,8 @@ string evse::network::tcp::http::reply::createReply()
     script scr(this, path);
     if(scr.was_successfull()){
         content = scr.getContent();
-        
-        cout << "Antwort für " << m_request.getRequestedFile() << " wird erstellt..." << endl;
-        string reply = makeReply(200, content.length(), m_request.getMIMEType(), content);
-        cout << "Antwort für " << m_request.getRequestedFile() << " erstellt" << endl;
 
-        return reply;
+        return makeReply(200, content.length(), m_request.getMIMEType(), content);;
     }
 
     content = "ERROR 404 File not found";

@@ -3,7 +3,7 @@
 
 #include "../tcp_socket.hpp"
 
-#define HTTP_MTU 1024
+#define HTTP_MTU 32
 
 namespace evse {
     namespace network {

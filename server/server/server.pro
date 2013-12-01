@@ -24,7 +24,8 @@ SOURCES += src/main.cpp \
     src/network/http/script.cpp \
     src/network/http/request.cpp \
     src/network/http/reply.cpp \
-    src/network/http/client.cpp
+    src/network/http/client.cpp \
+    src/rpi/rpi.cpp
 
 HEADERS  += \
     evse/gui/mainwindow.hpp \
@@ -36,7 +37,8 @@ HEADERS  += \
     evse/network/tcp/http/client.hpp \
     evse/network/tcp/tcp_server.hpp \
     evse/network/tcp/tcp_socket.hpp \
-    evse/std_and_boost.hpp
+    evse/std_and_boost.hpp \
+    evse/rpi/rpi.hpp
 
 FORMS    += utils/mainwindow.ui
 
