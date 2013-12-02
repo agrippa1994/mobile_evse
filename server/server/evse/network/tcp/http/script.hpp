@@ -1,7 +1,7 @@
 #ifndef SCRIPT_HPP
 #define SCRIPT_HPP
 
-#include <evse/std_and_boost.hpp>
+#include <string>
 
 namespace evse {
     namespace network {
@@ -15,10 +15,10 @@ namespace evse {
                 class script
                 {
                     // Pfad zur Datei, wo das Script ausgefuehrt werden soll
-                    const string& m_path;
+                    const std::string& m_path;
 
                     // Inhalt der Datei
-                    string m_content;
+                    std::string m_content;
 
                     // War das Script erfolgreich, wurde die Datei gefunden?
                     bool m_success;
@@ -32,13 +32,13 @@ namespace evse {
 
 
                 public:
-                    explicit script(reply *rpl, const string& path);
+                    explicit script(reply *rpl, const std::string& path);
 
                     // Erfolgreich
                     bool was_successfull() const { return m_success; }
 
                     // Inhalt
-                    const string& getContent() const { return m_content; }
+                    const std::string& getContent() const { return m_content; }
 
                     // Pointer zur Antwort
                     reply *getReply() { return m_reply; }

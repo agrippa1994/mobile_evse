@@ -1,8 +1,11 @@
 #ifndef TCP_SOCKET_HPP
 #define TCP_SOCKET_HPP
 
-#include <evse/std_and_boost.hpp>
-#include "tcp_server.hpp"
+#include <evse/network/tcp/tcp_server.hpp>
+#include <boost/bind.hpp>
+#include <vector>
+#include <memory>
+
 
 namespace evse {
     namespace network {
@@ -11,13 +14,13 @@ namespace evse {
             /*
                 Abstrakte Basisklasse für TCP Clienten
             */
-            template<typename socket> class tcp_socket : public enable_shared_from_this<socket>
+            template<typename socket> class tcp_socket : public std::enable_shared_from_this<socket>
             {
 
                 // asynchroner Handler für Lese- und  Verbindungsabruchcallbacks
                 void read_disconnect_handler()
                 {
-                    m_socket.async_read_some(boost::asio::buffer(m_buffer), bind(&tcp_socket<socket>::onMessageOrDisconnect, this, placeholders::_1, placeholders::_2));
+                    m_socket.async_read_some(boost::asio::buffer(m_buffer), boost::bind(&tcp_socket<socket>::onMessageOrDisconnect, this, _1, _2));
                 }
 
                 void onMessageOrDisconnect(const boost::system::error_code& e, std::size_t bytes_transferred)
@@ -36,7 +39,7 @@ namespace evse {
 
             public:
                 explicit tcp_socket(tcp_server<socket> *parent, boost::asio::ip::tcp::socket sock) :
-                    m_parent(parent), m_socket(move(sock)), m_buffer(8192)
+                    m_parent(parent), m_socket(std::move(sock)), m_buffer(8192)
                 {
                     read_disconnect_handler();
                 }
@@ -44,7 +47,7 @@ namespace evse {
                 // Pointer zum Server
                 tcp_server<socket> *getServer() { return m_parent; }
 
-                shared_ptr<socket> getPtr() { return tcp_socket<socket>::shared_from_this(); }
+                std::shared_ptr<socket> getPtr() { return tcp_socket<socket>::shared_from_this(); }
             protected:
                 // Socket
                 boost::asio::ip::tcp::socket    m_socket;
@@ -53,7 +56,7 @@ namespace evse {
                 tcp_server<socket>* m_parent;
 
                 // Buffer für einkommende Daten
-                vector<char> m_buffer;
+                std::vector<char> m_buffer;
 
 
                 virtual void onData(size_t bytes) = 0;

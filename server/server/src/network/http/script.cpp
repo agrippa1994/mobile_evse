@@ -3,6 +3,8 @@
 #include <evse/network/tcp/http/script_manager.hpp>
 #include <evse/network/tcp/http/client.hpp>
 #include <evse/network/tcp/http/server.hpp>
+#include <boost/algorithm/string.hpp>
+#include <fstream>
 
 bool evse::network::tcp::http::script::exec()
 {
@@ -15,12 +17,12 @@ bool evse::network::tcp::http::script::exec()
     return true;
 }
 
-evse::network::tcp::http::script::script(reply *rpl, const string& path) : m_reply(rpl), m_path(path), m_success(false)
+evse::network::tcp::http::script::script(reply *rpl, const std::string& path) : m_reply(rpl), m_path(path), m_success(false)
 {
     size_t offset = m_path.find(".");
-    string extension(m_path.begin() + offset + 1, m_path.end());
+    std::string extension(m_path.begin() + offset + 1, m_path.end());
     
-    ifstream stream(m_path.c_str(), ios_base::in | ios_base::binary);
+    std::ifstream stream(m_path.c_str(), std::ios_base::in | std::ios_base::binary);
     if(stream.is_open())
     {
         char buf[512] = {0};
@@ -29,7 +31,7 @@ evse::network::tcp::http::script::script(reply *rpl, const string& path) : m_rep
     }
     
     // Wenn es keine HTML Datei ist, dann soll die Datei nicht geparsed werden!
-    if(!boost::iequals(string("html"), extension))
+    if(!boost::iequals(std::string("html"), extension))
     {
         m_success = true;
         return;

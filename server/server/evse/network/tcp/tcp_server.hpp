@@ -1,9 +1,12 @@
 #ifndef TCP_SERVER_HPP
 #define TCP_SERVER_HPP
 
-#include <evse/std_and_boost.hpp>
-
-extern boost::asio::io_service m_io;
+#include <evse/network/io_service.hpp>
+#include <boost/asio.hpp>
+#include <boost/bind.hpp>
+#include <memory>
+#include <string>
+#include <set>
 
 namespace evse {
     namespace network {
@@ -11,12 +14,12 @@ namespace evse {
 
             template<typename socket_> class tcp_server
             {
-                typedef shared_ptr<socket_> socket_ptr;
+                typedef std::shared_ptr<socket_> socket_ptr;
 
 
                 void accept_handler()
                 {
-                    m_acceptor.async_accept(m_socket, bind(&tcp_server<socket_>::do_accept, this, placeholders::_1));
+                    m_acceptor.async_accept(m_socket, boost::bind(&tcp_server<socket_>::do_accept, this, _1));
                 }
 
                 void do_accept(boost::system::error_code ec)
@@ -29,10 +32,10 @@ namespace evse {
                 }
 
             public:
-                explicit tcp_server(string port) : m_acceptor(m_io), m_socket(m_io)
+                explicit tcp_server(std::string port) : m_acceptor(evse::network::io_service), m_socket(evse::network::io_service)
                 {
-                        boost::asio::ip::tcp::resolver resolver(m_io);
-                        boost::asio::ip::tcp::endpoint endpoint = * resolver.resolve({string("0.0.0.0"), port});
+                        boost::asio::ip::tcp::resolver resolver(evse::network::io_service);
+                        boost::asio::ip::tcp::endpoint endpoint = * resolver.resolve({std::string("0.0.0.0"), port});
 
                         m_acceptor.open(endpoint.protocol());
                         m_acceptor.set_option(boost::asio::ip::tcp::acceptor::reuse_address(true));
@@ -52,14 +55,9 @@ namespace evse {
                     m_clients.erase(ptr);
                 }
 
-                void run()
-                {
-                    m_io.run();
-                }
-
             protected:
                 // Sockets
-                set<socket_ptr> m_clients;
+                std::set<socket_ptr> m_clients;
 
                 // TCP-Socket für einkommende Verbindungen
                 boost::asio::ip::tcp::socket    m_socket;

@@ -1,39 +1,116 @@
 #include <evse/gui/mainwindow.hpp>
-#include <evse/std_and_boost.hpp>
 #include <evse/network/tcp/http/server.hpp>
 #include <evse/rpi/rpi.hpp>
-
+#include <evse/network/io_service.hpp>
 #include <boost/asio/io_service.hpp>
-
+#include <boost/thread.hpp>
+#include <string>
+#include <sstream>
 #include <QApplication>
-
-boost::asio::io_service m_io;
 
 void start_network()
 {
     try
     {
 #ifdef RASPBERRY_PI
-    evse::network::tcp::http::server srv(string("http"), string("/home/pi/server/www/"));
+    evse::network::tcp::http::server srv(std::string("http"), std::string("/home/pi/server/www/"));
 
     srv.getScriptManager().add_function("RPI_temperature();", [&](){
-        stringstream ss; ss << evse::rpi::getTemperature();
+        std::stringstream ss; ss << evse::rpi::getTemperature();
         return ss.str();
     });
 
     srv.getScriptManager().add_function("RPI_core_voltage();", [&](){
-        stringstream ss; ss << evse::rpi::getCoreVoltage();
+        std::stringstream ss; ss << evse::rpi::getCorevoltage();
         return ss.str();
     });
+
+    srv.getScriptManager().add_function("RPI_sdram_c_voltage();", [&](){
+        std::stringstream ss; ss << evse::rpi::getSDRAMCvoltage();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_sdram_i_voltage();", [&](){
+        std::stringstream ss; ss << evse::rpi::getSDRAMIvoltage();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_sdram_p_voltage();", [&](){
+        std::stringstream ss; ss << evse::rpi::getSDRAMPvoltage();
+        return ss.str();
+    });
+
+
+
+    srv.getScriptManager().add_function("RPI_arm_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getARMfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_core_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getCorefrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_h264_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getH264frequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_isp_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getISPfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_v3d_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getV3Dfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_uart_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getUARTfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_pwm_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getPWMfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_emmc_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getEMMCfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_pixel_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getPixelfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_vec_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getVECfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_hdmi_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getHDMIfrequency();
+        return ss.str();
+    });
+
+    srv.getScriptManager().add_function("RPI_dpi_frequency();", [&](){
+        std::stringstream ss; ss << evse::rpi::getDPIfrequency();
+        return ss.str();
+    });
+
 
 #else
     evse::network::tcp::http::server srv(string("http"), string("/home/mani/Arbeitsfläche/evse_www/"));
 #endif
-    m_io.run();
+    evse::network::io_service.run();
     }
-    catch(exception& e)
+    catch(std::exception& e)
     {
-        cout << "Server konnte nicht gestartet werden: " << e.what() << endl;
+        std::cout << "Server konnte nicht gestartet werden: " << e.what() << std::endl;
     }
 }
 
@@ -41,7 +118,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
-    cout << "Server wird gestartet ..." << endl;
+    std::cout << "Server wird gestartet ..." << std::endl;
 
     // Anzeigen des GUI
     evse::gui::mainwindow w;

@@ -1,6 +1,6 @@
 #include <evse/network/tcp/http/script_manager.hpp>
 
-bool evse::network::tcp::http::script_manager::add_function(string name, function<string (void)> func)
+bool evse::network::tcp::http::script_manager::add_function(std::string name, std::function<std::string (void)> func)
 {
     for(auto i : m_info)
         if(i.name == name)
@@ -12,7 +12,7 @@ bool evse::network::tcp::http::script_manager::add_function(string name, functio
     return true;
 }
 
-bool evse::network::tcp::http::script_manager::remove_function(string name, function<string (void)> func)
+bool evse::network::tcp::http::script_manager::remove_function(std::string name, std::function<std::string (void)> func)
 {
     int idx = 0;
     for(auto i : m_info)
