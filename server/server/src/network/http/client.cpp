@@ -40,8 +40,6 @@ void evse::network::tcp::http::client::onData(size_t bytes)
     for(std::string& paket : data_pakets){
         m_socket.async_write_some(boost::asio::buffer(paket.c_str(), paket.length()), [&](const boost::system::error_code& error, size_t bytesSendet){
             if(error){
-                // TODO
-                std::cout << "Error: " << error.message() << std::endl;
             }
         });
     }

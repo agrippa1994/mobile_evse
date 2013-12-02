@@ -3,16 +3,22 @@
 #include <evse/network/tcp/http/script_manager.hpp>
 #include <evse/network/tcp/http/client.hpp>
 #include <evse/network/tcp/http/server.hpp>
+
 #include <boost/algorithm/string.hpp>
+
 #include <fstream>
+#include <sstream>
 
 bool evse::network::tcp::http::script::exec()
 {
     server *svr = (server *)m_reply->getClient()->getServer();
     script_manager& mgr = svr->getScriptManager();
-    
-    for(auto i : mgr.getFunctions())
-        boost::replace_all(m_content, i.name, i.func());
+
+    for(auto i : mgr.getFunctions()){
+        std::stringstream ss;
+        i.func(ss);
+        boost::replace_all(m_content, i.name, ss.str());
+    }
 
     return true;
 }

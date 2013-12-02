@@ -1,4 +1,5 @@
 #include <evse/gui/mainwindow.hpp>
+
 #include "ui_mainwindow.h"
 
 evse::gui::mainwindow::mainwindow(QWidget *parent) :

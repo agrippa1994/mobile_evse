@@ -1,5 +1,6 @@
 #include <evse/network/tcp/http/request.hpp>
 #include <evse/network/tcp/http/client.hpp>
+
 #include <boost/algorithm/string.hpp>
 
 evse::network::tcp::http::request::request(client *cl, const std::string& http_header) : m_http_header(http_header), m_client(cl)

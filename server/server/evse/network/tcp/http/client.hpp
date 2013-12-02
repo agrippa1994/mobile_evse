@@ -2,6 +2,7 @@
 #define CLIENT_HPP
 
 #include <evse/network/tcp/tcp_socket.hpp>
+
 #include <boost/asio.hpp>
 
 #define HTTP_MTU 32
