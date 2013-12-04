@@ -19,29 +19,25 @@ void evse::network::tcp::http::client::onData(size_t bytes)
     
     std::string data = rep.createReply();
 
-    // Datenpakte in 10.000 Bytes trennen und seriell senden
-    std::vector<std::string> data_pakets;
+
+    size_t length = data.length();
+    size_t sent = 0;
+
+    while(sent < length)
     {
-        std::string tmp;
-        for(size_t i =0, u=0; i < data.length(); i++, u++)
+        try
         {
-            tmp += data[i];
-
-            if(i % HTTP_MTU == 0 && i != 0)
-            {
-                data_pakets.push_back(tmp);
-                tmp.clear();
-            }
+            sent += m_socket.write_some(boost::asio::buffer(
+                                            std::string(
+                                                data.begin() + sent,
+                                                data.end()
+                                                )
+                                            )
+                                        );
+        } catch(...)
+        {
+            return;
         }
-        data_pakets.push_back(tmp);
-    }
-
-
-    for(std::string& paket : data_pakets){
-        m_socket.async_write_some(boost::asio::buffer(paket.c_str(), paket.length()), [&](const boost::system::error_code& error, size_t bytesSendet){
-            if(error){
-            }
-        });
     }
 }
 

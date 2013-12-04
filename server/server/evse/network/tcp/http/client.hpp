@@ -5,7 +5,6 @@
 
 #include <boost/asio.hpp>
 
-#define HTTP_MTU 32
 
 namespace evse {
     namespace network {
