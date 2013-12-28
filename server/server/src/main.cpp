@@ -103,6 +103,9 @@ void start_network()
 
 int main(int argc, char *argv[])
 {
+    std::cout << sizeof(float) << std::endl;
+    std::cout << sizeof(int) << std::endl;
+
     QApplication a(argc, argv);
 
 
