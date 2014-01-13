@@ -22,6 +22,7 @@
 		3C15E8E5186F9E86002876A1 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C15E8C4186F9E86002876A1 /* UIKit.framework */; };
 		3C15E8ED186F9E86002876A1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3C15E8EB186F9E86002876A1 /* InfoPlist.strings */; };
 		3C15E8EF186F9E86002876A1 /* EVSETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C15E8EE186F9E86002876A1 /* EVSETests.m */; };
+		3C52207E1884119500528468 /* NetworkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C52207D1884119500528468 /* NetworkViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 		3C15E8EA186F9E86002876A1 /* EVSETests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "EVSETests-Info.plist"; sourceTree = "<group>"; };
 		3C15E8EC186F9E86002876A1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		3C15E8EE186F9E86002876A1 /* EVSETests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EVSETests.m; sourceTree = "<group>"; };
+		3C52207C1884119500528468 /* NetworkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkViewController.h; sourceTree = "<group>"; };
+		3C52207D1884119500528468 /* NetworkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +125,8 @@
 				3C15E8D9186F9E86002876A1 /* ViewController.m */,
 				3C15E8DB186F9E86002876A1 /* Images.xcassets */,
 				3C15E8C7186F9E86002876A1 /* Supporting Files */,
+				3C52207C1884119500528468 /* NetworkViewController.h */,
+				3C52207D1884119500528468 /* NetworkViewController.m */,
 			);
 			path = EVSE;
 			sourceTree = "<group>";
@@ -202,6 +207,9 @@
 				LastUpgradeCheck = 0500;
 				ORGANIZATIONNAME = Mani;
 				TargetAttributes = {
+					3C15E8BC186F9E86002876A1 = {
+						DevelopmentTeam = PZP46GS9KE;
+					};
 					3C15E8E0186F9E86002876A1 = {
 						TestTargetID = 3C15E8BC186F9E86002876A1;
 					};
@@ -256,6 +264,7 @@
 				3C15E8DA186F9E86002876A1 /* ViewController.m in Sources */,
 				3C15E8D1186F9E86002876A1 /* AppDelegate.m in Sources */,
 				3C15E8CD186F9E86002876A1 /* main.m in Sources */,
+				3C52207E1884119500528468 /* NetworkViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +357,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "E77ABB08-1365-423B-A0B0-AD36F04873EA";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -381,6 +391,7 @@
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				PROVISIONING_PROFILE = "E77ABB08-1365-423B-A0B0-AD36F04873EA";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
@@ -392,10 +403,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EVSE/EVSE-Prefix.pch";
 				INFOPLIST_FILE = "EVSE/EVSE-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -405,10 +419,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "EVSE/EVSE-Prefix.pch";
 				INFOPLIST_FILE = "EVSE/EVSE-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -474,6 +491,7 @@
 				3C15E8F4186F9E86002876A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		3C15E8F5186F9E86002876A1 /* Build configuration list for PBXNativeTarget "EVSETests" */ = {
 			isa = XCConfigurationList;
@@ -482,6 +500,7 @@
 				3C15E8F7186F9E86002876A1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
