@@ -1,11 +1,3 @@
-//
-//  AppDelegate.m
-//  EVSE
-//
-//  Created by Mani on 29.12.13.
-//  Copyright (c) 2013 Mani. All rights reserved.
-//
-
 #import "AppDelegate.h"
 
 @implementation AppDelegate

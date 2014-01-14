@@ -1,4 +1,5 @@
 #import "NetworkViewController.h"
+#import <SystemConfiguration/CaptiveNetwork.h>
 
 @interface NetworkViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *wlanConnect;
@@ -6,6 +7,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *ipSettings;
 @property (weak, nonatomic) IBOutlet UITextField *ipText;
 
+- (BOOL) isWlanConnectedToEVSE;
 @end
 
 @implementation NetworkViewController
@@ -19,6 +21,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.ipText.delegate = self;
 }
 
 - (void)didReceiveMemoryWarning
@@ -36,7 +40,12 @@
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     if(cell == self.wlanConnect)
     {
-        
+        if(![self isWlanConnectedToEVSE])
+        {
+            UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"Fehler" message:@"Sie sind nicht mit dem Tankstellennetzwerk verbunden!\nBitte überprüfen Sie die Verbindung zum Netzwerk!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            
+            [view show];
+        }
     }
     else if(cell == self.ipConnect)
     {
@@ -49,6 +58,35 @@
         }
     }
     
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    [self.ipText resignFirstResponder];
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
+
+- (BOOL) isWlanConnectedToEVSE
+{
+    NSArray *ifs = (__bridge id)CNCopySupportedInterfaces();
+    if([ifs count] == 0)
+        return NO;
+    
+    id info = nil;
+    for(NSString *ifname in ifs)
+    {
+        info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifname);
+        if(info && [info count])
+            return [[info objectForKey:@"SSID"] compare:@"evse" options:NSCaseInsensitiveSearch] == 0;
+    }
+    
+    return NO;
 }
 
 @end
