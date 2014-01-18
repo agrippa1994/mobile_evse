@@ -22,6 +22,7 @@
 		3C15E8ED186F9E86002876A1 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3C15E8EB186F9E86002876A1 /* InfoPlist.strings */; };
 		3C15E8EF186F9E86002876A1 /* EVSETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C15E8EE186F9E86002876A1 /* EVSETests.m */; };
 		3C52207E1884119500528468 /* NetworkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C52207D1884119500528468 /* NetworkViewController.m */; };
+		3C83F28E1887D4A600FC0F81 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C83F28D1887D4A600FC0F81 /* RootViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -55,6 +56,8 @@
 		3C15E8EE186F9E86002876A1 /* EVSETests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EVSETests.m; sourceTree = "<group>"; };
 		3C52207C1884119500528468 /* NetworkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkViewController.h; sourceTree = "<group>"; };
 		3C52207D1884119500528468 /* NetworkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkViewController.m; sourceTree = "<group>"; };
+		3C83F28C1887D4A600FC0F81 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
+		3C83F28D1887D4A600FC0F81 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +125,8 @@
 				3C15E8C7186F9E86002876A1 /* Supporting Files */,
 				3C52207C1884119500528468 /* NetworkViewController.h */,
 				3C52207D1884119500528468 /* NetworkViewController.m */,
+				3C83F28C1887D4A600FC0F81 /* RootViewController.h */,
+				3C83F28D1887D4A600FC0F81 /* RootViewController.m */,
 			);
 			path = EVSE;
 			sourceTree = "<group>";
@@ -258,6 +263,7 @@
 			files = (
 				3C15E8D1186F9E86002876A1 /* AppDelegate.m in Sources */,
 				3C15E8CD186F9E86002876A1 /* main.m in Sources */,
+				3C83F28E1887D4A600FC0F81 /* RootViewController.m in Sources */,
 				3C52207E1884119500528468 /* NetworkViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
