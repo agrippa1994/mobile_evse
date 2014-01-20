@@ -1,15 +1,8 @@
-//
-//  RootViewController.m
-//  EVSE
-//
-//  Created by Mani on 16.01.14.
-//  Copyright (c) 2014 Mani. All rights reserved.
-//
-
 #import "RootViewController.h"
+#import "GeneralViewController.h"
 
 @interface RootViewController ()
-
+- (void)onTimer:(NSTimer *)timer;
 @end
 
 @implementation RootViewController
@@ -26,13 +19,31 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	[self performSegueWithIdentifier:@"networkShow" sender:self];
+    
+    for(UIViewController *ctrl in self.viewControllers)
+    {
+        if([ctrl isKindOfClass:[GeneralViewController class]])
+        {
+            [NSTimer scheduledTimerWithTimeInterval:0 target:self selector:@selector(onTimer:) userInfo:nil repeats:NO];
+        }
+    }
+    
 }
 
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+}
+
+- (void)onTimer:(NSTimer *)timer
+{
+    for(UIViewController *ctrl in self.viewControllers)
+    {
+        if([ctrl isKindOfClass:[GeneralViewController class]])
+        {
+            [(GeneralViewController *)ctrl showNetworkForm];
+        }
+    }
 }
 
 @end

@@ -56,10 +56,6 @@
             
             [view show];
         }
-        else
-        {
-            [self performSegueWithIdentifier:@"showApp" sender:self];
-        }
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

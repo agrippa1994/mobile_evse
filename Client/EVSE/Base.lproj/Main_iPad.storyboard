@@ -4,17 +4,17 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3747"/>
     </dependencies>
     <scenes>
-        <!--Table View Controller - Root View Controller-->
+        <!--Table View Controller - Electric Vehicle Supply Equipment-->
         <scene sceneID="jYf-ro-hyh">
             <objects>
                 <tableViewController clearsSelectionOnViewWillAppear="NO" id="016-eF-K2N" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="qc7-Cy-gjo">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="qc7-Cy-gjo">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <prototypes>
-                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="asd" id="8gP-Cx-m8f">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="8gP-Cx-m8f">
+                                <rect key="frame" x="0.0" y="119" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8gP-Cx-m8f" id="kky-N7-qXc">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
@@ -27,7 +27,7 @@
                             <outlet property="delegate" destination="016-eF-K2N" id="BQG-XT-Ebt"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" title="Root View Controller" id="t7W-za-VF5"/>
+                    <navigationItem key="navigationItem" title="Electric Vehicle Supply Equipment" id="t7W-za-VF5"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0Qe-qN-3IV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -56,7 +56,6 @@
                     <connections>
                         <segue destination="0vV-FG-uJN" kind="relationship" relationship="masterViewController" id="E09-vQ-v1K"/>
                         <segue destination="ppp-nT-lFK" kind="relationship" relationship="detailViewController" id="p8f-m0-V0i"/>
-                        <segue destination="S5B-kA-kGA" kind="replace" identifier="networkShow" splitViewControllerTargetIndex="1" id="nqd-8E-2rM"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Cl7-uB-lxQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -68,21 +67,21 @@
             <objects>
                 <tableViewController id="S5B-kA-kGA" customClass="NetworkViewController" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="LUM-Aq-lxU">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="0.0" width="540" height="620"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
                             <tableViewSection headerTitle="Verbinden per WLAN" footerTitle="Sie müssen sich im WLAN-Netzwerk &quot;evse&quot; einloggen, um diese Funktion nutzen zu können." id="KWN-FB-cg4">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="Cell" textLabel="ZlW-Bm-Pei" style="IBUITableViewCellStyleDefault" id="gX6-4f-mhm">
-                                        <rect key="frame" x="0.0" y="55" width="768" height="44"/>
+                                        <rect key="frame" x="0.0" y="55" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="gX6-4f-mhm" id="JTr-j7-OHV">
-                                            <rect key="frame" x="0.0" y="0.0" width="768" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Verbinden" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ZlW-Bm-Pei">
-                                                    <rect key="frame" x="15" y="0.0" width="738" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="510" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -96,13 +95,13 @@
                             <tableViewSection headerTitle="Verbinden per IP" id="v26-ww-vDz">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="ARD-gg-qgV">
-                                        <rect key="frame" x="0.0" y="174" width="768" height="44"/>
+                                        <rect key="frame" x="0.0" y="191" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ARD-gg-qgV" id="DDT-45-dGG">
-                                            <rect key="frame" x="0.0" y="0.0" width="768" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tvg-D8-Eh0">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Tvg-D8-Eh0">
                                                     <rect key="frame" x="548" y="7" width="200" height="30"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <constraints>
@@ -127,14 +126,14 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="uFb-0T-fLC" style="IBUITableViewCellStyleDefault" id="cRU-Dh-lpn">
-                                        <rect key="frame" x="0.0" y="218" width="768" height="44"/>
+                                        <rect key="frame" x="0.0" y="235" width="540" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="cRU-Dh-lpn" id="fXo-sn-S7d">
-                                            <rect key="frame" x="0.0" y="0.0" width="768" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="540" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Verbinden" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="uFb-0T-fLC">
-                                                    <rect key="frame" x="15" y="0.0" width="738" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="510" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -160,12 +159,12 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Pq7-cw-JKq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-915" y="-1867"/>
+            <point key="canvasLocation" x="-1007" y="-1983"/>
         </scene>
-        <!--View Controller-->
+        <!--General View Controller-->
         <scene sceneID="Q6Q-FN-VOp">
             <objects>
-                <viewController id="ppp-nT-lFK" sceneMemberID="viewController">
+                <viewController id="ppp-nT-lFK" customClass="GeneralViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="AXv-Y0-ym8"/>
                         <viewControllerLayoutGuide type="bottom" id="mp4-GA-EOm"/>
@@ -173,8 +172,30 @@
                     <view key="view" contentMode="scaleToFill" id="4br-hW-cC2">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="s9w-HG-Ix7">
+                                <rect key="frame" x="0.0" y="980" width="768" height="44"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <items>
+                                    <barButtonItem title="Netzwerk" id="vVn-eZ-Tox">
+                                        <connections>
+                                            <action selector="onNetwork:" destination="ppp-nT-lFK" id="XpE-at-moe"/>
+                                            <segue destination="S5B-kA-kGA" kind="modal" modalPresentationStyle="formSheet" modalTransitionStyle="flipHorizontal" id="QCE-Ks-PFh"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </items>
+                            </toolbar>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="s9w-HG-Ix7" secondAttribute="trailing" id="gEO-Gh-ErA"/>
+                            <constraint firstAttribute="bottom" secondItem="s9w-HG-Ix7" secondAttribute="bottom" id="ou2-1n-IZp"/>
+                            <constraint firstItem="s9w-HG-Ix7" firstAttribute="leading" secondItem="4br-hW-cC2" secondAttribute="leading" id="pPG-dh-SPB"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="NetworkButton" destination="vVn-eZ-Tox" id="eVv-S1-VGR"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="QLs-cl-qbY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
