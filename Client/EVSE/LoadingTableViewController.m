@@ -47,9 +47,10 @@
     
     // 1 phase 16A 6h - 8h
     // 3 phase 63A < 1h
-    hours = [[NSArray alloc] initWithObjects:[stHourInfo init:@"weniger als eine Stunde" current:three_phase_63A], [stHourInfo init:@"6 - 8 Stunden" current:one_phase_16A], nil];
+    hours = [NSArray arrayWithObjects:[stHourInfo init:@"weniger als eine Stunde" current:three_phase_63A], [stHourInfo init:@"6 - 8 Stunden" current:one_phase_16A], nil];
     
     self.clearsSelectionOnViewWillAppear = YES;
+    
     self.hourPicker.delegate = self;
     self.hourPicker.dataSource = self;
 }
@@ -93,6 +94,7 @@
                 break;
         }
     }
+    
     else if(cell == self.stopLoadingCell)
     {
         
