@@ -23,7 +23,7 @@
 		3C15E8EF186F9E86002876A1 /* EVSETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C15E8EE186F9E86002876A1 /* EVSETests.m */; };
 		3C52207E1884119500528468 /* NetworkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C52207D1884119500528468 /* NetworkViewController.m */; };
 		3C83F28E1887D4A600FC0F81 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C83F28D1887D4A600FC0F81 /* RootViewController.m */; };
-		64C38692188C04C800162E00 /* GeneralViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64C38691188C04C800162E00 /* GeneralViewController.m */; };
+		3C8B5C06188E92660082E215 /* LoadingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8B5C05188E92660082E215 /* LoadingTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,8 +59,8 @@
 		3C52207D1884119500528468 /* NetworkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkViewController.m; sourceTree = "<group>"; };
 		3C83F28C1887D4A600FC0F81 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		3C83F28D1887D4A600FC0F81 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
-		64C38690188C04C800162E00 /* GeneralViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralViewController.h; sourceTree = "<group>"; };
-		64C38691188C04C800162E00 /* GeneralViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneralViewController.m; sourceTree = "<group>"; };
+		3C8B5C04188E92660082E215 /* LoadingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingTableViewController.h; sourceTree = "<group>"; };
+		3C8B5C05188E92660082E215 /* LoadingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -130,8 +130,8 @@
 				3C52207D1884119500528468 /* NetworkViewController.m */,
 				3C83F28C1887D4A600FC0F81 /* RootViewController.h */,
 				3C83F28D1887D4A600FC0F81 /* RootViewController.m */,
-				64C38690188C04C800162E00 /* GeneralViewController.h */,
-				64C38691188C04C800162E00 /* GeneralViewController.m */,
+				3C8B5C04188E92660082E215 /* LoadingTableViewController.h */,
+				3C8B5C05188E92660082E215 /* LoadingTableViewController.m */,
 			);
 			path = EVSE;
 			sourceTree = "<group>";
@@ -267,10 +267,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				3C15E8D1186F9E86002876A1 /* AppDelegate.m in Sources */,
-				64C38692188C04C800162E00 /* GeneralViewController.m in Sources */,
 				3C15E8CD186F9E86002876A1 /* main.m in Sources */,
 				3C83F28E1887D4A600FC0F81 /* RootViewController.m in Sources */,
 				3C52207E1884119500528468 /* NetworkViewController.m in Sources */,
+				3C8B5C06188E92660082E215 /* LoadingTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

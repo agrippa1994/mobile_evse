@@ -61,15 +61,16 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void) touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
-{
-    [self.ipText resignFirstResponder];
-}
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
     return YES;
+}
+
+- (BOOL)disablesAutomaticKeyboardDismissal
+{
+    return NO;
 }
 
 - (BOOL) isWlanConnectedToEVSE
@@ -89,4 +90,8 @@
     return NO;
 }
 
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end

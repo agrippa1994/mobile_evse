@@ -1,5 +1,5 @@
 #import <UIKit/UIKit.h>
 
-@interface NetworkViewController : UITableViewController<UITextFieldDelegate>
+@interface NetworkViewController : UITableViewController<UITextFieldDelegate, UIAlertViewDelegate>
 
 @end
