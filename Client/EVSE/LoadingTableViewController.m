@@ -87,10 +87,10 @@
         switch(info->ampere)
         {
             case one_phase_16A:
-                
+                [[Client sharedClient] startLoading:16];
                 break;
             case three_phase_63A:
-                
+                [[Client sharedClient] startLoading:63];
                 break;
         }
     }
@@ -101,6 +101,11 @@
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (void)client:(Client *)p loadingReply:(BOOL)wasLoadingStarted
+{
+    
 }
 
 @end

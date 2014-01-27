@@ -1,5 +1,6 @@
 #import "NetworkViewController.h"
 #import <SystemConfiguration/CaptiveNetwork.h>
+#import "Client.h"
 
 @interface NetworkViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *wlanConnect;
@@ -42,6 +43,7 @@
     {
         if(![self isWlanConnectedToEVSE])
         {
+            [[Client sharedClient] connect:@"localhost" withPort:80];
             UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"Fehler" message:@"Sie sind nicht mit dem Tankstellennetzwerk verbunden!\nBitte überprüfen Sie die Verbindung zum Netzwerk!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             
             [view show];
