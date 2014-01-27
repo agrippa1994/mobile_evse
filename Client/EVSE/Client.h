@@ -7,19 +7,23 @@ struct SystemInformation
         struct stTemperatures
         {
             float temperature;
-        } Temperatures;
+        }
+        Temperatures;
         
         struct stVoltages
         {
             float core, sdram_c, sdram_i, sdram_p;
-        } Voltages;
+        }
+        Voltages;
         
         struct stFrequencies
         {
             uint64_t arm, core, h264, isp, v3d, uart, pwm, emmc, pixel, vec, hdmi, dpi;
-        } Frequencies;
+        }
+        Frequencies;
         
-    } RaspberryPI;
+    }
+    RaspberryPI;
 };
 
 @class Client;
