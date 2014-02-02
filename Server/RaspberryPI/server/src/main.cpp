@@ -1,4 +1,3 @@
-#include <evse/rpi/rpi.hpp>
 #include <evse/network/io_service.hpp>
 #include <evse/evse.hpp>
 
@@ -10,8 +9,13 @@
 #include <sstream>
 #include <memory>
 
-void start_network()
+int main(int argc, char *argv[])
 {
+    BOOST_LOG_TRIVIAL(info);
+    BOOST_LOG_TRIVIAL(info) << "-------------------------------------";
+    BOOST_LOG_TRIVIAL(info) << "Der Server wird gestartet!";
+    BOOST_LOG_TRIVIAL(info) << "-------------------------------------";
+
     evse::evse supply_equipment;
 
     try
@@ -22,15 +26,6 @@ void start_network()
     {
         BOOST_LOG_TRIVIAL(fatal) << "evse::network::io_service meldet: " << e.what();
     }
-}
-
-int main(int argc, char *argv[])
-{
-    std::cout << std::endl;
-    BOOST_LOG_TRIVIAL(info) << "Der Server wird gestartet!";
-
-    // Starten des HTTP-Servers
-    boost::thread thr(start_network);
 
     while(true) { boost::this_thread::sleep_for(boost::chrono::seconds(1)); }
 }

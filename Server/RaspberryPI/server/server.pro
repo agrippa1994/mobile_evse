@@ -4,10 +4,6 @@
 #
 #-------------------------------------------------
 
-
-
-QT       += core
-
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS += -w
 
@@ -17,7 +13,6 @@ TEMPLATE = app
 CONFIG += console
 
 SOURCES += src/main.cpp \
-    src/rpi/rpi.cpp \
     src/network/io_service.cpp \
     src/evse.cpp \
     src/network/usb/usb.cpp
@@ -25,18 +20,20 @@ SOURCES += src/main.cpp \
 HEADERS  += \
     evse/network/tcp/tcp_server.hpp \
     evse/network/tcp/tcp_socket.hpp \
-    evse/rpi/rpi.hpp \
     evse/network/io_service.hpp \
     evse/evse.hpp \
     evse/network/usb/usb.hpp
 
 
-linux-g++{
+#x64 - Linux
+linux-g++
+{
     BOOST_DIR = /usr/local/boost_x64
 }
 
-linux-rasp-pi-g++{
-    #Rasperry PI
+#Rasperry PI
+linux-rasp-pi-g++
+{
     target.path = /home/pi/server
     TARGET = server
     INSTALLS += target
