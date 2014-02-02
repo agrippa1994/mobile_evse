@@ -4,75 +4,46 @@
 
 @interface NetworkViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *wlanConnect;
-@property (weak, nonatomic) IBOutlet UITableViewCell *ipConnect;
-@property (weak, nonatomic) IBOutlet UITableViewCell *ipSettings;
-@property (weak, nonatomic) IBOutlet UITextField *ipText;
 
 - (BOOL) isWlanConnectedToEVSE;
 @end
 
 @implementation NetworkViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
+- (void)viewDidAppear:(BOOL)animated
 {
-    self = [super initWithStyle:style];
-    return self;
+    [[Client sharedClient] addDelegate:self];
 }
 
-- (void)viewDidLoad
+- (void)viewDidDisappear:(BOOL)animated
 {
-    [super viewDidLoad];
-    
-    self.ipText.delegate = self;
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    [super prepareForSegue:segue sender:sender];
+    [[Client sharedClient] rmDelegate:self];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    
     if(cell == self.wlanConnect)
     {
         if(![self isWlanConnectedToEVSE])
         {
-            [[Client sharedClient] connect:@"localhost" withPort:80];
-            UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"Fehler" message:@"Sie sind nicht mit dem Tankstellennetzwerk verbunden!\nBitte überprüfen Sie die Verbindung zum Netzwerk!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            NSString *title = @"Fehler";
+            NSString *message = @"Sie sind nciht mit dem Tankstellennetzwerk verbunden!"
+            "Bitte überprüfen Sie die Verbindung zum Netzwerk";
+            
+            UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
             
             [view show];
         }
-    }
-    else if(cell == self.ipConnect)
-    {
-        NSString *ip_addr = self.ipText.text;
-        if([ip_addr length] == 0)
+        else
         {
-            UIAlertView *view = [[UIAlertView alloc] initWithTitle:@"Fehler" message:@"IP-Adresse ist ungültig!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-            
-            [view show];
+            // Verbinden mit dem Server
+            [[Client sharedClient] connect:@"10.0.10.1" withPort:80];
         }
     }
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-}
-
-
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [textField resignFirstResponder];
-    return YES;
-}
-
-- (BOOL)disablesAutomaticKeyboardDismissal
-{
-    return NO;
 }
 
 - (BOOL) isWlanConnectedToEVSE
@@ -86,14 +57,28 @@
     {
         info = (__bridge_transfer id)CNCopyCurrentNetworkInfo((__bridge CFStringRef)ifname);
         if(info && [info count])
-            return [[info objectForKey:@"SSID"] compare:@"evse" options:NSCaseInsensitiveSearch] == 0;
+            return [[info objectForKey:@"SSID"] rangeOfString:@"evse_" options:NSCaseInsensitiveSearch].length > 0;
+        
     }
     
     return NO;
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+// Delegationen des TCP-Clienten
+
+- (void)client:(Client *)p openRequest:(BOOL)isOpen
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if(isOpen)
+       [self dismissViewControllerAnimated:YES completion:nil];
+    
+    NSString *title = @"Fehler";
+    NSString *message = @"Die Verbindung zum Server kann nicht hergestellt werden!\n"
+    "Möglicherweise ist der Server abgestürzt oder aus einem anderen Grund nicht erreichbar!";
+    
+    UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+    
+    [view show];
 }
+
+
 @end

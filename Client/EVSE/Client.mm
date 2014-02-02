@@ -3,77 +3,6 @@
 #include <string>
 #include <sstream>
 
-#include <boost/serialization/access.hpp>
-#include <boost/archive/text_iarchive.hpp>
-#include <boost/archive/text_oarchive.hpp>
-
-
-#define serializer(archive) template<class T> void serialize(T & archive, const unsigned int)
-#define serializer_non_intrusive(arch, cl) template<class T> void serialize(T & arch, cl, const unsigned int)
-
-namespace boost {
-    namespace serialization {
-        
-        serializer_non_intrusive(t, SystemInformation & info)
-        {
-            t & info.RaspberryPI;
-        }
-        
-        serializer_non_intrusive(t, SystemInformation::stRaspberryPI & rpi)
-        {
-            t & rpi.Temperatures;
-            t & rpi.Voltages;
-            t & rpi.Frequencies;
-        }
-        
-        serializer_non_intrusive(t, SystemInformation::stRaspberryPI::stTemperatures & temp)
-        {
-            t & temp.temperature;
-        }
-        
-        serializer_non_intrusive(t, SystemInformation::stRaspberryPI::stVoltages & volt)
-        {
-            t & volt.core;
-            t & volt.sdram_c;
-            t & volt.sdram_i;
-            t & volt.sdram_p;
-        }
-        
-        serializer_non_intrusive(t, SystemInformation::stRaspberryPI::stFrequencies & f)
-        {
-            t & f.arm;
-            t & f.core;
-            t & f.h264;
-            t & f.isp;
-            t & f.v3d;
-            t & f.uart;
-            t & f.pwm;
-            t & f.emmc;
-            t & f.pixel;
-            t & f.vec;
-            t & f.hdmi;
-            t & f.dpi;
-        }
-    }
-}
-
-
-
-
-struct MessageBase
-{
-    enum eMessage { Message_None, Message_StartLoading, Message_StopLoading, Message_SystemInformation };
-    
-    explicit MessageBase(eMessage msg) : _msg(msg) { }
-    
-    serializer(t)
-    {
-        t & _msg;
-    }
-    
-    eMessage _msg;
-};
-
 @interface Client()
 {
     NSMutableSet *delegates;
@@ -82,10 +11,14 @@ struct MessageBase
     
     NSInputStream *inputStream;
     NSOutputStream *outputStream;
+    
+    BOOL wasOpenRequestSend;
 }
 
-- (BOOL)sendStream:(const std::stringstream &)stream;
 - (void)onData:(const uint8_t *)data length:(NSInteger)len;
+
+- (void)inputStreamEvent:(NSStreamEvent)eventCode;
+- (void)outputStreamEvent:(NSStreamEvent)eventCode;
 
 @end
 
@@ -110,6 +43,7 @@ struct MessageBase
     {
         delegates = [NSMutableSet set];
         messages = [NSMutableArray array];
+        wasOpenRequestSend = NO;
     }
     
     return self;
@@ -146,6 +80,8 @@ struct MessageBase
     [inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     [outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];
     
+    wasOpenRequestSend = YES;
+    
     [inputStream open];
     [outputStream open];
 }
@@ -155,196 +91,72 @@ struct MessageBase
     return NO;
 }
 
-- (BOOL)startLoading:(NSInteger)amps
-{
-    try
-    {
-        struct stLoad : MessageBase
-        {
-            stLoad() : MessageBase(MessageBase::Message_StartLoading) { }
-            
-            serializer(t)
-            {
-                boost::serialization::base_object<MessageBase>(* this);
-                t & amps;
-            }
-            
-            // vars
-            std::uint8_t amps;
-            
-        } load;
-        
-        load.amps = (std::uint8_t)amps;
-        
-        std::stringstream ss;
-        boost::archive::text_oarchive ia(ss);
-        
-        ia & load;
-        
-        return [self sendStream:ss];
-    }
-    
-    catch(...)
-    {
-        return NO;
-    }
-    
-    return NO;
-}
-
-- (BOOL)stopLoading
-{
-    try
-    {
-        struct stStop : MessageBase
-        {
-            stStop() : MessageBase(MessageBase::Message_StopLoading) { }
-            
-            serializer(t)
-            {
-                boost::serialization::base_object<MessageBase>(* this);
-                t & amps;
-            }
-            
-            // vars
-            std::uint8_t amps;
-            
-        } stop;
-        
-        std::stringstream ss;
-        boost::archive::text_oarchive ia(ss);
-        
-        ia & stop;
-        
-        return [self sendStream:ss];
-    }
-    
-    catch(...)
-    {
-        return NO;
-    }
-    
-    return NO;
-}
-
-
-- (BOOL)sendStream:(const std::stringstream &)stream
-{
-    if([outputStream streamStatus] != NSStreamStatusOpen)
-        return NO;
-    
-    const std::string & data = stream.str();
-    if(data.length() <= 0)
-        return NO;
-    
-    return [outputStream write:(const uint8_t *)data.c_str() maxLength:data.length()] > 0;
-}
-
 - (void)onData:(const uint8_t *)data length:(NSInteger)len
 {
-    std::stringstream ss(std::string((const char *)data, len));
-    boost::archive::text_iarchive ia(ss);
+    for(id<ClientDelegate> i in delegates)
+        [i client:self onData:data length:len];
+}
+
+- (void)inputStreamEvent:(NSStreamEvent)eventCode
+{
+    NSLog(@"inputStreamEvent:%lu", (unsigned long)eventCode);
     
-    MessageBase msg(MessageBase::Message_None);
-    
-    ia & msg;
-    
-    switch(msg._msg)
+    switch(eventCode)
     {
-        case MessageBase::Message_StartLoading:
-        {
-            struct stLoad
+        case NSStreamEventOpenCompleted:
+            for(id<ClientDelegate> p in delegates) [p client:self openRequest:YES];
+            break;
+        case NSStreamEventEndEncountered:
+            break;
+        case NSStreamEventErrorOccurred:
+            if(wasOpenRequestSend)
             {
-                serializer(t)
+                for(id<ClientDelegate> p in delegates) [p client:self openRequest:NO];
+            }
+            break;
+        case NSStreamEventHasBytesAvailable:
+ 
+            uint8_t buffer[2048] = { 0 };
+            while([inputStream hasBytesAvailable])
+            {
+                NSInteger len = [inputStream read:buffer maxLength:sizeof(buffer)];
+                if(len > 0)
                 {
-                    t & success;
+                    [self onData:buffer length:len];
                 }
-                bool success;
-            } load = { NO };
-            
-            ia & load;
-            
-            for(id<ClientDelegate> i in delegates)
-            {
-                [i client:self loadingReply:load.success];
-            }
-        }
-        break;
-            
-        case MessageBase::Message_StopLoading:
-        {
-            struct stStop
-            {
-                serializer(t)
+                else if(len == -1)
                 {
-                    t & success;
+                        
                 }
-                bool success;
-            } load = { NO };
-            
-            ia & load;
-            
-            for(id<ClientDelegate> i in delegates)
-            {
-                [i client:self loadingReply:load.success];
             }
-        }
-        break;
-            
-        case MessageBase::Message_SystemInformation:
-        {
-            SystemInformation info = { 0 };
-            
-            ia & info;
-            
-            for(id<ClientDelegate> i in delegates)
-            {
-                [i client:self systemInformation:info];
-            }
-        }
-        break;
-            
-        default:
-        break;
+            break;
     }
+
+}
+
+- (void)outputStreamEvent:(NSStreamEvent)eventCode
+{
+    NSLog(@"outputStreamEvent:%lu", (unsigned long)eventCode);
     
+    switch(eventCode)
+    {
+        case NSStreamEventOpenCompleted:
+            break;
+        case NSStreamEventEndEncountered:
+            break;
+        case NSStreamEventErrorOccurred:
+            break;
+        case NSStreamEventHasBytesAvailable:
+            break;
+    }
 }
 
 - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
 {
-    switch(eventCode)
-    {
-        case NSStreamEventOpenCompleted:
-            if(aStream == inputStream)
-            {
-                for(id<ClientDelegate> p in delegates) [p client:self openRequest:YES];
-            }
-            break;
-        case NSStreamEventEndEncountered:
-            NSLog(@"NSStreamEventEndEncountered");
-            break;
-        case NSStreamEventErrorOccurred:
-            NSLog(@"NSStreamEventErrorOccured");
-            break;
-        case NSStreamEventHasBytesAvailable:
-            if(aStream == inputStream)
-            {
-                uint8_t buffer[1024];
-                while([inputStream hasBytesAvailable])
-                {
-                    NSInteger len = [inputStream read:buffer maxLength:sizeof(buffer)];
-                    if(len > 0)
-                    {
-                        [self onData:buffer length:len];
-                    }
-                    else if(len == -1)
-                    {
-                        
-                    }
-                }
-            }
-            break;
-    }
+    if(aStream == inputStream)
+        [self inputStreamEvent:eventCode];
+    else if(aStream == outputStream)
+        [self outputStreamEvent:eventCode];
 }
 
 @end

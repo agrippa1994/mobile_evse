@@ -1,5 +1,6 @@
 #import <UIKit/UIKit.h>
+#import "Client.h"
 
-@interface NetworkViewController : UITableViewController<UITextFieldDelegate, UIAlertViewDelegate>
+@interface NetworkViewController : UITableViewController<ClientDelegate>
 
 @end

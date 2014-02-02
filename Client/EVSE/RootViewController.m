@@ -15,9 +15,4 @@
     [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-}
-
 @end

@@ -1,43 +1,13 @@
 #import <Foundation/Foundation.h>
 
-struct SystemInformation
-{
-    struct stRaspberryPI
-    {
-        struct stTemperatures
-        {
-            float temperature;
-        }
-        Temperatures;
-        
-        struct stVoltages
-        {
-            float core, sdram_c, sdram_i, sdram_p;
-        }
-        Voltages;
-        
-        struct stFrequencies
-        {
-            uint64_t arm, core, h264, isp, v3d, uart, pwm, emmc, pixel, vec, hdmi, dpi;
-        }
-        Frequencies;
-        
-    }
-    RaspberryPI;
-};
-
 @class Client;
 
 @protocol ClientDelegate <NSObject>
-
+@optional
 - (void)client:(Client *)p openRequest:(BOOL)isOpen;
 - (void)client:(Client *)p onDisconnect:(BOOL)disconnected;
 
-- (void)client:(Client *)p loadingReply:(BOOL)wasLoadingStarted;
-- (void)client:(Client *)p stopLoadingReply:(BOOL)wasLoadingStopped;
-
-- (void)client:(Client *)p systemInformation:(const struct SystemInformation)info;
-
+- (void)client:(Client *)p onData:(const uint8_t *)data length:(NSInteger)len;
 @end
 
 
@@ -50,9 +20,6 @@ struct SystemInformation
 
 - (void)connect:(NSString *)host withPort:(UInt32)port;
 - (BOOL)disconnect;
-
-- (BOOL)startLoading:(NSInteger)amps;
-- (BOOL)stopLoading;
 
 @end
 

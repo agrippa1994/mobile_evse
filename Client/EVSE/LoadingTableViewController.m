@@ -87,10 +87,8 @@
         switch(info->ampere)
         {
             case one_phase_16A:
-                [[Client sharedClient] startLoading:16];
                 break;
             case three_phase_63A:
-                [[Client sharedClient] startLoading:63];
                 break;
         }
     }
