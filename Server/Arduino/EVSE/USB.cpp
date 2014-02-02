@@ -3,7 +3,7 @@
 void usb_init()
 {
   // Wartet und startet die USB-Verbindung
-  Serial.begin(19200);
+  Serial.begin(115200);
   while(!Serial); 
 }
 
@@ -17,13 +17,14 @@ void usb_serialEvent()
      const char ch = Serial.read();
     
     // /n, /r
-    if(ch == 13 || ch == 10)
+    if(ch == '\n' || ch == '\r')
     {
       if(strlen(szBuffer) > 0)
       {
         // Ausführen von onCommand, wenn \n bzw. \r empfangen wurde
         // Senden des Rückgabewertes der Funktion an Sender
-        Serial.println( usb_onCommand(szBuffer) );
+        String szStr = szBuffer;
+        Serial.println( usb_onCommand(szStr) );
       
         // Entleeren des Buffers, setzen des Offsets auf 0
         memset(szBuffer, 0, sizeof(szBuffer));
@@ -39,36 +40,7 @@ void usb_serialEvent()
   } 
 }
 
-int usb_onCommand(const char *szStr)
+String usb_onCommand(const String & szStr)
 {
-  // Kleine Test-Beispiele....
-  
-  if(!strcmp(szStr, "init"))
-  {
-    digitalWrite(13, HIGH);
-    return 1;
-  }
-  
-  else if(!strcmp(szStr, "exit"))
-  {
-    digitalWrite(13, LOW);
-    return 1;
-  }
-  else if(!strcmp(szStr, "enable PWM"))
-  {
-    setPWM(50);
-    return 1;
-  }
-  else if(!strcmp(szStr, "disable PWM"))
-  {
-    setPWM(0);
-    return 1;
-  }
-  else if(!strcmp(szStr, "get PWM"))
-  {
-     return getPWM();
-  }
-  
-  // -1, wenn der Befehl nicht vorhanden ist
-  return -1;
+  return "unknown command";
 }

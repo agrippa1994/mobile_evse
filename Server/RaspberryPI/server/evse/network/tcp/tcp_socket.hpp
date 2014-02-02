@@ -22,10 +22,11 @@ namespace evse {
                 // asynchroner Handler für Lese- und  Verbindungsabruchcallbacks
                 void read_disconnect_handler()
                 {
-                    m_socket.async_read_some(boost::asio::buffer(m_buffer), boost::bind(&tcp_socket<socket>::onMessageOrDisconnect, this, _1, _2));
+                    boost::asio::async_read_until(m_socket, m_buffer, "\r\n", boost::bind(&tcp_socket<socket>::onMessageOrDisconnect, this, _1, _2));
+
                 }
 
-                void onMessageOrDisconnect(const boost::system::error_code& e, std::size_t bytes_transferred)
+                void onMessageOrDisconnect(const boost::system::error_code& e, std::size_t)
                 {
                     if(e)
                     {
@@ -34,14 +35,20 @@ namespace evse {
                         return;
                     }
 
-                    onData(bytes_transferred);
+                    std::string szData;
+                    std::istream(&m_buffer) >> szData;
+
+                    if(szData.length())
+                    {
+                        onData(szData);
+                    }
 
                     read_disconnect_handler();
                 }
 
             public:
                 explicit tcp_socket(tcp_server<socket> *parent, boost::asio::ip::tcp::socket sock) :
-                    m_parent(parent), m_socket(std::move(sock)), m_buffer(8192)
+                    m_parent(parent), m_socket(std::move(sock))
                 {
                     read_disconnect_handler();
                 }
@@ -58,10 +65,10 @@ namespace evse {
                 tcp_server<socket>* m_parent;
 
                 // Buffer für einkommende Daten
-                std::vector<char> m_buffer;
+                boost::asio::streambuf m_buffer;
 
 
-                virtual void onData(size_t bytes) = 0;
+                virtual void onData(const std::string & data) = 0;
                 virtual void onDisconnect() = 0;
             };
 

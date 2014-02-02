@@ -6,43 +6,29 @@
 
 
 
-QT       += core gui
+QT       += core
 
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS += -w
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
 TARGET = server
 TEMPLATE = app
 
+CONFIG += console
 
 SOURCES += src/main.cpp \
-    src/gui/mainwindow.cpp \
-    src/network/http/server.cpp \
-    src/network/http/script_manager.cpp \
-    src/network/http/script.cpp \
-    src/network/http/request.cpp \
-    src/network/http/reply.cpp \
-    src/network/http/client.cpp \
     src/rpi/rpi.cpp \
-    src/network/io_service.cpp
+    src/network/io_service.cpp \
+    src/evse.cpp \
+    src/network/usb/usb.cpp
 
 HEADERS  += \
-    evse/gui/mainwindow.hpp \
-    evse/network/tcp/http/server.hpp \
-    evse/network/tcp/http/script_manager.hpp \
-    evse/network/tcp/http/script.hpp \
-    evse/network/tcp/http/request.hpp \
-    evse/network/tcp/http/reply.hpp \
-    evse/network/tcp/http/client.hpp \
     evse/network/tcp/tcp_server.hpp \
     evse/network/tcp/tcp_socket.hpp \
     evse/rpi/rpi.hpp \
-    evse/network/io_service.hpp
-
-FORMS    += utils/mainwindow.ui
-
+    evse/network/io_service.hpp \
+    evse/evse.hpp \
+    evse/network/usb/usb.hpp
 
 
 linux-g++{
@@ -65,7 +51,8 @@ BOOST_DIR_LIBS = $$BOOST_DIR/lib/
 unix:!macx: LIBS += -lrt
 unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_system.a
 unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_thread.a
-
+unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_filesystem.a
+unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_log.a
 
 # Boost Ordner
 INCLUDEPATH += $$BOOST_DIR

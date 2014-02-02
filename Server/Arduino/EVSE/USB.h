@@ -8,6 +8,6 @@ void usb_serialEvent();
 void usb_init();
 
 // Verarbeitung der Befehle geschieht hier
-int  usb_onCommand(const char *szStr);
+String  usb_onCommand(const String & str);
 
 #endif
