@@ -42,5 +42,16 @@ void usb_serialEvent()
 
 String usb_onCommand(const String & szStr)
 {
+  if(szStr == "on")
+  {
+    digitalWrite(13, HIGH);
+    return "OK";
+  }
+  else if(szStr == "off")
+  {
+    digitalWrite(13, LOW);
+    return "OK";
+  }
+  
   return "unknown command";
 }

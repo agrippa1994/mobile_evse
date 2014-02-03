@@ -26,7 +26,7 @@ bool evse::evse_tcp_client::send(const std::string &str)
     return false;
 }
 
-void evse::evse_tcp_client::onData(const std::string & data)
+void evse::evse_tcp_client::onData(const std::string &data)
 {
     ( (evse *)m_parent )->on_tcp_data(shared_from_this(), data);
 }

@@ -33,7 +33,7 @@ namespace evse
     private:
         network::usb::usb m_arduino;
 
-        void on_tcp_data(std::shared_ptr<evse_tcp_client> cl, const std::string & text);
+        void on_tcp_data(std::shared_ptr<evse_tcp_client> cl, const std::string &text);
     };
 }
 

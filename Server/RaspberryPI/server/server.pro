@@ -4,6 +4,10 @@
 #
 #-------------------------------------------------
 
+message("Programm wird kompiliert...")
+message($$QMAKESPEC)
+
+
 QMAKE_CXXFLAGS += -std=c++11
 QMAKE_CXXFLAGS += -w
 

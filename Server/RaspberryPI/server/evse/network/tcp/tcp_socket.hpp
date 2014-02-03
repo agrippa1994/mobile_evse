@@ -4,6 +4,7 @@
 #include <evse/network/tcp/tcp_server.hpp>
 
 #include <boost/bind.hpp>
+#include <boost/algorithm/string/erase.hpp>
 
 #include <vector>
 #include <memory>
@@ -35,8 +36,12 @@ namespace evse {
                         return;
                     }
 
-                    std::string szData;
-                    std::istream(&m_buffer) >> szData;
+
+                    std::stringstream ss;
+                    std::istream(&m_buffer) >> ss.rdbuf();
+                    std::string szData = ss.str();
+
+                    boost::algorithm::erase_all(szData, "\r\n");
 
                     if(szData.length())
                     {

@@ -3,6 +3,7 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/log/trivial.hpp>
+#include <boost/algorithm/string/erase.hpp>
 
 evse::network::usb::usb::usb() : m_serial(evse::network::io_service)
 {
@@ -77,7 +78,14 @@ std::string evse::network::usb::usb::sendAndRead(const std::string & data, bool 
                 return retn;
             }
 
-            std::istream(&buf) >> retn;
+            std::istream buf_stream(&buf);
+            std::stringstream ss;
+
+            buf_stream >> ss.rdbuf();
+            retn  = ss.str();
+
+            boost::algorithm::erase_all(retn, "\r\n");
+
             if(retn.length() > 0)
             {
                 success = true;
