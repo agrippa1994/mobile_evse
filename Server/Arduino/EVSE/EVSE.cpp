@@ -1,4 +1,5 @@
 #include "EVSE.h"
+#include "vector.h"
 
 // Setup wird beim initialisieren des Programmes aufgerufen
 // Hier werden unter anderem alle Objekte initialisiert, aber nicht konstruiert
@@ -11,7 +12,7 @@ void setup()
 // loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
 void loop()
 {
-   
+  vector<int> x;   
 }
 
 // serialEvent() ist der Interrupt-Handler des Serialports
