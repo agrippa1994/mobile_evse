@@ -19,7 +19,7 @@
   usw.
   
   allocated_ hält die Information, wieviele Einträge es im dynamischen Speicher gibt (Anzahl der Elemente).
-  Im oberen Fall wäre es 4
+  Im oberen Fall wären es 4
   
 */
 
@@ -90,14 +90,13 @@ public:
     if(allocated_ <= 0 || idx >= allocated_)
       return;
         
-        
     size_t new_allocated = allocated_ - 1;
     T **new_data = new T * [new_allocated];
     
     delete data_[idx];
     data_[idx] = 0;
 
-    for(int i=0, u; i < new_allocated; i++, u++)
+    for(int i=0, u=0; i < new_allocated; i++, u++)
     {
       if(data_[i] == 0)
         u++;
