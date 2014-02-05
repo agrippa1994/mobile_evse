@@ -26,44 +26,44 @@
 #include <Arduino.h>
 
 
-template<typename T> class vector
+template<typename T> class Vector
 {
   size_t allocated_;
   T **data_;
 public:
   // Standard Konstruktor
-  vector() 
+  Vector() 
   : allocated_(0), data_(0)
   {
     
   }
   
   // Copy-Konstruktor
-  vector( const vector<T> & rhs) 
+  Vector( const Vector<T> & rhs) 
   : allocated_(0), data_(0)
   {
     copyAllElementsFromVectorToThis(rhs);
   }
   
-  ~vector()
+  ~Vector()
   {
     deleteAllElements();
   }
   
   
-  vector<T> & operator = (vector<T> & rhs)
+  Vector<T> & operator = (Vector<T> & rhs)
   {
     copyAllElementsFromVectorToThis(rhs);
   }
   
-  vector<T> & operator += (T & t)
+  Vector<T> & operator += (T & t)
   {
     append(t);
     
     return * this;
   }
   
-  vector<T> & operator += (T t)
+  Vector<T> & operator += (T t)
   {
     append(t);
     
@@ -127,7 +127,7 @@ private:
     }
   }
   
-  void copyAllElementsFromVectorToThis(const vector<T> & rhs)
+  void copyAllElementsFromVectorToThis(const Vector<T> & rhs)
   {
     deleteAllElements();
     
@@ -135,10 +135,7 @@ private:
     data_ = new T * [allocated_];
     
     for(int i=0; i < allocated_; i++)
-    {
-      data_[i] = new T;
-      memcpy(data_[i], rhs.data_[i], sizeof(T));
-    }
+      data_[i] = new T(* rhs.data_[i]);
   }
 
   void append(T & t)
