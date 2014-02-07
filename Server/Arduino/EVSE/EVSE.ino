@@ -1,5 +1,5 @@
 /*
-  Autor:  Manuel Stampfl
+  Autor:  Manuel Stampfl u. Christian Mitterbäck
   
  
   Programmbeschreibung:

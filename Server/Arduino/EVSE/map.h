@@ -2,7 +2,7 @@
 #define MAP_H
 
 #include <Arduino.h>
-
+#include "vector.h"
 
 template<typename T, typename U> class Map
 {
@@ -47,6 +47,14 @@ public:
     return allocated_; 
   }
 
+  Vector<T> allKeys() const
+  {
+    Vector<T> vec;
+    for(int i=0; i < allocated_; i++)
+      vec += (T)(* keys_[i]);
+    return vec;  
+  }
+  
   U & operator[] (T key)
   {
     // Der Schlüssel existiert  
