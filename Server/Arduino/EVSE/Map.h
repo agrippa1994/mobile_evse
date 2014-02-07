@@ -2,7 +2,7 @@
 #define MAP_H
 
 #include <Arduino.h>
-#include "vector.h"
+#include "Vector.h"
 
 template<typename T, typename U> class Map
 {
