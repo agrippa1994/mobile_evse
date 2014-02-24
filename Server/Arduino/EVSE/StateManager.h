@@ -27,12 +27,20 @@
     2 -> Wir können Strom liefern
 */
 
-
-class CStateManager
+enum eState
 {
- 
+  state_None = 0,
+  state_A,
+  state_B,
+  state_C,
+  state_D,
+  state_E,
+  state_F
 };
 
-extern CStateManager StateManager;
+void statemanager_init();
+void statemanager_update();
+
+eState getEVSEState();
 
 #endif

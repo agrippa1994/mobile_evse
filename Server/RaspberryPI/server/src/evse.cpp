@@ -28,6 +28,8 @@ bool evse::evse_tcp_client::send(const std::string &str)
 
 void evse::evse_tcp_client::onData(const std::string &data)
 {
+    //boost::thread thr(boost::bind(&evse::evse::on_tcp_data, (evse *)(&m_parent), shared_from_this(), data));
+
     ( (evse *)m_parent )->on_tcp_data(shared_from_this(), data);
 }
 

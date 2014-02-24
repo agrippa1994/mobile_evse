@@ -29,12 +29,6 @@ HEADERS  += \
     evse/network/usb/usb.hpp
 
 
-#x64 - Linux
-linux-g++
-{
-    BOOST_DIR = /usr/local/boost_x64
-}
-
 #Rasperry PI
 linux-rasp-pi-g++
 {
@@ -46,6 +40,7 @@ linux-rasp-pi-g++
 
     BOOST_DIR = /usr/local/boost_arm
 }
+BOOST_DIR = /usr/local/boost_x64
 
 BOOST_DIR_LIBS = $$BOOST_DIR/lib/
 
