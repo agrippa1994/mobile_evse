@@ -12,8 +12,7 @@
 #include <QWidget>
 #include <QStyleFactory>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow),
-    _socket(this)
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), _socket(this)
 {
     ui->setupUi(this);
 
