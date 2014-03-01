@@ -4,29 +4,29 @@
 #
 #-------------------------------------------------
 
-message("Programm wird kompiliert...")
-message($$QMAKESPEC)
-
-
-QMAKE_CXXFLAGS += -std=c++11
+QMAKE_CXXFLAGS += -std=c++0x
 QMAKE_CXXFLAGS += -w
+
+QT -= core gui widget
 
 TARGET = server
 TEMPLATE = app
 
 CONFIG += console
 
-SOURCES += src/main.cpp \
-    src/network/io_service.cpp \
-    src/evse.cpp \
-    src/network/usb/usb.cpp
+SOURCES += main.cpp \
+    usb_base.cpp \
+    arduino.cpp \
+    tcp_client_base.cpp \
+    tcp_server_base.cpp \
+    network.cpp
 
-HEADERS  += \
-    evse/network/tcp/tcp_server.hpp \
-    evse/network/tcp/tcp_socket.hpp \
-    evse/network/io_service.hpp \
-    evse/evse.hpp \
-    evse/network/usb/usb.hpp
+HEADERS += \
+    usb_base.h \
+    arduino.h \
+    tcp_client_base.h \
+    tcp_server_base.h \
+    network.h
 
 
 #Rasperry PI
@@ -40,14 +40,13 @@ linux-rasp-pi-g++
 
     BOOST_DIR = /usr/local/boost_arm
 }
-BOOST_DIR = /usr/local/boost_x64
 
+BOOST_DIR = /usr/local/boost_x64
 BOOST_DIR_LIBS = $$BOOST_DIR/lib/
 
 unix:!macx: LIBS += -lrt
 unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_system.a
 unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_thread.a
-unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_filesystem.a
 unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_log.a
 
 # Boost Ordner
@@ -58,3 +57,5 @@ INCLUDEPATH += $$PWD
 
 #Abhängigkeiten
 DEPENDPATH += $$BOOST_DIR
+
+

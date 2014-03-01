@@ -108,7 +108,7 @@ void MainWindow::menu_info()
 
 void MainWindow::send()
 {
-    QString & text = ui->lineEdit->text();
+    QString text = ui->lineEdit->text();
     if(text.length() == 0)
         return;
 
