@@ -62,23 +62,26 @@ MainWindow::~MainWindow()
 
 void MainWindow::tcp_data()
 {
-    QString msg = QString(_socket.readAll()).remove("\r\n");
-
-    QStringList tokens = msg.split("(\\w+)\\:(\\w+) ");
-    for(int i=0;i<tokens.size();i++)
+    QStringList messages = QString(_socket.readAll()).split("\r\n", QString::SkipEmptyParts);
+    for(int i=0; i < messages.length(); i++)
     {
-        QStringList val_and_key = tokens[i].split(":");
-        if(val_and_key.size() != 2)
-            continue;
-
-        if(val_and_key[0] == "state")
+        messages[i] = messages[i].remove("\r\n");
+        QStringList tokens = messages[i].split("(\\w+)\\:(\\w+) ");
+        for(int u=0;u<tokens.size();u++)
         {
-            int state = val_and_key[1].toInt() - 48;
-            setEVSEState(state);
-        }
-    }
+            QStringList val_and_key = tokens[u].split(":");
+            if(val_and_key.size() != 2)
+                continue;
 
-    networkLog("<font color=\"#0000AA\">" + msg + "</font>");
+            if(val_and_key[0] == "state")
+            {
+                int state = val_and_key[1].toInt() - 48;
+                setEVSEState(state);
+            }
+        }
+
+        networkLog("<font color=\"#0000AA\">" + messages[i] + "</font>");
+    }
 }
 
 void MainWindow::tcp_stateChange(QAbstractSocket::SocketState state)
