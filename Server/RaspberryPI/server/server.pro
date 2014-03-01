@@ -41,7 +41,7 @@ linux-rasp-pi-g++
     BOOST_DIR = /usr/local/boost_arm
 }
 
-BOOST_DIR = /usr/local/boost_x64
+#BOOST_DIR = /usr/local/boost_x64
 BOOST_DIR_LIBS = $$BOOST_DIR/lib/
 
 unix:!macx: LIBS += -lrt
