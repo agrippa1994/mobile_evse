@@ -36,7 +36,7 @@ void loop()
   static unsigned long last = millis();
   unsigned long current = millis();
   
-  if(last + 300 > current)
+  if(last + 100 > current)
     return;
   
   last = current;
