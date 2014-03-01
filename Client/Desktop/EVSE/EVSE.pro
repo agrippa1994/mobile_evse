@@ -21,24 +21,3 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
-
-#x64 - Linux
-
-    BOOST_DIR = /usr/local/boost_x64
-
-
-
-BOOST_DIR_LIBS = $$BOOST_DIR/lib
-
-unix:!macx: LIBS += -lrt
-unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_system.a
-
-
-# Boost Ordner
-INCLUDEPATH += $$BOOST_DIR
-
-#Projekt Ordner auch als Include-Pfad verwenden
-INCLUDEPATH += $$PWD
-
-#Abhängigkeiten
-DEPENDPATH += $$BOOST_DIR

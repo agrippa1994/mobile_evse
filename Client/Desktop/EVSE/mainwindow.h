@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QTcpSocket>
-#include <QTimer>
 
 namespace Ui
 {
@@ -19,22 +18,21 @@ public:
     ~MainWindow();
 
 private slots:
-    void tcp_connected();
-    void tcp_disconnected();
+    void tcp_data();
     void tcp_stateChange(QAbstractSocket::SocketState);
     void tcp_error(QAbstractSocket::SocketError);
 
-    void timer();
-
     void menu_info();
 
+    void send();
 private:
     Ui::MainWindow *ui;
     QTcpSocket _socket;
+    int _state;
 
     void setEVSEState(int row);
     void networkLog(const QString & str);
-    QString sendAndRead(const QString & send);
+    bool sendAndRead(const QString & send);
 };
 
 #endif // MAINWINDOW_H
