@@ -25,7 +25,7 @@ void usb_serialEvent()
         // Ausführen von onCommand, wenn \n bzw. \r empfangen wurde
         // Senden des Rückgabewertes der Funktion an Sender
         String szStr = szBuffer;
-        Serial.println( usb_onCommand(szStr) );
+        usb_onCommand(szStr);
       
         // Entleeren des Buffers, setzen des Offsets auf 0
         memset(szBuffer, 0, sizeof(szBuffer));
@@ -41,7 +41,7 @@ void usb_serialEvent()
   } 
 }
 
-String usb_onCommand(const String & szStr)
+void usb_onCommand(const String & szStr)
 {
   return CommandHandler(szStr);
 }

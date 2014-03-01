@@ -5,39 +5,17 @@
 #include "CommandHandler.h"
 #include "StateManager.h"
 
-String startLoading(const String& command, String_Map & args)
+void startLoading(const String& command, String_Map & args)
 {
   if(args.size() == 0)
-    return "error";
+    return;
   
   if(!args.isset("--current") || !args.isset("--phases"))
-    return "error";
+    return;
   
-  String retn;
-  retn += "Ladung gestartet, Strom: ";
-  retn += args["--current"];
-
-  retn += ", Phasen: ";
-  retn += args["--phases"];
-
-  return retn;  
+  return;  
 }
 
-String get(const String& command, String_Map & args)
-{
-  String retn;
-  
-  if(args.isset("--evse"))
-  {
-    if(args["--evse"] == "state")
-    {
-      String retn; retn += (int) getEVSEState();
-      return retn; 
-    }
-  }
-  
-  return "error";
-}
 // Setup wird beim initialisieren des Programmes aufgerufen
 // Hier werden unter anderem alle Objekte initialisiert, aber nicht konstruiert
 void setup()
@@ -48,13 +26,26 @@ void setup()
   statemanager_init();
   
   CommandHandler()["startloading"] = startLoading;
-  CommandHandler()["get"] = get;
 }
 
 // loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
 void loop()
 {
   statemanager_update();
+  
+  static unsigned long last = millis();
+  unsigned long current = millis();
+  
+  if(last + 300 > current)
+    return;
+  
+  last = current;
+  
+  String data="state:";
+  data += (getEVSEState() + '0');
+  
+  data += "\r\n";
+  Serial.print(data);
 }
 
 // serialEvent() ist der Interrupt-Handler des Serialports

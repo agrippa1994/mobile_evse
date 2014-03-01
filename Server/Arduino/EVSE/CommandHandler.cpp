@@ -12,7 +12,7 @@ void CommandHandler_init()
 }
 
 // Aufsplitten des Befehles; Übergabe an den Callback Funktionen
-String CommandHandler(const String & usb_command)
+void CommandHandler(const String & usb_command)
 {
   Vector<String> tokens = split(usb_command, " ");  
   
@@ -20,7 +20,7 @@ String CommandHandler(const String & usb_command)
   // COMMAND --PARAM1 ARGUMENT1 --PARAM2 ARGUMENT2 --PARAMN ARGUMENTN
   
   if(tokens.size() % 2 == 0 || tokens.size() == 0)
-    return "error";
+    return;
     
   // Der Befehl steht am Anfang..  
   String command = tokens[0];
@@ -37,7 +37,7 @@ String CommandHandler(const String & usb_command)
         if(g_CommandHandler_Map[ allKeys[i] ])
           return g_CommandHandler_Map[ allKeys[i] ](command, args_params);
        
-   return "error";
+   return;
 }
 
 // Globale Instanz

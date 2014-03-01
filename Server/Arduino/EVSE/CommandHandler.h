@@ -5,10 +5,10 @@
 #include "Map.h"
 
 typedef Map<String, String> String_Map;
-typedef Map<String, String (*)(const String&, String_Map &)> CommandHandler_Map;
+typedef Map<String, void (*)(const String&, String_Map &)> CommandHandler_Map;
 
-void   CommandHandler_init();
-String CommandHandler(const String & usb_command);
+void CommandHandler_init();
+void CommandHandler(const String & usb_command);
 
 
 CommandHandler_Map& CommandHandler();
