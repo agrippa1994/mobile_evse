@@ -64,6 +64,20 @@ void MainWindow::tcp_data()
 {
     QString msg = QString(_socket.readAll()).remove("\r\n");
 
+    QStringList tokens = msg.split("(\\w+)\\:(\\w+) ");
+    for(int i=0;i<tokens.size();i++)
+    {
+        QStringList val_and_key = tokens[i].split(":");
+        if(val_and_key.size() != 2)
+            continue;
+
+        if(val_and_key[0] == "state")
+        {
+            int state = val_and_key[1].toInt() - 48;
+            setEVSEState(state);
+        }
+    }
+
     networkLog("<font color=\"#0000AA\">" + msg + "</font>");
 }
 
