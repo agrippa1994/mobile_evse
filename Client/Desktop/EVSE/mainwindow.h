@@ -33,6 +33,9 @@ private:
     void setEVSEState(int row);
     void networkLog(const QString & str);
     bool sendAndRead(const QString & send);
+
+    void dataForMainTable(const QString & key, const QString & value);
+    void onKeyAndValue(const QString & key, const QString & value);
 };
 
 #endif // MAINWINDOW_H

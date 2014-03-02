@@ -16,29 +16,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 {
     ui->setupUi(this);
 
-    qApp->setStyle(QStyleFactory::create("Fusion"));
-
-    QPalette darkPalette;
-    darkPalette.setColor(QPalette::Window, QColor(53,53,53));
-    darkPalette.setColor(QPalette::WindowText, Qt::white);
-    darkPalette.setColor(QPalette::Base, QColor(25,25,25));
-    darkPalette.setColor(QPalette::AlternateBase, QColor(53,53,53));
-    darkPalette.setColor(QPalette::ToolTipBase, Qt::white);
-    darkPalette.setColor(QPalette::ToolTipText, Qt::white);
-    darkPalette.setColor(QPalette::Text, Qt::white);
-    darkPalette.setColor(QPalette::Button, QColor(53,53,53));
-    darkPalette.setColor(QPalette::ButtonText, Qt::white);
-    darkPalette.setColor(QPalette::BrightText, Qt::red);
-    darkPalette.setColor(QPalette::Link, QColor(42, 130, 218));
-
-    darkPalette.setColor(QPalette::Highlight, QColor(42, 130, 218));
-    darkPalette.setColor(QPalette::HighlightedText, Qt::black);
-
-    qApp->setPalette(darkPalette);
-
-    qApp->setStyleSheet("QToolTip { color: #ffffff; background-color: #2a82da; border: 1px solid white; }");
-
-
     QObject::connect(&_socket, SIGNAL(readyRead()), SLOT(tcp_data()));
     QObject::connect(&_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), SLOT(tcp_stateChange(QAbstractSocket::SocketState)));
     QObject::connect(&_socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(tcp_error(QAbstractSocket::SocketError)));
@@ -66,18 +43,19 @@ void MainWindow::tcp_data()
     for(int i=0; i < messages.length(); i++)
     {
         messages[i] = messages[i].remove("\r\n");
-        QStringList tokens = messages[i].split("(\\w+)\\:(\\w+) ");
+        QStringList tokens = messages[i].split(" ", QString::SkipEmptyParts);
         for(int u=0;u<tokens.size();u++)
         {
             QStringList val_and_key = tokens[u].split(":");
             if(val_and_key.size() != 2)
                 continue;
 
-            if(val_and_key[0] == "state")
-            {
-                int state = val_and_key[1].toInt() - 48;
-                setEVSEState(state);
-            }
+            QString key = val_and_key[0];
+            QString val = val_and_key[1];
+
+            onKeyAndValue(key, val);
+            dataForMainTable(key, val);
+
         }
 
         networkLog("<font color=\"#0000AA\">" + messages[i] + "</font>");
@@ -171,4 +149,32 @@ bool MainWindow::sendAndRead(const QString &send)
         return true;
 
     return false;
+}
+
+void MainWindow::dataForMainTable(const QString &key, const QString &value)
+{
+    QTableWidget *table = ui->mainTable;
+    QList<QTableWidgetItem *> items = table->findItems(key, Qt::MatchCaseSensitive);
+
+    if(items.length() != 0)
+    {
+        table->item(table->row(items[0]), 1)->setText(value);
+        return;
+    }
+
+    int rowIdx = table->rowCount();
+    table->insertRow(rowIdx);
+
+    table->setItem(rowIdx, 0,  new QTableWidgetItem(key));
+    table->setItem(rowIdx, 1,  new QTableWidgetItem(value));
+
+    return;
+}
+
+void MainWindow::onKeyAndValue(const QString &key, const QString &value)
+{
+    if(key == "state")
+    {
+        setEVSEState(value.toInt());
+    }
 }

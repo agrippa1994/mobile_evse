@@ -5,15 +5,39 @@
 #include "CommandHandler.h"
 #include "StateManager.h"
 
+int requestLoading = 0;
+int requestLoadingCurrent = 0;
+int requestStopLoading = 0;
+
+int isLoading = 0;
+int isStopped = 1;
+
+int stringToInt(const String& c)
+{
+  char buf[32] = {0};
+  c.toCharArray(buf, sizeof(buf));
+  return atoi(buf); 
+}
+
 void startLoading(const String& command, String_Map & args)
 {
   if(args.size() == 0)
     return;
   
-  if(!args.isset("--current") || !args.isset("--phases"))
+  if(!args.isset("--current"))
     return;
   
+  requestLoading = 1;
+  requestStopLoading = 0;
+  requestLoadingCurrent = stringToInt(args["--current"]);
+  
   return;  
+}
+
+void stopLoading(const String& command, String_Map & args)
+{
+  requestLoading = 0;
+  requestLoadingCurrent = 0;
 }
 
 // Setup wird beim initialisieren des Programmes aufgerufen
@@ -26,23 +50,33 @@ void setup()
   statemanager_init();
   
   CommandHandler()["startloading"] = startLoading;
+  CommandHandler()["stoploading"] = stopLoading;
 }
 
 // loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
 void loop()
 {
   statemanager_update();
+
+  String data;
   
-  static unsigned long last = millis();
-  unsigned long current = millis();
+  data +="state:";
+  data += getEVSEState();
+
+  data += " requestLoading:";
+  data += requestLoading;
   
-  if(last + 100 > current)
-    return;
+  data += " requestLoadingCurrent:";
+  data += requestLoadingCurrent;
   
-  last = current;
+  data += " requestStopLoading:";
+  data += requestStopLoading;
   
-  String data="state:";
-  data += (getEVSEState() + '0');
+  data += " isLoading:";
+  data += isLoading;
+  
+  data += " isStopped:";
+  data += isStopped;
   
   data += "\r\n";
   Serial.print(data);
