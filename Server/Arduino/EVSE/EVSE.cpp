@@ -12,6 +12,8 @@ int requestStopLoading = 0;
 int isLoading = 0;
 int isStopped = 1;
 
+int updateSpeed = 150;
+
 int stringToInt(const String& c)
 {
   char buf[32] = {0};
@@ -40,6 +42,18 @@ void stopLoading(const String& command, String_Map & args)
   requestLoadingCurrent = 0;
 }
 
+void config(const String& command, String_Map & args)
+{
+  if(args.isset("--updatespeed"))
+  {
+    int val = stringToInt(args["--updatespeed"]);
+    if(val < 50)
+     return;
+    
+    updateSpeed = val; 
+  }
+}
+
 // Setup wird beim initialisieren des Programmes aufgerufen
 // Hier werden unter anderem alle Objekte initialisiert, aber nicht konstruiert
 void setup()
@@ -51,6 +65,7 @@ void setup()
   
   CommandHandler()["startloading"] = startLoading;
   CommandHandler()["stoploading"] = stopLoading;
+  CommandHandler()["config"] = config;
 }
 
 // loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
@@ -58,6 +73,14 @@ void loop()
 {
   statemanager_update();
 
+  static unsigned long last_time = millis();
+  unsigned long now = millis();
+  
+  if(last_time + updateSpeed >= now)
+    return;
+    
+  last_time = now;
+  
   String data;
   
   data +="state:";
@@ -77,6 +100,9 @@ void loop()
   
   data += " isStopped:";
   data += isStopped;
+  
+  data += " updateSpeed:";
+  data += updateSpeed;
   
   data += "\r\n";
   Serial.print(data);
