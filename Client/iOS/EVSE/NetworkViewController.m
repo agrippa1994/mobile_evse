@@ -29,7 +29,7 @@
         if(![self isWlanConnectedToEVSE])
         {
             NSString *title = @"Fehler";
-            NSString *message = @"Sie sind nciht mit dem Tankstellennetzwerk verbunden!"
+            NSString *message = @"Sie sind nicht mit dem Tankstellennetzwerk verbunden!"
             "Bitte überprüfen Sie die Verbindung zum Netzwerk";
             
             UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
@@ -39,7 +39,7 @@
         else
         {
             // Verbinden mit dem Server
-            [[Client sharedClient] connect:@"10.0.10.1" withPort:80];
+            [[Client sharedClient] connect:@"10.0.10.1" withPort:2425];
         }
     }
     
@@ -69,7 +69,10 @@
 - (void)client:(Client *)p openRequest:(BOOL)isOpen
 {
     if(isOpen)
-       [self dismissViewControllerAnimated:YES completion:nil];
+    {
+        [self dismissViewControllerAnimated:YES completion:nil];
+        return;
+    }
     
     NSString *title = @"Fehler";
     NSString *message = @"Die Verbindung zum Server kann nicht hergestellt werden!\n"
@@ -80,5 +83,19 @@
     [view show];
 }
 
+- (void)client:(Client *)p onDisconnect:(BOOL)disconnected
+{
+    
+}
+
+- (void)client:(Client *)p onData:(const uint8_t *)data length:(NSInteger)len
+{
+    
+}
+
+- (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val
+{
+    
+}
 
 @end

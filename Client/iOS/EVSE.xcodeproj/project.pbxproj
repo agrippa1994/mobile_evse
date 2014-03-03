@@ -15,10 +15,10 @@
 		3C15E8DC186F9E86002876A1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C15E8DB186F9E86002876A1 /* Images.xcassets */; };
 		3C1B22CF188FC8EF000F47ED /* Client.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3C1B22CE188FC8EF000F47ED /* Client.mm */; };
 		3C52207E1884119500528468 /* NetworkViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C52207D1884119500528468 /* NetworkViewController.m */; };
-		3C74979518990098006412D1 /* DebugViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C74979418990098006412D1 /* DebugViewController.m */; };
 		3C83F28E1887D4A600FC0F81 /* RootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C83F28D1887D4A600FC0F81 /* RootViewController.m */; };
 		3C88CDE818967CD30019E7FD /* Main_iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C88CDE418967CD30019E7FD /* Main_iPad.storyboard */; };
 		3C8B5C06188E92660082E215 /* LoadingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C8B5C05188E92660082E215 /* LoadingTableViewController.m */; };
+		3CA065B718C4949D00F3DC11 /* DebugTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CA065B618C4949D00F3DC11 /* DebugTableViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,14 +38,14 @@
 		3C3FDB801897C8EB00F198AC /* libboost_system.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_system.a; path = ../../../../../Developer/boost/lib/ios/libboost_system.a; sourceTree = "<group>"; };
 		3C52207C1884119500528468 /* NetworkViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkViewController.h; sourceTree = "<group>"; };
 		3C52207D1884119500528468 /* NetworkViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkViewController.m; sourceTree = "<group>"; };
-		3C74979318990098006412D1 /* DebugViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugViewController.h; sourceTree = "<group>"; };
-		3C74979418990098006412D1 /* DebugViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugViewController.m; sourceTree = "<group>"; };
 		3C83F28C1887D4A600FC0F81 /* RootViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RootViewController.h; sourceTree = "<group>"; };
 		3C83F28D1887D4A600FC0F81 /* RootViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RootViewController.m; sourceTree = "<group>"; };
 		3C88CDE518967CD30019E7FD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = EVSE/Base.lproj/Main_iPad.storyboard; sourceTree = "<group>"; };
 		3C88CDEA18967D820019E7FD /* libboost_serialization.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libboost_serialization.a; path = ../../../../../Developer/boost/lib/ios/libboost_serialization.a; sourceTree = "<group>"; };
 		3C8B5C04188E92660082E215 /* LoadingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoadingTableViewController.h; sourceTree = "<group>"; };
 		3C8B5C05188E92660082E215 /* LoadingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoadingTableViewController.m; sourceTree = "<group>"; };
+		3CA065B518C4949D00F3DC11 /* DebugTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DebugTableViewController.h; sourceTree = "<group>"; };
+		3CA065B618C4949D00F3DC11 /* DebugTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DebugTableViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,10 +106,10 @@
 				3C83F28D1887D4A600FC0F81 /* RootViewController.m */,
 				3C8B5C04188E92660082E215 /* LoadingTableViewController.h */,
 				3C8B5C05188E92660082E215 /* LoadingTableViewController.m */,
-				3C74979318990098006412D1 /* DebugViewController.h */,
-				3C74979418990098006412D1 /* DebugViewController.m */,
 				3C1B22CD188FC8EF000F47ED /* Client.h */,
 				3C1B22CE188FC8EF000F47ED /* Client.mm */,
+				3CA065B518C4949D00F3DC11 /* DebugTableViewController.h */,
+				3CA065B618C4949D00F3DC11 /* DebugTableViewController.m */,
 			);
 			path = EVSE;
 			sourceTree = "<group>";
@@ -195,10 +195,10 @@
 			files = (
 				3C15E8D1186F9E86002876A1 /* AppDelegate.m in Sources */,
 				3C15E8CD186F9E86002876A1 /* main.m in Sources */,
-				3C74979518990098006412D1 /* DebugViewController.m in Sources */,
 				3C1B22CF188FC8EF000F47ED /* Client.mm in Sources */,
 				3C83F28E1887D4A600FC0F81 /* RootViewController.m in Sources */,
 				3C52207E1884119500528468 /* NetworkViewController.m in Sources */,
+				3CA065B718C4949D00F3DC11 /* DebugTableViewController.m in Sources */,
 				3C8B5C06188E92660082E215 /* LoadingTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

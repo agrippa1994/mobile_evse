@@ -95,6 +95,20 @@
 {
     for(id<ClientDelegate> i in delegates)
         [i client:self onData:data length:len];
+    
+    NSArray *tokens = [[NSString stringWithCString:(const char *)data encoding:NSASCIIStringEncoding] componentsSeparatedByString:@" "];
+    for(NSString *tok in tokens)
+    {
+        NSArray *vals = [tok componentsSeparatedByString:@":"];
+        if([vals count] != 2)
+            continue;
+        
+        NSString *key = [vals firstObject];
+        NSString *val = [vals lastObject];
+        
+        for(id<ClientDelegate> i in delegates)
+            [i client:self onKeyAndValue:key value:val];
+    }
 }
 
 - (void)inputStreamEvent:(NSStreamEvent)eventCode

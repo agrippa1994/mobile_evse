@@ -3,11 +3,12 @@
 @class Client;
 
 @protocol ClientDelegate <NSObject>
-@optional
+@required
 - (void)client:(Client *)p openRequest:(BOOL)isOpen;
 - (void)client:(Client *)p onDisconnect:(BOOL)disconnected;
 
 - (void)client:(Client *)p onData:(const uint8_t *)data length:(NSInteger)len;
+- (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val;
 @end
 
 

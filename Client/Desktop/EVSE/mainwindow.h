@@ -21,6 +21,7 @@ private slots:
     void tcp_data();
     void tcp_stateChange(QAbstractSocket::SocketState);
     void tcp_error(QAbstractSocket::SocketError);
+    void btn_commandwindow();
 
     void menu_info();
 

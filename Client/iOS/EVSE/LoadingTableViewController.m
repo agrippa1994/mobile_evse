@@ -55,6 +55,16 @@
     self.hourPicker.dataSource = self;
 }
 
+- (void) viewDidAppear:(BOOL)animated
+{
+    [[Client sharedClient] addDelegate:self];
+}
+
+- (void) viewDidDisappear:(BOOL)animated
+{
+    [[Client sharedClient] rmDelegate:self];
+}
+
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -101,7 +111,22 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)client:(Client *)p loadingReply:(BOOL)wasLoadingStarted
+- (void)client:(Client *)p openRequest:(BOOL)isOpen
+{
+
+}
+
+- (void)client:(Client *)p onDisconnect:(BOOL)disconnected
+{
+    
+}
+
+- (void)client:(Client *)p onData:(const uint8_t *)data length:(NSInteger)len
+{
+    
+}
+
+- (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val
 {
     
 }

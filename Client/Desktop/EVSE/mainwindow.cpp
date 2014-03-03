@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QObject::connect(&_socket, SIGNAL(readyRead()), SLOT(tcp_data()));
     QObject::connect(&_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), SLOT(tcp_stateChange(QAbstractSocket::SocketState)));
     QObject::connect(&_socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(tcp_error(QAbstractSocket::SocketError)));
+    QObject::connect(ui->intervalButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
+    QObject::connect(ui->startButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
+    QObject::connect(ui->stopButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->pushButton, SIGNAL(clicked()), SLOT(send()));
 
     QSettings settings("settings.ini", QSettings::IniFormat);
@@ -91,6 +94,31 @@ void MainWindow::tcp_stateChange(QAbstractSocket::SocketState state)
 void MainWindow::tcp_error(QAbstractSocket::SocketError)
 {
     networkLog("<font color=\"#FF0000\">Ein Fehler ist aufgetreten</font>");
+}
+
+void MainWindow::btn_commandwindow()
+{
+    if(sender() == ui->intervalButton)
+    {
+        if(sendAndRead(QString().sprintf("config --updatespeed %d", ui->intevalSpinBox->value())))
+            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
+        else
+            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
+    }
+    else if(sender() == ui->startButton)
+    {
+        if(sendAndRead(QString().sprintf("startloading --current %d", ui->startSpinBox->value())))
+            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
+        else
+            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
+    }
+    else if(sender() == ui->stopButton)
+    {
+        if(sendAndRead("stoploading"))
+            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
+        else
+            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
+    }
 }
 
 void MainWindow::menu_info()
