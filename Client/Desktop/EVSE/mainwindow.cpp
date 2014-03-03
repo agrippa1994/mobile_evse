@@ -19,20 +19,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QObject::connect(&_socket, SIGNAL(readyRead()), SLOT(tcp_data()));
     QObject::connect(&_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), SLOT(tcp_stateChange(QAbstractSocket::SocketState)));
     QObject::connect(&_socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(tcp_error(QAbstractSocket::SocketError)));
+
+    QObject::connect(ui->actionVerbindung_ffnen, SIGNAL(triggered()), SLOT(menu_network()));
+    QObject::connect(ui->actionVerbindung_schlie_en, SIGNAL(triggered()), SLOT(menu_network()));
+
     QObject::connect(ui->intervalButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->startButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->stopButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->pushButton, SIGNAL(clicked()), SLOT(send()));
 
-    QSettings settings("settings.ini", QSettings::IniFormat);
-    QString readedIP = settings.value("IP", "10.0.10.1").toString();
-
-    QString ip = QInputDialog::getText(this, "Server-Daten", "IP-Adresse", QLineEdit::Normal, readedIP);
-
-    // Schreiben der IP in die INI-Datei
-    settings.setValue("IP", ip);
-
-    _socket.connectToHost(ip, 2425);
+    if(!showIPDialogAndConnect())
+        exit(0);
 }
 
 MainWindow::~MainWindow()
@@ -143,6 +140,19 @@ void MainWindow::send()
     ui->lineEdit->clear();
 }
 
+void MainWindow::menu_network()
+{
+    if(sender() == ui->actionVerbindung_ffnen)
+    {
+        showIPDialogAndConnect();
+    }
+    else if(sender() == ui->actionVerbindung_schlie_en)
+    {
+        if(_socket.state() != QAbstractSocket::UnconnectedState)
+            _socket.close();
+    }
+}
+
 void MainWindow::setEVSEState(int row)
 {
     for(int c = 0; c < ui->stateTable->columnCount(); c ++)
@@ -205,4 +215,25 @@ void MainWindow::onKeyAndValue(const QString &key, const QString &value)
     {
         setEVSEState(value.toInt());
     }
+}
+
+bool MainWindow::showIPDialogAndConnect()
+{
+    QSettings settings("settings.ini", QSettings::IniFormat);
+    QString readedIP = settings.value("IP", "10.0.10.1").toString();
+
+    bool bOK = false;
+    QString ip = QInputDialog::getText(this, "Server-Daten", "IP-Adresse", QLineEdit::Normal, readedIP, &bOK);
+    if(!bOK)
+        return false;
+
+    // Schreiben der IP in die INI-Datei
+    settings.setValue("IP", ip);
+
+    if(_socket.state() != QAbstractSocket::UnconnectedState)
+        _socket.close();
+
+    _socket.connectToHost(ip, 2425);
+
+    return true;
 }

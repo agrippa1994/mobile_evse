@@ -26,6 +26,8 @@ private slots:
     void menu_info();
 
     void send();
+
+    void menu_network();
 private:
     Ui::MainWindow *ui;
     QTcpSocket _socket;
@@ -37,6 +39,8 @@ private:
 
     void dataForMainTable(const QString & key, const QString & value);
     void onKeyAndValue(const QString & key, const QString & value);
+
+    bool showIPDialogAndConnect();
 };
 
 #endif // MAINWINDOW_H

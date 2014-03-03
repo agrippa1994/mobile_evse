@@ -44,10 +44,12 @@ linux-rasp-pi-g++
 #BOOST_DIR = /usr/local/boost_x64
 BOOST_DIR_LIBS = $$BOOST_DIR/lib/
 
-unix:!macx: LIBS += -lrt
-unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_system.a
-unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_thread.a
 unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_log.a
+unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_filesystem.a
+unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_thread.a
+unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_system.a
+unix:!macx: LIBS += -lpthread
+unix:!macx: LIBS += -lrt
 
 # Boost Ordner
 INCLUDEPATH += $$BOOST_DIR
