@@ -26,6 +26,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QObject::connect(ui->intervalButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->startButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->stopButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
+    QObject::connect(ui->digitalButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
+    QObject::connect(ui->pwmButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
+
     QObject::connect(ui->pushButton, SIGNAL(clicked()), SLOT(send()));
 
     if(!showIPDialogAndConnect())
@@ -116,6 +119,22 @@ void MainWindow::btn_commandwindow()
         else
             networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
     }
+
+    else if(sender() == ui->digitalButton)
+    {
+        if(sendAndRead(QString().sprintf("config --digitalWrite %d --value %d", ui->digitalSpinBoxPin->value(), ui->digitalSpinBoxVal->value())))
+            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
+        else
+            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
+    }
+    else if(sender() == ui->pwmButton)
+    {
+        if(sendAndRead(QString().sprintf("config --pwm %d", ui->pwmSpinBox->value())))
+            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
+        else
+            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
+    }
+
 }
 
 void MainWindow::menu_info()

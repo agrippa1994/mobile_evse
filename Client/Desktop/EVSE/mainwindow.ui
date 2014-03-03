@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>580</width>
-    <height>468</height>
+    <width>961</width>
+    <height>819</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -72,8 +72,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>580</width>
-     <height>25</height>
+     <width>961</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -363,7 +363,7 @@
    <widget class="QWidget" name="dockWidgetContents_2">
     <layout class="QGridLayout" name="gridLayout_2">
      <item row="1" column="0">
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="startLoading">
        <property name="title">
         <string>Ladung starten</string>
        </property>
@@ -414,7 +414,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="Interval">
        <property name="title">
         <string>Wiederholungsintervall</string>
        </property>
@@ -428,7 +428,7 @@
            <string>Intervall: </string>
           </property>
           <property name="minimum">
-           <number>50</number>
+           <number>0</number>
           </property>
           <property name="maximum">
            <number>19999</number>
@@ -477,7 +477,7 @@
       </widget>
      </item>
      <item row="2" column="0">
-      <widget class="QGroupBox" name="groupBox_3">
+      <widget class="QGroupBox" name="stopLoading">
        <property name="title">
         <string>Ladung beenden</string>
        </property>
@@ -507,6 +507,104 @@
            </size>
           </property>
          </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QGroupBox" name="digitalWrite">
+       <property name="title">
+        <string>Schreiben digitaler Daten</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_8">
+        <item row="0" column="1">
+         <widget class="QSpinBox" name="digitalSpinBoxVal">
+          <property name="maximum">
+           <number>1</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QSpinBox" name="digitalSpinBoxPin">
+          <property name="prefix">
+           <string>Pin D</string>
+          </property>
+          <property name="minimum">
+           <number>2</number>
+          </property>
+          <property name="maximum">
+           <number>13</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="digitalButton">
+          <property name="text">
+           <string>OK</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <spacer name="horizontalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="4" column="0">
+      <widget class="QGroupBox" name="PWM">
+       <property name="title">
+        <string>Pulsweitenmodulation 1kHz (Pin 10)</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_10">
+        <item row="0" column="0">
+         <widget class="QSpinBox" name="pwmSpinBox">
+          <property name="maximum">
+           <number>249</number>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="3">
+         <widget class="QPushButton" name="pwmButton">
+          <property name="text">
+           <string>OK</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QDial" name="pwmDial">
+          <property name="maximum">
+           <number>249</number>
+          </property>
+          <property name="notchTarget">
+           <double>24.899999999999999</double>
+          </property>
+          <property name="notchesVisible">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
        </layout>
       </widget>
@@ -701,7 +799,7 @@
     </hint>
     <hint type="destinationlabel">
      <x>149</x>
-     <y>367</y>
+     <y>796</y>
     </hint>
    </hints>
   </connection>
@@ -716,8 +814,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>440</x>
-     <y>367</y>
+     <x>948</x>
+     <y>796</y>
     </hint>
    </hints>
   </connection>
@@ -748,8 +846,8 @@
      <y>-1</y>
     </hint>
     <hint type="destinationlabel">
-     <x>440</x>
-     <y>367</y>
+     <x>948</x>
+     <y>796</y>
     </hint>
    </hints>
   </connection>
@@ -781,7 +879,39 @@
     </hint>
     <hint type="destinationlabel">
      <x>149</x>
-     <y>367</y>
+     <y>796</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pwmDial</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>pwmSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>141</x>
+     <y>582</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>57</x>
+     <y>587</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pwmSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>pwmDial</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>59</x>
+     <y>597</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>126</x>
+     <y>604</y>
     </hint>
    </hints>
   </connection>
