@@ -73,7 +73,7 @@
      <x>0</x>
      <y>0</y>
      <width>961</width>
-     <height>20</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -116,6 +116,8 @@
     </property>
     <addaction name="actionVerbindung_ffnen"/>
     <addaction name="actionVerbindung_schlie_en"/>
+    <addaction name="separator"/>
+    <addaction name="actionNachrichten_anzeigen"/>
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuFenster"/>
@@ -701,6 +703,14 @@
   <action name="actionVerbindung_schlie_en">
    <property name="text">
     <string>Verbindung schließen</string>
+   </property>
+  </action>
+  <action name="actionNachrichten_anzeigen">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Nachrichten anzeigen?</string>
    </property>
   </action>
  </widget>

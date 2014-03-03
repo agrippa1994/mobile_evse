@@ -61,7 +61,8 @@ void MainWindow::tcp_data()
 
         }
 
-        networkLog("<font color=\"#0000AA\">" + messages[i] + "</font>");
+        if(ui->actionNachrichten_anzeigen->isChecked())
+            networkLog("<font color=\"#0000AA\">" + messages[i] + "</font>");
     }
 }
 
