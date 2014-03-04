@@ -10,7 +10,7 @@ extern boost::function<void (const std::string &)> usb_data;
 class arduino : public usb_base
 {
 public:
-    arduino(boost::asio::io_service & io, std::string & dev) : usb_base(io, dev) { }
+    arduino(boost::asio::io_service & io) : usb_base(io) { }
     ~arduino() { }
 
 protected:

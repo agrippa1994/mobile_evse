@@ -7,6 +7,8 @@ boost::function<void (const std::string &)> usb_data;
 void arduino::onError(const boost::system::error_code &ec)
 {
     BOOST_LOG_TRIVIAL(fatal) << "arduino::onError: " << ec.message();
+
+    open();
 }
 
 void arduino::onData(const std::string & data, const size_t)

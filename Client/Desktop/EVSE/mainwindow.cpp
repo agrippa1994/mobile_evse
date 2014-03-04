@@ -26,7 +26,8 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     QObject::connect(ui->intervalButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->startButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->stopButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
-    QObject::connect(ui->digitalButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
+    QObject::connect(ui->digitalButton0, SIGNAL(clicked()), SLOT(btn_commandwindow()));
+    QObject::connect(ui->digitalButton1, SIGNAL(clicked()), SLOT(btn_commandwindow()));
     QObject::connect(ui->pwmButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
 
     QObject::connect(ui->pushButton, SIGNAL(clicked()), SLOT(send()));
@@ -99,43 +100,19 @@ void MainWindow::tcp_error(QAbstractSocket::SocketError)
 
 void MainWindow::btn_commandwindow()
 {
-    if(sender() == ui->intervalButton)
-    {
-        if(sendAndRead(QString().sprintf("config --updatespeed %d", ui->intevalSpinBox->value())))
-            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
-        else
-            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
-    }
-    else if(sender() == ui->startButton)
-    {
-        if(sendAndRead(QString().sprintf("startloading --current %d", ui->startSpinBox->value())))
-            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
-        else
-            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
-    }
-    else if(sender() == ui->stopButton)
-    {
-        if(sendAndRead("stoploading"))
-            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
-        else
-            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
-    }
+    bool bSend = false;
 
-    else if(sender() == ui->digitalButton)
-    {
-        if(sendAndRead(QString().sprintf("config --digitalWrite %d --value %d", ui->digitalSpinBoxPin->value(), ui->digitalSpinBoxVal->value())))
-            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
-        else
-            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
-    }
-    else if(sender() == ui->pwmButton)
-    {
-        if(sendAndRead(QString().sprintf("config --pwm %d", ui->pwmSpinBox->value())))
-            networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
-        else
-            networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
-    }
+    if(sender() == ui->intervalButton)      bSend = sendAndRead(QString().sprintf("config --updatespeed %d", ui->intevalSpinBox->value()));
+    else if(sender() == ui->startButton)    bSend = sendAndRead(QString().sprintf("startloading --current %d", ui->startSpinBox->value()));
+    else if(sender() == ui->stopButton)     bSend = sendAndRead("stoploading");
+    else if(sender() == ui->digitalButton0) bSend = sendAndRead(QString().sprintf("config --digitalWrite %d --value %d", ui->digitalSpinBoxPin->value(), 0));
+    else if(sender() == ui->digitalButton1) bSend = sendAndRead(QString().sprintf("config --digitalWrite %d --value %d", ui->digitalSpinBoxPin->value(), 1));
+    else if(sender() == ui->pwmButton)      bSend = sendAndRead(QString().sprintf("config --pwm %d", ui->pwmSpinBox->value()));
 
+    if(bSend)
+        networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
+    else
+        networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
 }
 
 void MainWindow::menu_info()

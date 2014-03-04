@@ -4,7 +4,6 @@
 #include <boost/log/trivial.hpp>
 #include <boost/thread.hpp>
 #include <boost/algorithm/string.hpp>
-#include <boost/filesystem.hpp>
 
 #include <string>
 
@@ -15,11 +14,8 @@ using namespace std;
 
 boost::asio::io_service g_io;
 
-
-std::string device((boost::filesystem::exists("/dev/ttyUSB0")) ? "/dev/ttyUSB0" : "/dev/ttyUSB1");
-
 server svr(g_io);
-arduino ar(g_io, device);
+arduino ar(g_io);
 
 void on_tcp_data(const std::string &data)
 {

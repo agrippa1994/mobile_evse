@@ -11,12 +11,16 @@ public:
     bool send(const std::string & msg);
 
 protected:
-    explicit usb_base(boost::asio::io_service & io, const std::string & port);
+    explicit usb_base(boost::asio::io_service & io);
 
     usb_base(usb_base &) = delete;
     usb_base(usb_base &&) = delete;
 
     usb_base& operator = (usb_base &) = delete;
+
+    void close();
+    bool open();
+    bool is_open() const;
 
 protected:
     virtual void onError(const boost::system::error_code &) = 0;
