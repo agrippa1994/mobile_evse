@@ -1,14 +1,24 @@
-#import "NetworkViewController.h"
-#import <SystemConfiguration/CaptiveNetwork.h>
-#import "Client.h"
+//
+//  NetworkTableViewController.m
+//  EVSE
+//
+//  Created by Manuel on 05.03.14.
+//  Copyright (c) 2014 Manuel. All rights reserved.
+//
 
-@interface NetworkViewController ()
-@property (weak, nonatomic) IBOutlet UITableViewCell *wlanConnect;
+#import "NetworkTableViewController.h"
+
+#import <SystemConfiguration/CaptiveNetwork.h>
+
+@interface NetworkTableViewController ()
+
+@property (weak, nonatomic) IBOutlet UITableViewCell *Connect;
 
 - (BOOL) isWlanConnectedToEVSE;
+
 @end
 
-@implementation NetworkViewController
+@implementation NetworkTableViewController
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -24,7 +34,7 @@
 {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     
-    if(cell == self.wlanConnect)
+    if(cell == self.Connect)
     {
         if(![self isWlanConnectedToEVSE])
         {
@@ -43,7 +53,7 @@
         }
     }
     
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (BOOL) isWlanConnectedToEVSE
@@ -64,8 +74,6 @@
     return NO;
 }
 
-// Delegationen des TCP-Clienten
-
 - (void)client:(Client *)p openRequest:(BOOL)isOpen
 {
     if(isOpen)
@@ -81,21 +89,6 @@
     UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
     
     [view show];
-}
-
-- (void)client:(Client *)p onDisconnect:(BOOL)disconnected
-{
-    
-}
-
-- (void)client:(Client *)p onData:(const uint8_t *)data length:(NSInteger)len
-{
-    
-}
-
-- (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val
-{
-    
 }
 
 @end

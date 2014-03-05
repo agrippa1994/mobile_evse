@@ -2,8 +2,8 @@
 //  main.m
 //  EVSE
 //
-//  Created by Mani on 29.12.13.
-//  Copyright (c) 2013 Mani. All rights reserved.
+//  Created by Manuel on 05.03.14.
+//  Copyright (c) 2014 Manuel. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
