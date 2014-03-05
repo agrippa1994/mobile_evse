@@ -11,29 +11,19 @@
 #include <QDateTime>
 #include <QWidget>
 #include <QStyleFactory>
+#include <QMdiSubWindow>
 
-MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow), _socket(this)
+#include "evsewindow.h"
+#include "servermanager.h"
+
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
 
-    QObject::connect(&_socket, SIGNAL(readyRead()), SLOT(tcp_data()));
-    QObject::connect(&_socket, SIGNAL(stateChanged(QAbstractSocket::SocketState)), SLOT(tcp_stateChange(QAbstractSocket::SocketState)));
-    QObject::connect(&_socket, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(tcp_error(QAbstractSocket::SocketError)));
+    QObject::connect(ui->actionNeue_Verbindung, SIGNAL(triggered()), SLOT(menu_newConnection()));
+    QObject::connect(ui->actionServermanager, SIGNAL(triggered()), SLOT(menu_serverManager()));
 
-    QObject::connect(ui->actionVerbindung_ffnen, SIGNAL(triggered()), SLOT(menu_network()));
-    QObject::connect(ui->actionVerbindung_schlie_en, SIGNAL(triggered()), SLOT(menu_network()));
-
-    QObject::connect(ui->intervalButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
-    QObject::connect(ui->startButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
-    QObject::connect(ui->stopButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
-    QObject::connect(ui->digitalButton0, SIGNAL(clicked()), SLOT(btn_commandwindow()));
-    QObject::connect(ui->digitalButton1, SIGNAL(clicked()), SLOT(btn_commandwindow()));
-    QObject::connect(ui->pwmButton, SIGNAL(clicked()), SLOT(btn_commandwindow()));
-
-    QObject::connect(ui->pushButton, SIGNAL(clicked()), SLOT(send()));
-
-    if(!showIPDialogAndConnect())
-        exit(0);
+    QObject::connect(&_serverManager, SIGNAL(ConnectionRequest(QString)), SLOT(servermanager_connectionRequest(QString)));
 }
 
 MainWindow::~MainWindow()
@@ -41,196 +31,50 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::tcp_data()
+void MainWindow::menu_newConnection()
 {
-    QStringList messages = QString(_socket.readAll()).split("\r\n", QString::SkipEmptyParts);
-    for(int i=0; i < messages.length(); i++)
+    QString label = "Geben Sie eine Hostadresse bzw. eine IP ein, mit der Sie sich verbinden möchten:";
+    QString titel = "Verbindung herstellen";
+
+    QString ip = QInputDialog::getText(this, label, label, QLineEdit::Normal, "10.0.10.1");
+
+    QList<QMdiSubWindow *> list = ui->mdiArea->subWindowList();
+    for(int i=0;i<list.size();i++)
     {
-        messages[i] = messages[i].remove("\r\n");
-        QStringList tokens = messages[i].split(" ", QString::SkipEmptyParts);
-        for(int u=0;u<tokens.size();u++)
+        EVSEWindow *wnd = (EVSEWindow *)list.at(i)->widget();
+        if(wnd == 0)
+            continue;
+
+        if(ip == wnd->Host())
         {
-            QStringList val_and_key = tokens[u].split(":");
-            if(val_and_key.size() != 2)
-                continue;
-
-            QString key = val_and_key[0];
-            QString val = val_and_key[1];
-
-            onKeyAndValue(key, val);
-            dataForMainTable(key, val);
-
-        }
-
-        if(ui->actionNachrichten_anzeigen->isChecked())
-            networkLog("<font color=\"#0000AA\">" + messages[i] + "</font>");
-    }
-}
-
-void MainWindow::tcp_stateChange(QAbstractSocket::SocketState state)
-{
-    switch(state)
-    {
-    case QAbstractSocket::UnconnectedState:
-        networkLog("<font color=\"#FF0000\">Verbindung geschlossen</font>");
-        break;
-
-    case QAbstractSocket::HostLookupState:
-        networkLog("<font color=\"#B45F04\">Host wird aufgelöst</font>");
-        break;
-
-    case QAbstractSocket::ConnectingState:
-        networkLog("<font color=\"#B45F04\">Verbindung wird aufgebaut ...</font>");
-        break;
-
-    case QAbstractSocket::ConnectedState:
-        networkLog("<font color=\"#00FF00\">Verbindung wurde erfolgreich aufgebaut</font>");
-        break;
-
-    case QAbstractSocket::ClosingState:
-        networkLog("<font color=\"#FF0000\">Verbindung wird geschlossen</font>");
-        break;
-    }
-}
-
-void MainWindow::tcp_error(QAbstractSocket::SocketError)
-{
-    networkLog("<font color=\"#FF0000\">Ein Fehler ist aufgetreten</font>");
-}
-
-void MainWindow::btn_commandwindow()
-{
-    bool bSend = false;
-
-    if(sender() == ui->intervalButton)      bSend = sendAndRead(QString().sprintf("config --updatespeed %d", ui->intevalSpinBox->value()));
-    else if(sender() == ui->startButton)    bSend = sendAndRead(QString().sprintf("startloading --current %d", ui->startSpinBox->value()));
-    else if(sender() == ui->stopButton)     bSend = sendAndRead("stoploading");
-    else if(sender() == ui->digitalButton0) bSend = sendAndRead(QString().sprintf("config --digitalWrite %d --value %d", ui->digitalSpinBoxPin->value(), 0));
-    else if(sender() == ui->digitalButton1) bSend = sendAndRead(QString().sprintf("config --digitalWrite %d --value %d", ui->digitalSpinBoxPin->value(), 1));
-    else if(sender() == ui->pwmButton)      bSend = sendAndRead(QString().sprintf("config --pwm %d", ui->pwmSpinBox->value()));
-
-    if(bSend)
-        networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
-    else
-        networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
-}
-
-void MainWindow::menu_info()
-{
-    QMessageBox::information(this, "Info",
-                             "Programmierer: Manuel Stampfl\r\n"
-                             "All rights reserved", "OK");
-}
-
-void MainWindow::send()
-{
-    QString text = ui->lineEdit->text();
-    if(text.length() == 0)
-        return;
-
-
-    if(sendAndRead(text))
-        networkLog("<font color=\"#00FF00\">Daten erfolgreich gesendet</font>");
-    else
-        networkLog("<font color=\"#FF0000\">Daten konnten nicht übermittelt werden!</font>");
-
-    ui->lineEdit->clear();
-}
-
-void MainWindow::menu_network()
-{
-    if(sender() == ui->actionVerbindung_ffnen)
-    {
-        showIPDialogAndConnect();
-    }
-    else if(sender() == ui->actionVerbindung_schlie_en)
-    {
-        if(_socket.state() != QAbstractSocket::UnconnectedState)
-            _socket.close();
-    }
-}
-
-void MainWindow::setEVSEState(int row)
-{
-    for(int c = 0; c < ui->stateTable->columnCount(); c ++)
-    {
-        for(int r = 0; r < ui->stateTable->rowCount(); r ++)
-        {
-            ui->stateTable->item(r, c)->setBackground(QBrush());
+            QMessageBox::warning(this, "Info", "Es ist schon ein Fenster mit dieser IP vorhanden", "OK");
+            return;
         }
     }
 
-    for(int i=0;i<ui->stateTable->columnCount();i++)
+    ui->mdiArea->addSubWindow(new EVSEWindow(this, ip))->show();
+}
+
+void MainWindow::menu_serverManager()
+{
+    _serverManager.show();
+}
+
+void MainWindow::servermanager_connectionRequest(const QString &ip)
+{
+    QList<QMdiSubWindow *> list = ui->mdiArea->subWindowList();
+    for(int i=0;i<list.size();i++)
     {
-        ui->stateTable->item(row, i)->setBackground(QBrush(QColor(0, 255, 0)));
-    }
-}
+        EVSEWindow *wnd = (EVSEWindow *)list.at(i)->widget();
+        if(wnd == 0)
+            continue;
 
-void MainWindow::networkLog(const QString &str)
-{
-    ui->networkBrowser->append("<font style=\"font-weight:bold\">" + QDateTime::currentDateTime().toString("[dd.MM.yyyy hh:mm:ss:zzz] ") + "</font>" + str);
-}
-
-bool MainWindow::sendAndRead(const QString &send)
-{
-    const int timeout = 500;
-
-    if(_socket.state() != QAbstractSocket::ConnectedState)
-        return 0;
-
-    QString s = send + "\r\n";
-    _socket.write(s.toStdString().c_str());
-    if(_socket.waitForBytesWritten(timeout))
-        return true;
-
-    return false;
-}
-
-void MainWindow::dataForMainTable(const QString &key, const QString &value)
-{
-    QTableWidget *table = ui->mainTable;
-    QList<QTableWidgetItem *> items = table->findItems(key, Qt::MatchCaseSensitive);
-
-    if(items.length() != 0)
-    {
-        table->item(table->row(items[0]), 1)->setText(value);
-        return;
+        if(ip == wnd->Host())
+        {
+            QMessageBox::warning(this, "Info", "Es ist schon ein Fenster mit dieser IP vorhanden", "OK");
+            return;
+        }
     }
 
-    int rowIdx = table->rowCount();
-    table->insertRow(rowIdx);
-
-    table->setItem(rowIdx, 0,  new QTableWidgetItem(key));
-    table->setItem(rowIdx, 1,  new QTableWidgetItem(value));
-
-    return;
-}
-
-void MainWindow::onKeyAndValue(const QString &key, const QString &value)
-{
-    if(key == "state")
-    {
-        setEVSEState(value.toInt());
-    }
-}
-
-bool MainWindow::showIPDialogAndConnect()
-{
-    QSettings settings("settings.ini", QSettings::IniFormat);
-    QString readedIP = settings.value("IP", "10.0.10.1").toString();
-
-    bool bOK = false;
-    QString ip = QInputDialog::getText(this, "Server-Daten", "IP-Adresse", QLineEdit::Normal, readedIP, &bOK);
-    if(!bOK)
-        return false;
-
-    // Schreiben der IP in die INI-Datei
-    settings.setValue("IP", ip);
-
-    if(_socket.state() != QAbstractSocket::UnconnectedState)
-        _socket.close();
-
-    _socket.connectToHost(ip, 2425);
-
-    return true;
+    ui->mdiArea->addSubWindow(new EVSEWindow(this, ip))->show();
 }

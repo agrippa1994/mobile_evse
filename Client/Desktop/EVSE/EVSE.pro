@@ -16,8 +16,14 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    evsewindow.cpp \
+    servermanager.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    evsewindow.h \
+    servermanager.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    evsewindow.ui \
+    servermanager.ui

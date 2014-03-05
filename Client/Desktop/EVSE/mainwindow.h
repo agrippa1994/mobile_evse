@@ -2,12 +2,15 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QTcpSocket>
+
+#include "servermanager.h"
 
 namespace Ui
 {
     class MainWindow;
 }
+
+class ServerManager;
 
 class MainWindow : public QMainWindow
 {
@@ -17,30 +20,17 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    Ui::MainWindow *UI() { return ui; }
+
 private slots:
-    void tcp_data();
-    void tcp_stateChange(QAbstractSocket::SocketState);
-    void tcp_error(QAbstractSocket::SocketError);
-    void btn_commandwindow();
+    void menu_newConnection();
+    void menu_serverManager();
 
-    void menu_info();
+    void servermanager_connectionRequest(const QString &ip);
 
-    void send();
-
-    void menu_network();
 private:
     Ui::MainWindow *ui;
-    QTcpSocket _socket;
-    int _state;
-
-    void setEVSEState(int row);
-    void networkLog(const QString & str);
-    bool sendAndRead(const QString & send);
-
-    void dataForMainTable(const QString & key, const QString & value);
-    void onKeyAndValue(const QString & key, const QString & value);
-
-    bool showIPDialogAndConnect();
+    ServerManager _serverManager;
 };
 
 #endif // MAINWINDOW_H
