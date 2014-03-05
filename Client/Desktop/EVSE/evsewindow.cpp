@@ -66,9 +66,6 @@ void EVSEWindow::tcp_data()
             dataForMainTable(key, val);
 
         }
-
-        //if(ui->actionNachrichten_anzeigen->isChecked())
-            networkLog("<font color=\"#0000AA\">" + messages[i] + "</font>");
     }
 }
 
