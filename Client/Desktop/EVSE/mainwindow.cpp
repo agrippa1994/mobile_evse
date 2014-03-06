@@ -1,16 +1,9 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <QColor>
-#include <QBrush>
 #include <QMessageBox>
 #include <QInputDialog>
 #include <QSettings>
-#include <QDebug>
-#include <QVariant>
-#include <QDateTime>
-#include <QWidget>
-#include <QStyleFactory>
 #include <QMdiSubWindow>
 
 #include "evsewindow.h"
@@ -33,10 +26,10 @@ MainWindow::~MainWindow()
 
 void MainWindow::menu_newConnection()
 {
-    bool OK = false;
-
-    QString label = "Geben Sie eine Hostadresse bzw. eine IP ein, mit der Sie sich verbinden möchten:";
     QString titel = "Verbindung herstellen";
+    QString label = "Geben Sie eine Hostadresse bzw. eine IP ein, mit der Sie sich verbinden möchten:";
+
+    bool OK = false;
 
     QString ip = QInputDialog::getText(this, titel, label, QLineEdit::Normal, "10.0.10.1", &OK);
     if(!OK || ip.length() == 0)
@@ -60,9 +53,9 @@ void MainWindow::servermanager_connectionRequest(const QString &ip)
 bool MainWindow::addSubWindow(const QString &host)
 {
     QList<QMdiSubWindow *> list = ui->mdiArea->subWindowList();
-    for(int i=0;i<list.size();i++)
+    for(auto p : list)
     {
-        EVSEWindow *wnd = dynamic_cast<EVSEWindow *>( list.at(i)->widget() );
+        EVSEWindow *wnd = dynamic_cast<EVSEWindow *>( p->widget() );
 
         if(wnd == 0)
             continue;

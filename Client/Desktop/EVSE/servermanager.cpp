@@ -1,9 +1,8 @@
 #include "servermanager.h"
 #include "ui_servermanager.h"
 
-#include <QHideEvent>
 #include <QShowEvent>
-
+#include <QHideEvent>
 #include <QVariant>
 #include <QByteArray>
 #include <QDataStream>
@@ -36,9 +35,9 @@ void ServerManager::showEvent(QShowEvent *p)
 
     QList<QVariant> list = settings.value("servermanager").toList();
 
-    for(int i=0; i < list.length(); i++)
+    for(auto &i : list)
     {
-        QStringList host_and_name = list[i].toStringList();
+        QStringList host_and_name = i.toStringList();
         if(host_and_name.length() != 2)
             continue;
 
