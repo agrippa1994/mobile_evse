@@ -33,26 +33,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::menu_newConnection()
 {
+    bool OK = false;
+
     QString label = "Geben Sie eine Hostadresse bzw. eine IP ein, mit der Sie sich verbinden möchten:";
     QString titel = "Verbindung herstellen";
 
-    QString ip = QInputDialog::getText(this, label, label, QLineEdit::Normal, "10.0.10.1");
+    QString ip = QInputDialog::getText(this, titel, label, QLineEdit::Normal, "10.0.10.1", &OK);
+    if(!OK || ip.length() == 0)
+        return;
 
-    QList<QMdiSubWindow *> list = ui->mdiArea->subWindowList();
-    for(int i=0;i<list.size();i++)
-    {
-        EVSEWindow *wnd = (EVSEWindow *)list.at(i)->widget();
-        if(wnd == 0)
-            continue;
-
-        if(ip == wnd->Host())
-        {
-            QMessageBox::warning(this, "Info", "Es ist schon ein Fenster mit dieser IP vorhanden", "OK");
-            return;
-        }
-    }
-
-    ui->mdiArea->addSubWindow(new EVSEWindow(this, ip))->show();
+    if(!addSubWindow(ip))
+        QMessageBox::warning(this, "Info", "Es ist schon ein Fenster mit dieser IP vorhanden", "OK");
 }
 
 void MainWindow::menu_serverManager()
@@ -62,19 +53,24 @@ void MainWindow::menu_serverManager()
 
 void MainWindow::servermanager_connectionRequest(const QString &ip)
 {
+    if(!addSubWindow(ip))
+        QMessageBox::warning(this, "Info", "Es ist schon ein Fenster mit dieser IP vorhanden", "OK");
+}
+
+bool MainWindow::addSubWindow(const QString &host)
+{
     QList<QMdiSubWindow *> list = ui->mdiArea->subWindowList();
     for(int i=0;i<list.size();i++)
     {
-        EVSEWindow *wnd = (EVSEWindow *)list.at(i)->widget();
+        EVSEWindow *wnd = dynamic_cast<EVSEWindow *>( list.at(i)->widget() );
+
         if(wnd == 0)
             continue;
 
-        if(ip == wnd->Host())
-        {
-            QMessageBox::warning(this, "Info", "Es ist schon ein Fenster mit dieser IP vorhanden", "OK");
-            return;
-        }
+        if(host == wnd->Host())
+            return false;
     }
 
-    ui->mdiArea->addSubWindow(new EVSEWindow(this, ip))->show();
+    ui->mdiArea->addSubWindow(new EVSEWindow(this, host))->show();
+    return true;
 }

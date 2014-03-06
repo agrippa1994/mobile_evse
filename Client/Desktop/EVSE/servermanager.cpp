@@ -126,7 +126,3 @@ void ServerManager::tableRightClick(const QPoint& p)
 
 }
 
-void ServerManager::save()
-{
-
-}

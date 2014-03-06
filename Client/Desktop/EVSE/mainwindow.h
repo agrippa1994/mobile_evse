@@ -31,6 +31,8 @@ private slots:
 private:
     Ui::MainWindow *ui;
     ServerManager _serverManager;
+
+    bool addSubWindow(const QString &host);
 };
 
 #endif // MAINWINDOW_H
