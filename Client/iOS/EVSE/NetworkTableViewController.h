@@ -1,5 +1,5 @@
 //
-//  AppDelegate.h
+//  NetworkTableViewController.h
 //  EVSE
 //
 //  Created by Manuel on 05.03.14.
@@ -7,9 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Client.h"
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
-
-@property (strong, nonatomic) UIWindow *window;
+@interface NetworkTableViewController : UITableViewController<ClientDelegate>
 
 @end

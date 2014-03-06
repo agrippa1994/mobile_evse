@@ -91,10 +91,20 @@
     return NO;
 }
 
+- (BOOL)isConnected
+{
+    NSStreamStatus iStatus = [inputStream streamStatus];
+    NSStreamStatus oStatus = [outputStream streamStatus];
+    
+    return  (BOOL)(((iStatus == NSStreamStatusOpen) || (iStatus == NSStreamStatusWriting) || (iStatus == NSStreamStatusReading))
+             &&((oStatus == NSStreamStatusOpen) || (oStatus == NSStreamStatusWriting) || (oStatus == NSStreamStatusReading)));
+}
+
 - (void)onData:(const uint8_t *)data length:(NSInteger)len
 {
     for(id<ClientDelegate> i in delegates)
-        [i client:self onData:data length:len];
+        if([i respondsToSelector:@selector(client:onData:length:)])
+            [i client:self onData:data length:len];
     
     NSArray *tokens = [[NSString stringWithCString:(const char *)data encoding:NSASCIIStringEncoding] componentsSeparatedByString:@" "];
     for(NSString *tok in tokens)
@@ -107,7 +117,8 @@
         NSString *val = [vals lastObject];
         
         for(id<ClientDelegate> i in delegates)
-            [i client:self onKeyAndValue:key value:val];
+            if([i respondsToSelector:@selector(client:onKeyAndValue:value:)])
+                [i client:self onKeyAndValue:key value:val];
     }
 }
 
@@ -118,18 +129,22 @@
     switch(eventCode)
     {
         case NSStreamEventOpenCompleted:
-            for(id<ClientDelegate> p in delegates) [p client:self openRequest:YES];
+            for(id<ClientDelegate> p in delegates)
+                if([p respondsToSelector:@selector(client:openRequest:)])
+                    [p client:self openRequest:YES];
             break;
         case NSStreamEventEndEncountered:
             break;
         case NSStreamEventErrorOccurred:
             if(wasOpenRequestSend)
             {
-                for(id<ClientDelegate> p in delegates) [p client:self openRequest:NO];
+                for(id<ClientDelegate> p in delegates)
+                    if([p respondsToSelector:@selector(client:openRequest:)])
+                        [p client:self openRequest:NO];
             }
             break;
         case NSStreamEventHasBytesAvailable:
- 
+            
             uint8_t buffer[2048] = { 0 };
             while([inputStream hasBytesAvailable])
             {
@@ -140,12 +155,12 @@
                 }
                 else if(len == -1)
                 {
-                        
+                    
                 }
             }
             break;
     }
-
+    
 }
 
 - (void)outputStreamEvent:(NSStreamEvent)eventCode

@@ -3,7 +3,7 @@
 @class Client;
 
 @protocol ClientDelegate <NSObject>
-@required
+@optional
 - (void)client:(Client *)p openRequest:(BOOL)isOpen;
 - (void)client:(Client *)p onDisconnect:(BOOL)disconnected;
 
@@ -21,6 +21,8 @@
 
 - (void)connect:(NSString *)host withPort:(UInt32)port;
 - (BOOL)disconnect;
+
+- (BOOL)isConnected;
 
 @end
 
