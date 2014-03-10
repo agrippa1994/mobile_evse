@@ -7,6 +7,8 @@
 QMAKE_CXXFLAGS += -std=c++0x
 QMAKE_CXXFLAGS += -w
 
+CONFIG+=c++11
+
 QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
