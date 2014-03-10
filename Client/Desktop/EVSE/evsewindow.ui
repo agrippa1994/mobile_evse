@@ -55,7 +55,7 @@
               <string>Intervall: </string>
              </property>
              <property name="minimum">
-              <number>100</number>
+              <number>250</number>
              </property>
              <property name="maximum">
               <number>19999</number>
