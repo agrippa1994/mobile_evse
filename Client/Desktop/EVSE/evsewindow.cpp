@@ -14,9 +14,9 @@
 #include <QDateTime>
 #include <QWidget>
 #include <QStyleFactory>
+#include <QHideEvent>
 
-
-EVSEWindow::EVSEWindow(class MainWindow *parent, const QString &Host) : QWidget(parent), ui(new Ui::EVSEWindow), _parent(parent), _Host(Host)
+EVSEWindow::EVSEWindow(class MainWindow *parent, const QString &Host) : QWidget(parent), ui(new Ui::EVSEWindow), _parent(parent), _Host(Host), _shouldHide(false)
 {
     ui->setupUi(this);
 
@@ -133,6 +133,10 @@ void EVSEWindow::send()
     ui->lineEdit->clear();
 }
 
+void EVSEWindow::hideEvent(QHideEvent *p)
+{
+    _shouldHide = true;
+}
 
 void EVSEWindow::setEVSEState(int row)
 {
@@ -152,7 +156,8 @@ void EVSEWindow::setEVSEState(int row)
 
 void EVSEWindow::networkLog(const QString &str)
 {
-    ui->networkBrowser->append("<font style=\"font-weight:bold\">" + QDateTime::currentDateTime().toString("[dd.MM.yyyy hh:mm:ss:zzz] ") + "</font>" + str);
+    if(!_shouldHide)
+        ui->networkBrowser->append("<font style=\"font-weight:bold\">" + QDateTime::currentDateTime().toString("[dd.MM.yyyy hh:mm:ss:zzz] ") + "</font>" + str);
 }
 
 bool EVSEWindow::sendAndRead(const QString &send)

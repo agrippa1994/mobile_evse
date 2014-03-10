@@ -26,12 +26,17 @@ private slots:
     void btn_commandwindow();
 
     void send();
+
+protected:
+    virtual void hideEvent(class QHideEvent *p);
+
 private:
     Ui::EVSEWindow*     ui;
     class MainWindow*   _parent;
     QString             _Host;
     QTcpSocket          _socket;
     int                 _state;
+    bool                _shouldHide;
 
     void setEVSEState(int row);
     void networkLog(const QString & str);
