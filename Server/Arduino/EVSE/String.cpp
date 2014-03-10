@@ -1,27 +1,18 @@
 #include "String.h"
+#include "floatToString.h"
 
-Vector<String> split(const String & s, const char *delims)
+String& operator += (String& in, float value)
 {
-  Vector<String> tokens; 
+  char szIn[32] = { 0 };
   
-  if(s.length() == 0)
-    return tokens;
-    
-  size_t bufLen = s.length() + 1;  
-  char *str = new char[bufLen];
-  memset(str, 0, bufLen);
+  in += floatToString(szIn, value, 2);;
   
-  s.toCharArray(str, bufLen);
-  
-  char *pch = strtok(str, delims);
-  
-  while(pch != NULL)
-  {
-    tokens += pch; 
-    pch = strtok(NULL, delims);
-  }
+  return in;
+}
 
-  delete [] str;
-  
-  return tokens;
+int stringToInt(const String& c)
+{
+  char buf[32] = {0};
+  c.toCharArray(buf, sizeof(buf));
+  return atoi(buf); 
 }

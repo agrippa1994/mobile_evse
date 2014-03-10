@@ -16,6 +16,8 @@ public:
     void remove(boost::shared_ptr<tcp_client_base> b);
 
     void sendToAll(const std::string & data);
+
+    boost::mutex& mutex();
 protected:
     virtual boost::shared_ptr<tcp_client_base> incomingConnection(boost::asio::ip::tcp::socket s) = 0;
 

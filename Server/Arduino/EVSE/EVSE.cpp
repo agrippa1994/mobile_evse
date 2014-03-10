@@ -1,9 +1,9 @@
 #include "EVSE.h"
-#include "Vector.h"
-#include "Map.h"
 #include "String.h"
-#include "CommandHandler.h"
 #include "StateManager.h"
+
+#include <string.h>
+#include <stdio.h>
 
 int requestLoading = 0;
 int requestLoadingCurrent = 0;
@@ -12,64 +12,85 @@ int requestStopLoading = 0;
 int isLoading = 0;
 int isStopped = 1;
 
-int updateSpeed = 100;
+int updateSpeed = 200;
 
-int stringToInt(const String& c)
+// Diese Funktion wird für das Formatieren der Nachricht, welche per USB versendet wird, verwendet.
+template<typename T, typename U> void addValueToString(String & s, T t, U u, bool First = false)
 {
-  char buf[32] = {0};
-  c.toCharArray(buf, sizeof(buf));
-  return atoi(buf); 
+  if(!First)
+    s += " ";
+  
+  s += t;
+  s += ":";
+  s += u; 
 }
 
-void startLoading(const String& command, String_Map & args)
+// Verarbeiten der Befehle, welche per USB empfangen werden
+// Mögliche Befehle
+//   startloading --current [STROM]
+//   stoploading
+//   config --pwm [PWM]
+//   config --digitalWrite [PIN] --value [0/1]
+//   config --updatespeed [SPEED in ms]
+void commandHandler(const char *sz)
 {
-  if(args.size() == 0)
-    return;
-  
-  if(!args.isset("--current"))
-    return;
-  
-  requestLoading = 1;
-  requestStopLoading = 0;
-  requestLoadingCurrent = stringToInt(args["--current"]);
-  
-  return;  
-}
-
-void stopLoading(const String& command, String_Map & args)
-{
-  requestLoading = 0;
-  requestLoadingCurrent = 0;
-}
-
-void config(const String& command, String_Map & args)
-{
-  if(args.isset("--updatespeed"))
+  if(strstr(sz, "startloading --current") != 0)
   {
-    int val = stringToInt(args["--updatespeed"]);
-    
-    updateSpeed = val; 
-  }
-  
-  if(args.isset("--digitalWrite") && args.isset("--value"))
-  {
-    int pin = stringToInt(args["--digitalWrite"]);
-    if(pin <= 1 || pin > 13)
-      return;
-      
-    int value = stringToInt(args["--value"]);
-    if(value == 0 || value == 1)
+    int current = 0;
+    if(sscanf(sz, "startloading --current %d", &current) == 1)
     {
-       digitalWrite(pin, value);
-    }    
+      requestLoading = 1;
+      requestStopLoading = 0; 
+      requestLoadingCurrent = current;
+    }
+    return;
   }
   
-  if(args.isset("--pwm"))
+  else if(strstr(sz, "stoploading") != 0)
   {
-    int val = stringToInt(args["--pwm"]);
-
-    setPWM(val); 
+    requestLoading = 0;
+    requestLoadingCurrent = 0;
+    return;
   }
+  
+  else if(strstr(sz, "config") != 0)
+  {
+    if(strstr(sz, "config --pwm") != 0)
+    {
+      int pwm = 0;
+      if(sscanf(sz, "config --pwm %d", &pwm) == 1)
+      {
+        setPWM(pwm);
+      } 
+    }
+    else if(strstr(sz, "config --digitalWrite") != 0)
+    {
+      int pin = 0, val = 0;
+      if(sscanf(sz, "config --digitalWrite %d --value %d", &pin, &val) == 2)
+      {
+        if(pin <= 1 || pin > 13)
+          return;
+          
+        if(val == 0 || val == 1)
+          digitalWrite(pin, val);
+      } 
+    }
+    else if(strstr(sz, "config --updatespeed") != 0)
+    {
+      int speed = 0;
+      if(sscanf(sz, "config --updatespeed %d", &speed) == 1)
+      {
+        if(speed >= 200)
+          updateSpeed = speed;
+      } 
+    }
+  }
+}
+
+// Callback für den genormten EVSE Status
+// Wird aufgerufen, falls eine Änderung erfolgt
+void evseStateChange(eState _old, eState _new)
+{
   
 }
 
@@ -78,89 +99,47 @@ void config(const String& command, String_Map & args)
 void setup()
 {
   pwm_init();
-  usb_init(); 
-  CommandHandler_init(); 
-  statemanager_init();
   
-  CommandHandler()["startloading"] = startLoading;
-  CommandHandler()["stoploading"] = stopLoading;
-  CommandHandler()["config"] = config;
+  statemanager_init(evseStateChange);
+  usb_init(commandHandler); 
 }
 
 // loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
 void loop()
 {
-  static unsigned long last_loop_time = millis();
-  
-  statemanager_update();
-
-  static unsigned long last_time = millis();
-  unsigned long now = millis();
-  
-  unsigned long current_loop_time = millis();
-  unsigned long loop_time = current_loop_time-last_loop_time;
-  
-  if(last_time + updateSpeed >= now)
-    return;
-    
-  last_time = now;
-  
-  String data;
-  
-  data +="state:";
-  data += getEVSEState();
-
-  data += " requestLoading:";
-  data += requestLoading;
-  
-  data += " requestLoadingCurrent:";
-  data += requestLoadingCurrent;
-  
-  data += " requestStopLoading:";
-  data += requestStopLoading;
-  
-  data += " isLoading:";
-  data += isLoading;
-  
-  data += " isStopped:";
-  data += isStopped;
-  
-  data += " updateSpeed:";
-  data += updateSpeed;
-  
-  data += " PWM:";
-  data += getPWM();
-  
-  for(int i=A0, u = 0; i <= A5; i++, u++)
+  // Update
   {
-    data += " A";
-    data += u;
-    data += ":";
-    
-    data += analogRead(i);
+    statemanager_update();
   }
   
-  for(int i=0; i <= 13; i++)
+  // Senden der Daten
   {
-    data += " D";
-    data += i;
-    data += ":";
-   
-   data += digitalRead(i); 
+    static unsigned long last_time = millis();
+    unsigned long now = millis();
+    
+    if(last_time + updateSpeed >= now)
+      return;
+      
+    last_time = now;
+    
+    String data;
+    
+    addValueToString(data, "state", getEVSEState(), true);
+    addValueToString(data, "requestLoading", requestLoading);
+    addValueToString(data, "requestLoadingCurrent", requestLoadingCurrent);
+    addValueToString(data, "requestStopLoading", requestStopLoading);
+    addValueToString(data, "isLoading", isLoading);
+    addValueToString(data, "isStopped", isStopped);
+    addValueToString(data, "updateSpeed", updateSpeed);
+    addValueToString(data, "PWM", getPWM());
+    addValueToString(data, "temperature", (float)(analogRead(A0) * 0.0049 * 100));
+    
+    // Senden der analogen Daten
+    for(int i=A0, u = 0; i <= A5; i++, u++) addValueToString(data, String( String("A") + String(u)), analogRead(i));
+    
+    // Senden der digitalen Daten
+    for(int i=0; i <= 13; i++)  addValueToString(data, String( String("D") + String(i)), digitalRead(i));
+    
+    Serial.println(data);
   }
-  
-  data += " loopTime:";
-  data += loop_time;
-
-  data += "\r\n";
-  Serial.print(data);
-  
-  last_loop_time = millis();
-}
-
-// serialEvent() ist der Interrupt-Handler des Serialports
-// Es wird hier verwendet, um Daten direkt beim Empfang zu lesen
-void serialEvent()
-{
-  usb_serialEvent();
 }

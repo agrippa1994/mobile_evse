@@ -26,7 +26,8 @@ HEADERS += \
     arduino.h \
     tcp_client_base.h \
     tcp_server_base.h \
-    network.h
+    network.h \
+    log.h
 
 
 #Rasperry PI

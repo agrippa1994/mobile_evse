@@ -1,8 +1,9 @@
 /*
-  Autor:  Manuel Stampfl u. Christian Mitterbäck
+  Autoren:  Manuel Stampfl u. Christian Mitterbäck
   
  
   Programmbeschreibung:
+  
   
 
 */

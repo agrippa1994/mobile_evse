@@ -38,7 +38,9 @@ enum eState
   state_F
 };
 
-void statemanager_init();
+typedef void (* __stateChange)(eState, eState);
+
+void statemanager_init(__stateChange pFunc);
 void statemanager_update();
 
 eState getEVSEState();

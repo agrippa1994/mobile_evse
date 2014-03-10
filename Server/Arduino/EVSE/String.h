@@ -2,8 +2,9 @@
 #define STRING_H
 
 #include <Arduino.h>
-#include "Vector.h"
 
-Vector<String> split(const String & s, const char *delim);
+String& operator+=(String& in, float value);
+
+int stringToInt(const String& c);
 
 #endif

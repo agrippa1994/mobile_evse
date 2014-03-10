@@ -1,19 +1,18 @@
 #include "arduino.h"
-
-#include <boost/log/trivial.hpp>
+#include "log.h"
 
 boost::function<void (const std::string &)> usb_data;
 
 void arduino::onError(const boost::system::error_code &ec)
 {
-    BOOST_LOG_TRIVIAL(fatal) << "arduino::onError: " << ec.message();
+    LOG(fatal) << ec.message();
 
     open();
 }
 
 void arduino::onData(const std::string & data, const size_t)
 {
-    BOOST_LOG_TRIVIAL(info) << "arduino::onData";
+    LOG(info);
 
     if(usb_data)
         usb_data(data);

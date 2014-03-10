@@ -11,13 +11,14 @@ class tcp_client_base : public boost::enable_shared_from_this<tcp_client_base>
 public:
     tcp_client_base(class tcp_server_base *base, boost::asio::ip::tcp::socket sock);
 
+    bool is_connected();
+
     bool send(const std::string & data);
     bool disconnect();
 
 protected:
     virtual void onConnect() = 0;
     virtual void onData(const std::string & data, const size_t bytes) = 0;
-    virtual void onError(const boost::system::error_code & ec) = 0;
 
     void startReadHandler();
 
@@ -31,6 +32,7 @@ private:
     boost::asio::streambuf m_buf;
 
     void readHandler(const boost::system::error_code & ec, const size_t bytes);
+    void writeHandler(const boost::system::error_code &ec, const size_t bytes);
 };
 
 #endif // TCP_CLIENT_BASE_H

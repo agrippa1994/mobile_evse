@@ -26,7 +26,6 @@ public:
 protected:
     virtual void onConnect();
     virtual void onData(const std::string & data, const size_t);
-    virtual void onError(const boost::system::error_code &);
 };
 
 #endif // NETWORK_H

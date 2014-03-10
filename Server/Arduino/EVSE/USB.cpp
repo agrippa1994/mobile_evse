@@ -1,8 +1,17 @@
 #include "EVSE.h"
-#include "CommandHandler.h"
 
-void usb_init()
+__usbHandler g_pFunc = 0;
+
+void usb_onCommand(const char *szStr)
 {
+  if(g_pFunc)
+    g_pFunc(szStr);
+}
+
+void usb_init(__usbHandler pFunc)
+{
+  g_pFunc = pFunc;
+  
   // Wartet und startet die USB-Verbindung
   Serial.begin(115200);
   while(!Serial); 
@@ -10,7 +19,7 @@ void usb_init()
 
 void usb_serialEvent()
 {
-  static char szBuffer[256] = {0};
+  static char szBuffer[512] = {0};
   static size_t BufferOffset = 0;
   
   if(Serial.available() > 0)
@@ -23,9 +32,7 @@ void usb_serialEvent()
       if(strlen(szBuffer) > 0)
       {
         // Ausführen von onCommand, wenn \n bzw. \r empfangen wurde
-        // Senden des Rückgabewertes der Funktion an Sender
-        String szStr = szBuffer;
-        usb_onCommand(szStr);
+        usb_onCommand(szBuffer);
       
         // Entleeren des Buffers, setzen des Offsets auf 0
         memset(szBuffer, 0, sizeof(szBuffer));
@@ -41,7 +48,9 @@ void usb_serialEvent()
   } 
 }
 
-void usb_onCommand(const String & szStr)
+// serialEvent() ist der Interrupt-Handler des Serialports
+// Es wird hier verwendet, um Daten direkt beim Empfang zu lesen
+void serialEvent()
 {
-  return CommandHandler(szStr);
+  usb_serialEvent();
 }

@@ -1,33 +1,43 @@
 #include "tcp_client_base.h"
 #include "tcp_server_base.h"
+#include "log.h"
 
 #include <boost/bind.hpp>
-#include <boost/log/trivial.hpp>
 
 tcp_client_base::tcp_client_base(tcp_server_base *base, boost::asio::ip::tcp::socket sock) : m_parent(base), m_socket(std::move(sock))
 {
-    BOOST_LOG_TRIVIAL(info) << "tcp_client_base::tcp_client_base";
+    LOG(info);
     startReadHandler();
+}
+
+bool tcp_client_base::is_connected()
+{
+    return m_socket.is_open();
 }
 
 bool tcp_client_base::send(const std::string & data)
 {
-    BOOST_LOG_TRIVIAL(info) << "tcp_client_base::send";
-
-    if(!m_socket.is_open())
-        return false;
+    LOG(info);
 
     try
     {
-        return m_socket.send(boost::asio::buffer(data)) > 0;
+        if(!m_socket.is_open())
+            return false;
+
+        auto p = boost::bind(&tcp_client_base::writeHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred);
+        m_socket.async_send(boost::asio::buffer(data), p);
+
     }
-    catch(...) { }
+    catch(...)
+    {
+        return false;
+    }
     return false;
 }
 
 bool tcp_client_base::disconnect()
 {
-    BOOST_LOG_TRIVIAL(info) << "tcp_client_base::disconnect";
+    LOG(info);
 
     if(!m_socket.is_open())
         return false;
@@ -42,7 +52,7 @@ bool tcp_client_base::disconnect()
 
 void tcp_client_base::startReadHandler()
 {
-    BOOST_LOG_TRIVIAL(info) << "tcp_client_base::startReadHandler";
+    LOG(info);
 
     auto p = boost::bind(&tcp_client_base::readHandler, this, boost::asio::placeholders::error, boost::asio::placeholders::bytes_transferred);
     boost::asio::async_read_until(m_socket, m_buf, "\r\n", p);
@@ -50,22 +60,31 @@ void tcp_client_base::startReadHandler()
 
 boost::asio::ip::tcp::socket & tcp_client_base::socket()
 {
-    BOOST_LOG_TRIVIAL(info) << "tcp_client_base::socket";
+    LOG(info);
     return m_socket;
 }
 
 class tcp_server_base *tcp_client_base::parent()
 {
-    BOOST_LOG_TRIVIAL(info) << "tcp_client_base::parent";
+    LOG(info);
     return m_parent;
 }
 
 void tcp_client_base::readHandler(const boost::system::error_code & ec, const size_t bytes)
 {
-    BOOST_LOG_TRIVIAL(info) << "tcp_client_base::readHandler: " << ec.message();
+    boost::lock_guard<boost::mutex> lock(parent()->mutex());
+
+    LOG(info) << ec.message();
+
     if(ec)
     {
-        onError(ec);
+        try
+        {
+            m_socket.cancel();
+            m_socket.close();
+        }
+        catch(...){}
+
         return;
     }
 
@@ -79,4 +98,21 @@ void tcp_client_base::readHandler(const boost::system::error_code & ec, const si
     onData(content, bytes);
 
     startReadHandler();
+}
+
+void tcp_client_base::writeHandler(const boost::system::error_code &ec, const size_t bytes)
+{
+    boost::lock_guard<boost::mutex> lock(parent()->mutex());
+
+    LOG(info) << ec.message();
+
+    if(!ec)
+        return;
+
+    try
+    {
+        m_socket.cancel();
+        m_socket.close();
+    }
+    catch(...){}
 }

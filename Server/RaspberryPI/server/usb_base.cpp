@@ -1,16 +1,17 @@
 #include "usb_base.h"
-#include <boost/log/trivial.hpp>
+#include "log.h"
+
 #include <boost/filesystem.hpp>
 
 bool usb_base::send(const std::string & msg)
 {
-    BOOST_LOG_TRIVIAL(info) << "usb_base::send";
+    LOG(info);
     return (boost::asio::write(m_usb, boost::asio::buffer(msg)) == msg.length()) ? true : false;
 }
 
 usb_base::usb_base(boost::asio::io_service & io)  : m_usb(io)
 {
-    BOOST_LOG_TRIVIAL(info) << "usb_base::usb_base";
+    LOG(info);
 
     open();
 }
@@ -26,7 +27,7 @@ void usb_base::close()
 
 bool usb_base::open()
 {
-    BOOST_LOG_TRIVIAL(info) << "usb_base::open";
+    LOG(info);
 
     close();
 
@@ -58,7 +59,7 @@ bool usb_base::is_open() const
 
 void usb_base::startReadHandler()
 {
-    BOOST_LOG_TRIVIAL(info) << "usb_base::startReadHandler";
+    LOG(info);
 
     auto p = boost::bind(&usb_base::readHandler, this, boost::asio::placeholders::bytes_transferred, boost::asio::placeholders::error);
     boost::asio::async_read_until(m_usb, m_buf, "\r\n", p);
@@ -67,7 +68,7 @@ void usb_base::startReadHandler()
 
 void usb_base::readHandler(const size_t bytes, const boost::system::error_code & ec)
 {
-    BOOST_LOG_TRIVIAL(info) << "usb_base::readHandler: " << ec.message();
+    LOG(info) << ec.message();
 
     if(ec)
         return onError(ec);
