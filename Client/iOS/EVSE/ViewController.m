@@ -52,20 +52,12 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return 2;
+    return 7;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
-    switch(row)
-    {
-        case 0:
-            return @"1-2 Stunden";
-        case 1:
-            return @"6-8 Stunden";
-        default:
-            return @"";
-    }
+    return [NSString stringWithFormat:@"%d Stunde%c", row + 1, (row == 0) ? 'n' : '\0'];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -74,17 +66,44 @@
     
     if(cell == self.startLoadingCell)
     {
+        NSString *state = [[[Client sharedClient] keyAndValues] objectForKey:@"isLoading"];
+        if(state != nil)
+        {
+            if([state compare:@"0"] == 0)
+            {
+                // TODO: Ladung starten
+                
+                return;
+            }
+            
+        }
         
+        // TODO: Fehler ausgeben
     }
     
     else if(cell == self.stopLoadingCell)
     {
+        NSString *state = [[[Client sharedClient] keyAndValues] objectForKey:@"isLoading"];
+        if(state != nil)
+        {
+            if([state compare:@"1"] == 0)
+            {
+                // TODO: Ladung stoppen
+                
+                return;
+            }
+            
+        }
+
+        // TODO: Fehler ausgeben
         
     }
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
+//  onKeyAndValue wird vom Clienten über eine Delegation aufgerufen
+//  Hier wird es verwendet, um die Temperaturen, Status, etc. einzulesen und zu visualisieren
 - (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val
 {
     if([key compare:@"state"] == 0)
@@ -92,7 +111,7 @@
         [self.loadingStateCell.detailTextLabel setText:val];
     }
     
-    if([key compare:@"PWM"] == 0)
+    if([key compare:@"temperature"] == 0)
     {
         [self.temperatureCell.detailTextLabel setText:val];
     }

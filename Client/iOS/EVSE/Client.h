@@ -24,6 +24,9 @@
 
 - (BOOL)isConnected;
 
+
+@property(readonly, nonatomic) NSMapTable *keyAndValues;
+
 @end
 
 

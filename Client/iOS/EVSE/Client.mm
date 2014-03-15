@@ -24,6 +24,7 @@
 
 
 @implementation Client
+@synthesize keyAndValues = keysVals;
 
 + (Client *)sharedClient
 {
@@ -43,6 +44,8 @@
     {
         delegates = [NSMutableSet set];
         messages = [NSMutableArray array];
+        keysVals = [NSMapTable mapTableWithKeyOptions:NSPointerFunctionsStrongMemory valueOptions:NSPointerFunctionsStrongMemory];
+        
         wasOpenRequestSend = NO;
     }
     
@@ -88,6 +91,15 @@
 
 - (BOOL)disconnect
 {
+    if(![self isConnected])
+        return NO;
+    
+    // Entfernen aller Schlüssel und Werte
+    [keysVals removeAllObjects];
+    
+    [inputStream close];
+    [outputStream close];
+    
     return NO;
 }
 
@@ -102,10 +114,12 @@
 
 - (void)onData:(const uint8_t *)data length:(NSInteger)len
 {
+    // Daten-Delegation
     for(id<ClientDelegate> i in delegates)
         if([i respondsToSelector:@selector(client:onData:length:)])
             [i client:self onData:data length:len];
     
+    // Zerlegen des Strings
     NSArray *tokens = [[NSString stringWithCString:(const char *)data encoding:NSASCIIStringEncoding] componentsSeparatedByString:@" "];
     for(NSString *tok in tokens)
     {
@@ -116,10 +130,18 @@
         NSString *key = [vals firstObject];
         NSString *val = [vals lastObject];
         
+        // Setzen des Wertes in der Map
+        [keysVals setObject:key forKey:val];
+    }
+    
+    // Aufrufen der Delegation
+    NSEnumerator *it = [keysVals keyEnumerator];
+    id pair;
+    while((pair = [it nextObject]))
         for(id<ClientDelegate> i in delegates)
             if([i respondsToSelector:@selector(client:onKeyAndValue:value:)])
-                [i client:self onKeyAndValue:key value:val];
-    }
+                [i client:self onKeyAndValue:pair value:[keysVals objectForKey:pair]];
+    
 }
 
 - (void)inputStreamEvent:(NSStreamEvent)eventCode
@@ -150,13 +172,7 @@
             {
                 NSInteger len = [inputStream read:buffer maxLength:sizeof(buffer)];
                 if(len > 0)
-                {
                     [self onData:buffer length:len];
-                }
-                else if(len == -1)
-                {
-                    
-                }
             }
             break;
     }
