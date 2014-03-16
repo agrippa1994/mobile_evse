@@ -24,6 +24,7 @@
 
 - (BOOL)isConnected;
 
+- (BOOL)send:(NSString *)data;
 
 @property(readonly, nonatomic) NSMapTable *keyAndValues;
 

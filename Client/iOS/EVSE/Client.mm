@@ -2,6 +2,7 @@
 
 #include <string>
 #include <sstream>
+#include <string.h>
 
 @interface Client()
 {
@@ -112,6 +113,16 @@
              &&((oStatus == NSStreamStatusOpen) || (oStatus == NSStreamStatusWriting) || (oStatus == NSStreamStatusReading)));
 }
 
+- (BOOL)send:(NSString *)data
+{
+    if(![self isConnected])
+        return NO;
+    
+    const uint8_t * raw = (const uint8_t *)[[data stringByAppendingString:@"\r\n"] UTF8String];
+    const size_t len = strlen((const char *) raw);
+    return [outputStream write:raw maxLength:len] > 0;
+}
+
 - (void)onData:(const uint8_t *)data length:(NSInteger)len
 {
     // Daten-Delegation
@@ -131,7 +142,7 @@
         NSString *val = [vals lastObject];
         
         // Setzen des Wertes in der Map
-        [keysVals setObject:key forKey:val];
+        [keysVals setObject:val forKey:key];
     }
     
     // Aufrufen der Delegation
