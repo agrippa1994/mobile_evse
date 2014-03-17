@@ -1,9 +1,11 @@
 #include "EVSE.h"
+#include "Pins.h"
 
 void pwm_init()
 {   
   // Pin 10 wird für die PWM verwendet
-  pinMode(10,OUTPUT);
+  pinMode(PIN_PWM, OUTPUT);
+  digitalWrite(PIN_PWM, HIGH);
   
   // Erstellen einer Pulsweitenmodulation auf dem digitalen Pin 10
   TCCR1A = _BV(COM1A0) | _BV(COM1B1) | _BV(WGM11) | _BV(WGM10);

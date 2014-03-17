@@ -1,6 +1,9 @@
 #include "EVSE.h"
 #include "String.h"
 #include "StateManager.h"
+#include "USBData.h"
+#include "Charger.h"
+#include "Pins.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -9,21 +12,8 @@ int requestLoading = 0;
 int requestLoadingCurrent = 0;
 int requestStopLoading = 0;
 
-int isLoading = 0;
-int isStopped = 1;
-
 int updateSpeed = 200;
 
-// Diese Funktion wird für das Formatieren der Nachricht, welche per USB versendet wird, verwendet.
-template<typename T, typename U> void addValueToString(String & s, T t, U u, bool First = false)
-{
-  if(!First)
-    s += " ";
-  
-  s += t;
-  s += ":";
-  s += u; 
-}
 
 // Verarbeiten der Befehle, welche per USB empfangen werden
 // Mögliche Befehle
@@ -91,7 +81,44 @@ void commandHandler(const char *sz)
 // Wird aufgerufen, falls eine Änderung erfolgt
 void evseStateChange(eState _old, eState _new)
 {
+  if(_new == _old)
+    return;
+    
+  switch(_new)
+  {
+  case state_B:
+      enableCharging(requestLoadingCurrent);
+    break;  
+  case state_C:
+  case state_D:
+    
+    break;
+  default:
+      disableCharging();
+    break;  
+  }
+}
+
+void send_usb_data()
+{
+  String data;
+    
+  addValueToString(data, "state", getEVSEState(), true);
+  addValueToString(data, "requestLoading", requestLoading);
+  addValueToString(data, "requestLoadingCurrent", requestLoadingCurrent);
+  addValueToString(data, "requestStopLoading", requestStopLoading);
+  addValueToString(data, "isLoading", isLoading());
+  addValueToString(data, "updateSpeed", updateSpeed);
+  addValueToString(data, "PWM", getPWM());
+  addValueToString(data, "temperature", (float)(analogRead(PIN_TEMPERATURE) * 0.0049 * 100));
   
+  // Senden der analogen Daten
+  for(int i=A0, u = 0; i <= A5; i++, u++) addValueToString(data, String( String("A") + String(u)), analogRead(i));
+  
+  // Senden der digitalen Daten
+  for(int i=0; i <= 13; i++)  addValueToString(data, String( String("D") + String(i)), digitalRead(i));
+  
+  Serial.println(data);
 }
 
 // Setup wird beim initialisieren des Programmes aufgerufen
@@ -99,6 +126,7 @@ void evseStateChange(eState _old, eState _new)
 void setup()
 {
   pwm_init();
+  charger_init();
   
   statemanager_init(evseStateChange);
   usb_init(commandHandler); 
@@ -110,6 +138,7 @@ void loop()
   // Update
   {
     statemanager_update();
+    charger_update();
   }
   
   // Senden der Daten
@@ -120,26 +149,7 @@ void loop()
     if(last_time + updateSpeed >= now)
       return;
       
+    send_usb_data();  
     last_time = now;
-    
-    String data;
-    
-    addValueToString(data, "state", getEVSEState(), true);
-    addValueToString(data, "requestLoading", requestLoading);
-    addValueToString(data, "requestLoadingCurrent", requestLoadingCurrent);
-    addValueToString(data, "requestStopLoading", requestStopLoading);
-    addValueToString(data, "isLoading", isLoading);
-    addValueToString(data, "isStopped", isStopped);
-    addValueToString(data, "updateSpeed", updateSpeed);
-    addValueToString(data, "PWM", getPWM());
-    addValueToString(data, "temperature", (float)(analogRead(A0) * 0.0049 * 100));
-    
-    // Senden der analogen Daten
-    for(int i=A0, u = 0; i <= A5; i++, u++) addValueToString(data, String( String("A") + String(u)), analogRead(i));
-    
-    // Senden der digitalen Daten
-    for(int i=0; i <= 13; i++)  addValueToString(data, String( String("D") + String(i)), digitalRead(i));
-    
-    Serial.println(data);
   }
 }

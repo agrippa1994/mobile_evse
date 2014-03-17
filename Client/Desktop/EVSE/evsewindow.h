@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QTcpSocket>
+#include <QMap>
 
 namespace Ui
 {
@@ -37,6 +38,8 @@ private:
     QTcpSocket          _socket;
     int                 _state;
     bool                _shouldHide;
+
+    QMap<QString, QString> _valKeys;
 
     void setEVSEState(int row);
     void networkLog(const QString & str);

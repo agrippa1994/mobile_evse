@@ -1,4 +1,5 @@
 #include "StateManager.h"
+#include "Pins.h"
 
 #include <Arduino.h>
 
@@ -29,7 +30,7 @@ void statemanager_update()
   
   int high = 0, val = 0;
   for(int i=0; i<100; i++)
-    if((val = analogRead(A0)) > high)
+    if((val = analogRead(PIN_CP_VOLTAGE_DROP)) > high)
       high = val;
   
   for(int i=0;i<arraySize(StateVoltage); i++)

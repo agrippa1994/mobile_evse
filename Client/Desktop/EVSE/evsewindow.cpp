@@ -62,10 +62,14 @@ void EVSEWindow::tcp_data()
             QString key = val_and_key[0];
             QString val = val_and_key[1];
 
-            onKeyAndValue(key, val);
-            dataForMainTable(key, val);
-
+            _valKeys[key] = val;
         }
+    }
+
+    for(auto i = _valKeys.begin(); i != _valKeys.end(); i ++)
+    {
+        onKeyAndValue(i.key(), i.value());
+        dataForMainTable(i.key(), i.value());
     }
 }
 
@@ -107,8 +111,36 @@ void EVSEWindow::btn_commandwindow()
     bool bSend = false;
 
     if(sender() == ui->intervalButton)      bSend = sendAndRead(QString().sprintf("config --updatespeed %d", ui->intevalSpinBox->value()));
-    else if(sender() == ui->startButton)    bSend = sendAndRead(QString().sprintf("startloading --current %d", ui->startSpinBox->value()));
-    else if(sender() == ui->stopButton)     bSend = sendAndRead("stoploading");
+    else if(sender() == ui->startButton)
+    {
+        if(_valKeys["state"] != "2") // State B
+        {
+            QString msg = "Die Ladung kann nicht gestartet werden, da kein Fahrzeug angeschlossen ist!";
+            QMessageBox::warning(this, "Info", msg, "OK");
+            return;
+        }
+
+        bSend = sendAndRead(QString().sprintf("startloading --current %d", ui->startSpinBox->value()));
+    }
+    else if(sender() == ui->stopButton)
+    {
+        // ^ XOR
+        // ! NOT
+        // State 2: !(1 ^ 1) -> 1
+        // State 3: !(0 ^ 1) -> 0
+        // State 4: !(1 ^ 0) -> 0
+        // State 5: !(1 ^ 1) -> 1
+
+        if(!(_valKeys["state"] != "3"  ^ _valKeys["state"] != "4")) // State C D
+        {
+            QString msg = "Die Ladung kann nicht gestoppt werden, da kein Fahrzeug geladen wird!";
+            QMessageBox::warning(this, "Info", msg, "OK");
+            return;
+        }
+
+        bSend = sendAndRead("stoploading");
+    }
+
     else if(sender() == ui->digitalButton0) bSend = sendAndRead(QString().sprintf("config --digitalWrite %d --value %d", ui->digitalSpinBoxPin->value(), 0));
     else if(sender() == ui->digitalButton1) bSend = sendAndRead(QString().sprintf("config --digitalWrite %d --value %d", ui->digitalSpinBoxPin->value(), 1));
     else if(sender() == ui->pwmButton)      bSend = sendAndRead(QString().sprintf("config --pwm %d", ui->pwmSpinBox->value()));

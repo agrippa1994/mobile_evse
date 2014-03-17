@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-String& operator+=(String& in, float value);
+String& operator += (String& in, float value);
 
 int stringToInt(const String& c);
 

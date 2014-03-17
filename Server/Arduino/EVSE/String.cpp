@@ -10,6 +10,7 @@ String& operator += (String& in, float value)
   return in;
 }
 
+
 int stringToInt(const String& c)
 {
   char buf[32] = {0};
