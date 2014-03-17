@@ -126,6 +126,7 @@ void EVSEWindow::btn_commandwindow()
     {
         // ^ XOR
         // ! NOT
+        //
         // State 2: !(1 ^ 1) -> 1
         // State 3: !(0 ^ 1) -> 0
         // State 4: !(1 ^ 0) -> 0
