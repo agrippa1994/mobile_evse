@@ -112,12 +112,6 @@ void send_usb_data()
   addValueToString(data, "PWM", getPWM());
   addValueToString(data, "temperature", (float)(analogRead(PIN_TEMPERATURE) * 0.0049 * 100));
   
-  // Senden der analogen Daten
-  for(int i=A0, u = 0; i <= A5; i++, u++) addValueToString(data, String( String("A") + String(u)), analogRead(i));
-  
-  // Senden der digitalen Daten
-  for(int i=0; i <= 13; i++)  addValueToString(data, String( String("D") + String(i)), digitalRead(i));
-  
   Serial.println(data);
 }
 
