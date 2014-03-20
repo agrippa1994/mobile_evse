@@ -11,7 +11,6 @@
 
 @interface StartLoadingTableViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *requestLoadingCurrentCell;
-@property (weak, nonatomic) IBOutlet UIActivityIndicatorView *activityIndicator;
 @property (weak, nonatomic) IBOutlet UITableViewCell *cancelLoadingCell;
 
 @end
