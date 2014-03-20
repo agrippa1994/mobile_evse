@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "Client.h"
 
-@interface StartLoadingTableViewController : UITableViewController<ClientDelegate>
+@interface StartLoadingTableViewController : UITableViewController<UIPickerViewDelegate, UIPickerViewDataSource, ClientDelegate>
 
 @end

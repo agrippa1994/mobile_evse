@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Client.h"
 
-@interface StopLoadingTableViewController : UITableViewController
+@interface StopLoadingTableViewController : UITableViewController<ClientDelegate>
 
 @end

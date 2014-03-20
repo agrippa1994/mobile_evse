@@ -7,7 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "Client.h"
 
-@interface ControllingTableViewController : UITableViewController
+@interface ControllingTableViewController : UITableViewController<ClientDelegate>
 
 @end

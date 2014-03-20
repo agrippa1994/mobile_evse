@@ -1,11 +1,3 @@
-//
-//  ControllingTableViewController.m
-//  EVSE
-//
-//  Created by Manuel on 20.03.14.
-//  Copyright (c) 2014 Manuel. All rights reserved.
-//
-
 #import "ControllingTableViewController.h"
 
 @interface ControllingTableViewController ()
@@ -14,32 +6,32 @@
 
 @implementation ControllingTableViewController
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [[Client sharedClient] addDelegate:self];
+    
+    if(![[Client sharedClient] isConnected])
+    {
+        [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
+    }
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [[Client sharedClient] rmDelegate:self];
+}
+
+- (void)client:(Client *)p onDisconnect:(BOOL)disconnected
+{
+    [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
+}
+
+/*
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -56,7 +48,7 @@
     return 0;
 }
 
-/*
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
