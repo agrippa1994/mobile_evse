@@ -2,18 +2,15 @@
 
 @interface ControllingTableViewController ()
 
+-(void)didBecomeActive;
 @end
 
 @implementation ControllingTableViewController
 
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-}
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [[Client sharedClient] addDelegate:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     if(![[Client sharedClient] isConnected])
     {
@@ -24,6 +21,15 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [[Client sharedClient] rmDelegate:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)didBecomeActive
+{
+    if(![[Client sharedClient] isConnected])
+    {
+        [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
+    }
 }
 
 - (void)client:(Client *)p onDisconnect:(BOOL)disconnected

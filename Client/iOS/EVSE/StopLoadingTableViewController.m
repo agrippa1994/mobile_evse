@@ -10,14 +10,16 @@
 
 @interface StopLoadingTableViewController ()
 @property (weak, nonatomic) IBOutlet UITableViewCell *stopLoadingCell;
+
+-(void)didBecomeActive;
 @end
 
 @implementation StopLoadingTableViewController
 
-
 - (void)viewDidAppear:(BOOL)animated
 {
     [[Client sharedClient] addDelegate:self];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didBecomeActive) name:UIApplicationDidBecomeActiveNotification object:nil];
     
     if(![[Client sharedClient] isConnected])
     {
@@ -28,6 +30,15 @@
 - (void)viewDidDisappear:(BOOL)animated
 {
     [[Client sharedClient] rmDelegate:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+- (void)didBecomeActive
+{
+    if(![[Client sharedClient] isConnected])
+    {
+        [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
+    }
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -43,7 +54,6 @@
         {
             if([state compare:@"1"] == 0)
             {
-                [self performSegueWithIdentifier:@"stopLoadingForm" sender:self];
                 return;
             }
             
