@@ -1,7 +1,5 @@
 #import "Client.h"
 
-#include <string>
-#include <sstream>
 #include <string.h>
 
 @interface Client()
@@ -19,7 +17,6 @@
 - (void)onData:(const uint8_t *)data length:(NSInteger)len;
 
 - (void)inputStreamEvent:(NSStreamEvent)eventCode;
-- (void)outputStreamEvent:(NSStreamEvent)eventCode;
 
 @end
 
@@ -162,13 +159,25 @@
     switch(eventCode)
     {
         case NSStreamEventOpenCompleted:
+        {
             for(id<ClientDelegate> p in delegates)
                 if([p respondsToSelector:@selector(client:openRequest:)])
                     [p client:self openRequest:YES];
+            
+            wasOpenRequestSend = NO;
             break;
+        }
+            
         case NSStreamEventEndEncountered:
+        {
+            for(id<ClientDelegate> p in delegates)
+                if([p respondsToSelector:@selector(client:onDisconnect:)])
+                    [p client:self onDisconnect:YES];
             break;
+        }
+            
         case NSStreamEventErrorOccurred:
+        {
             if(wasOpenRequestSend)
             {
                 for(id<ClientDelegate> p in delegates)
@@ -176,43 +185,38 @@
                         [p client:self openRequest:NO];
             }
             break;
-        case NSStreamEventHasBytesAvailable:
+        }
             
+        case NSStreamEventHasBytesAvailable:
+        {
             uint8_t buffer[2048] = { 0 };
             while([inputStream hasBytesAvailable])
             {
                 NSInteger len = [inputStream read:buffer maxLength:sizeof(buffer)];
-                if(len > 0)
+                if(len <= 0)
+                {
+                    for(id<ClientDelegate> p in delegates)
+                        if([p respondsToSelector:@selector(client:onDisconnect:)])
+                            [p client:self onDisconnect:YES];
+                }
+                else
+                {
                     [self onData:buffer length:len];
+                }
             }
             break;
-    }
-    
-}
-
-- (void)outputStreamEvent:(NSStreamEvent)eventCode
-{
-    NSLog(@"outputStreamEvent:%lu", (unsigned long)eventCode);
-    
-    switch(eventCode)
-    {
-        case NSStreamEventOpenCompleted:
-            break;
-        case NSStreamEventEndEncountered:
-            break;
-        case NSStreamEventErrorOccurred:
-            break;
-        case NSStreamEventHasBytesAvailable:
+        }
+            
+        default:
             break;
     }
+    
 }
 
 - (void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode
 {
     if(aStream == inputStream)
         [self inputStreamEvent:eventCode];
-    else if(aStream == outputStream)
-        [self outputStreamEvent:eventCode];
 }
 
 @end

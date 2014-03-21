@@ -24,7 +24,7 @@
 		64B6163418C7A1DF003764CE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B6161318C7A1DF003764CE /* UIKit.framework */; };
 		64B6163C18C7A1DF003764CE /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 64B6163A18C7A1DF003764CE /* InfoPlist.strings */; };
 		64B6163E18C7A1DF003764CE /* EVSETests.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B6163D18C7A1DF003764CE /* EVSETests.m */; };
-		64B6164F18C7A57B003764CE /* Client.mm in Sources */ = {isa = PBXBuildFile; fileRef = 64B6164E18C7A57B003764CE /* Client.mm */; };
+		64B6164F18C7A57B003764CE /* Client.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B6164E18C7A57B003764CE /* Client.m */; };
 		64B6165218C7B54E003764CE /* NetworkTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 64B6165018C7B54E003764CE /* NetworkTableViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -64,7 +64,7 @@
 		64B6163B18C7A1DF003764CE /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		64B6163D18C7A1DF003764CE /* EVSETests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = EVSETests.m; sourceTree = "<group>"; };
 		64B6164D18C7A56A003764CE /* Client.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Client.h; sourceTree = "<group>"; };
-		64B6164E18C7A57B003764CE /* Client.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Client.mm; sourceTree = "<group>"; };
+		64B6164E18C7A57B003764CE /* Client.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Client.m; sourceTree = "<group>"; };
 		64B6165018C7B54E003764CE /* NetworkTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NetworkTableViewController.m; sourceTree = "<group>"; };
 		64B6165118C7B54E003764CE /* NetworkTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NetworkTableViewController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -133,7 +133,7 @@
 				64B6161E18C7A1DF003764CE /* AppDelegate.h */,
 				64B6161F18C7A1DF003764CE /* AppDelegate.m */,
 				64B6164D18C7A56A003764CE /* Client.h */,
-				64B6164E18C7A57B003764CE /* Client.mm */,
+				64B6164E18C7A57B003764CE /* Client.m */,
 				646FBE9218D5D6FC00207C0D /* StartLoadingTableViewController.h */,
 				646FBE9318D5D6FC00207C0D /* StartLoadingTableViewController.m */,
 				646FBE9518D5D70E00207C0D /* StopLoadingTableViewController.h */,
@@ -275,7 +275,7 @@
 			files = (
 				646FBE9718D5D70E00207C0D /* StopLoadingTableViewController.m in Sources */,
 				6413FC7418DB821400703793 /* ControllingTableViewController.m in Sources */,
-				64B6164F18C7A57B003764CE /* Client.mm in Sources */,
+				64B6164F18C7A57B003764CE /* Client.m in Sources */,
 				64B6162018C7A1DF003764CE /* AppDelegate.m in Sources */,
 				64B6161C18C7A1DF003764CE /* main.m in Sources */,
 				64B6165218C7B54E003764CE /* NetworkTableViewController.m in Sources */,

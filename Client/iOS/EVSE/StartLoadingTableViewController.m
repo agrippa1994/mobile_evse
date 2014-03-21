@@ -49,6 +49,12 @@
     }
 }
 
+- (void)client:(Client *)p onDisconnect:(BOOL)disconnected
+{
+    [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
+}
+
+
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
     return 1;
@@ -98,11 +104,5 @@
         }
     }
 }
-
-- (void)client:(Client *)p onDisconnect:(BOOL)disconnected
-{
-    [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
-}
-
 
 @end

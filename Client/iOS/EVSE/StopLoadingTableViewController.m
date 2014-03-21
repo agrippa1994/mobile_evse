@@ -41,6 +41,11 @@
     }
 }
 
+- (void)client:(Client *)p onDisconnect:(BOOL)disconnected
+{
+    [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
@@ -64,11 +69,6 @@
         UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
         [view show];
     }
-}
-
-- (void)client:(Client *)p onDisconnect:(BOOL)disconnected
-{
-    [self performSegueWithIdentifier:@"showNetworkForm" sender:self];
 }
 
 @end
