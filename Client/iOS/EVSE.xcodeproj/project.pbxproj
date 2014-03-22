@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6413FC7418DB821400703793 /* ControllingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6413FC7318DB821400703793 /* ControllingTableViewController.m */; };
+		6466275E18DDDF2300BB33D2 /* iPadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6466275D18DDDF2300BB33D2 /* iPadViewController.m */; };
 		646FBE9418D5D6FC00207C0D /* StartLoadingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 646FBE9318D5D6FC00207C0D /* StartLoadingTableViewController.m */; };
 		646FBE9718D5D70E00207C0D /* StopLoadingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 646FBE9618D5D70E00207C0D /* StopLoadingTableViewController.m */; };
 		64B6161018C7A1DF003764CE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B6160F18C7A1DF003764CE /* Foundation.framework */; };
@@ -41,6 +42,8 @@
 /* Begin PBXFileReference section */
 		6413FC7218DB821400703793 /* ControllingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControllingTableViewController.h; sourceTree = "<group>"; };
 		6413FC7318DB821400703793 /* ControllingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ControllingTableViewController.m; sourceTree = "<group>"; };
+		6466275C18DDDF2300BB33D2 /* iPadViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = iPadViewController.h; sourceTree = "<group>"; };
+		6466275D18DDDF2300BB33D2 /* iPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iPadViewController.m; sourceTree = "<group>"; };
 		646FBE9218D5D6FC00207C0D /* StartLoadingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartLoadingTableViewController.h; sourceTree = "<group>"; };
 		646FBE9318D5D6FC00207C0D /* StartLoadingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartLoadingTableViewController.m; sourceTree = "<group>"; };
 		646FBE9518D5D70E00207C0D /* StopLoadingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopLoadingTableViewController.h; sourceTree = "<group>"; };
@@ -142,6 +145,8 @@
 				6413FC7318DB821400703793 /* ControllingTableViewController.m */,
 				64B6165018C7B54E003764CE /* NetworkTableViewController.m */,
 				64B6165118C7B54E003764CE /* NetworkTableViewController.h */,
+				6466275C18DDDF2300BB33D2 /* iPadViewController.h */,
+				6466275D18DDDF2300BB33D2 /* iPadViewController.m */,
 			);
 			path = EVSE;
 			sourceTree = "<group>";
@@ -277,6 +282,7 @@
 				6413FC7418DB821400703793 /* ControllingTableViewController.m in Sources */,
 				64B6164F18C7A57B003764CE /* Client.m in Sources */,
 				64B6162018C7A1DF003764CE /* AppDelegate.m in Sources */,
+				6466275E18DDDF2300BB33D2 /* iPadViewController.m in Sources */,
 				64B6161C18C7A1DF003764CE /* main.m in Sources */,
 				64B6165218C7B54E003764CE /* NetworkTableViewController.m in Sources */,
 				646FBE9418D5D6FC00207C0D /* StartLoadingTableViewController.m in Sources */,
