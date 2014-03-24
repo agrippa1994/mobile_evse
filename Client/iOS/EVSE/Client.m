@@ -183,6 +183,8 @@
                 for(id<ClientDelegate> p in delegates)
                     if([p respondsToSelector:@selector(client:openRequest:)])
                         [p client:self openRequest:NO];
+                
+                wasOpenRequestSend = NO;
             }
             break;
         }

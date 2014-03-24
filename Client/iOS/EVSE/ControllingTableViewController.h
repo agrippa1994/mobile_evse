@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Client.h"
+#import "EVSETableViewBase.h"
 
-@interface ControllingTableViewController : UITableViewController<ClientDelegate>
+@interface ControllingTableViewController : EVSETableViewBase
 
 @end

@@ -7,8 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "Client.h"
+#import "EVSETableViewBase.h"
 
-@interface StartLoadingTableViewController : UITableViewController<UIPickerViewDelegate, UIPickerViewDataSource, ClientDelegate>
+@interface StartLoadingTableViewController : EVSETableViewBase<UIPickerViewDelegate, UIPickerViewDataSource>
 
 @end
