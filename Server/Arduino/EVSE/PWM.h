@@ -10,5 +10,6 @@ void setPWM(int value);
 // Auslesen der PWM
 int  getPWM();
   
+bool isPWMEnabled();  
 
 #endif

@@ -7,6 +7,9 @@ void charger_update();
 void enableCharging(int amps);
 void disableCharging();
 
+void enableRelay();
+void disableRelay();
+
 unsigned long chargingTime();
 
 bool isLoading();

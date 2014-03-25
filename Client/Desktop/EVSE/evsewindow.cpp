@@ -35,6 +35,8 @@ EVSEWindow::EVSEWindow(class MainWindow *parent, const QString &Host) : QWidget(
 
     QObject::connect(ui->pushButton, SIGNAL(clicked()), SLOT(send()));
 
+    QObject::connect(ui->stateTable, SIGNAL(customContextMenuRequested(QPoint)), SLOT(tableRightClick(QPoint)));
+
     ConnectToHost();
 }
 
@@ -228,12 +230,39 @@ void EVSEWindow::dataForMainTable(const QString &key, const QString &value)
     return;
 }
 
+void EVSEWindow::tableRightClick(const QPoint& p)
+{
+    QPoint global = ui->stateTable->mapToGlobal(p);
+
+    QMenu menu;
+
+    QTableWidgetItem *item = 0;
+    if((item = ui->stateTable->itemAt(p)))
+    {
+        QAction *force = menu.addAction("Diesen Wert forcen");
+        QAction *deforce = menu.addAction("Force deaktivieren");
+
+        QAction *selected = menu.exec(global);
+        if(force == selected)
+            sendAndRead(QString().sprintf("config --force %d", item->row()));
+        else if(deforce == selected)
+            sendAndRead("config --force disable");
+    }
+    else
+    {
+        QAction *deforce = menu.addAction("Force deaktivieren");
+        if(deforce == menu.exec(global))
+            sendAndRead("config --force disable");
+    }
+}
+
 void EVSEWindow::onKeyAndValue(const QString &key, const QString &value)
 {
     if(key == "state")
-    {
         setEVSEState(value.toInt());
-    }
+
+    if(key == "force")
+        ui->forceIndicator->setText("Force: " + QString((value == "1") ? "aktiviert" : "deaktiviert"));
 }
 
 void EVSEWindow::ConnectToHost()

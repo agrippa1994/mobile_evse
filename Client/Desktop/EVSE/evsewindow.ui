@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>498</width>
-    <height>507</height>
+    <height>573</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -370,6 +370,9 @@
        <layout class="QGridLayout" name="gridLayout_4">
         <item row="0" column="0">
          <widget class="QTableWidget" name="stateTable">
+          <property name="contextMenuPolicy">
+           <enum>Qt::CustomContextMenu</enum>
+          </property>
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
@@ -541,6 +544,13 @@
           </item>
          </widget>
         </item>
+        <item row="1" column="0">
+         <widget class="QLabel" name="forceIndicator">
+          <property name="text">
+           <string>Force: unbekannt</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QFrame" name="frame_2">
@@ -585,12 +595,12 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>141</x>
-     <y>582</y>
+     <x>194</x>
+     <y>383</y>
     </hint>
     <hint type="destinationlabel">
-     <x>57</x>
-     <y>587</y>
+     <x>96</x>
+     <y>370</y>
     </hint>
    </hints>
   </connection>
@@ -601,12 +611,28 @@
    <slot>setValue(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>59</x>
-     <y>597</y>
+     <x>96</x>
+     <y>370</y>
     </hint>
     <hint type="destinationlabel">
-     <x>126</x>
-     <y>604</y>
+     <x>194</x>
+     <y>383</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lineEdit</sender>
+   <signal>returnPressed()</signal>
+   <receiver>pushButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>331</x>
+     <y>535</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>427</x>
+     <y>541</y>
     </hint>
    </hints>
   </connection>

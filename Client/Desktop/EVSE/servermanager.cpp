@@ -122,6 +122,5 @@ void ServerManager::tableRightClick(const QPoint& p)
             ui->tableWidget->insertRow(rowCount);
         }
     }
-
 }
 

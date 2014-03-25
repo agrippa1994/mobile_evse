@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QTcpSocket>
 #include <QMap>
+#include <QPoint>
 
 namespace Ui
 {
@@ -27,6 +28,8 @@ private slots:
     void btn_commandwindow();
 
     void send();
+
+    void tableRightClick(const QPoint& p);
 
 protected:
     virtual void hideEvent(class QHideEvent *p);

@@ -32,14 +32,20 @@ void setPWM(int value)
     // muss das Register OCR1B von 0 - 249 gesetzt werden
   
     OCR1A = 249;   // 1kHz
-    OCR1B = value; 
   }
+  
+  OCR1B = value; 
 }
 
 // Gibt das Tastverhältnis der PWM zurück (0-249)
 int getPWM()
 {
    return OCR1B; 
+}
+
+bool isPWMEnabled()
+{
+  return getPWM() != 0; 
 }
 
 
