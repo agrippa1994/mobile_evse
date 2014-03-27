@@ -62,12 +62,6 @@
     <addaction name="actionMinimieren"/>
     <addaction name="actionMaximieren"/>
    </widget>
-   <widget class="QMenu" name="menu">
-    <property name="title">
-     <string>?</string>
-    </property>
-    <addaction name="actionInfo"/>
-   </widget>
    <widget class="QMenu" name="menuDatei">
     <property name="title">
      <string>Datei</string>
@@ -79,7 +73,6 @@
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuFenster"/>
-   <addaction name="menu"/>
   </widget>
   <action name="actionBeenden">
    <property name="text">
