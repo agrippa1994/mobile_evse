@@ -112,9 +112,9 @@ void commandHandler(const char *sz)
 
 // Callback für den genormten EVSE Status
 // Wird aufgerufen, falls eine Änderung erfolgt
-void evseStateChange(eState _old, eState _new)
+void evseStateChange(eState oldState, eState newState)
 {
-  if(_new == _old)
+  if(newState == oldState)
     return;
   
   // Sequenz 1.1  
@@ -123,7 +123,7 @@ void evseStateChange(eState _old, eState _new)
     
   } 
   // Sequence 1.2 (Plug-in (w/o S2)) 
-  else if((oldstate == state_A && (newState == state_C || newState == state_D)) && !isPWMEnabled())
+  else if((oldState == state_A && (newState == state_C || newState == state_D)) && !isPWMEnabled())
   {
      
   }

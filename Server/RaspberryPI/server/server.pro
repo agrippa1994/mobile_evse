@@ -9,6 +9,10 @@ QMAKE_CXXFLAGS += -w
 
 QT -= core gui widget
 
+win32{
+    QT += core
+}
+
 TARGET = server
 TEMPLATE = app
 
