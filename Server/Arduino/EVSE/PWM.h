@@ -12,4 +12,6 @@ int  getPWM();
   
 bool isPWMEnabled();  
 
+void setPWMAmpere(int ampere);
+
 #endif

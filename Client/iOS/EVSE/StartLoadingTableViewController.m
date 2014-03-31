@@ -10,6 +10,10 @@
 
 
 @interface StartLoadingTableViewController ()
+{
+    UIAlertView *waitAlertView;
+    BOOL waitAlertViewActive;
+}
 @property (weak, nonatomic) IBOutlet UIPickerView *hourPicker;
 @property (weak, nonatomic) IBOutlet UITableViewCell *startLoadingCell;
 @end
@@ -18,6 +22,8 @@
 
 - (void)viewDidLoad
 {
+    waitAlertViewActive = NO;
+    
     self.hourPicker.delegate = self;
     self.hourPicker.dataSource = self;
 }
@@ -57,6 +63,13 @@
                 int currents[] = {18, 16, 14, 13, 12, 11, 10, 9, 8};
                 NSUInteger idx = [self.hourPicker selectedRowInComponent:0];
                 [[Client sharedClient] send:[NSString stringWithFormat:@"startloading --current %d", currents[idx]]];
+                
+                NSString *title = @"Info";
+                NSString *message = @"Warte bis die Ladung gestartet wird...";
+                
+                waitAlertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                [waitAlertView show];
+                waitAlertViewActive = YES;
                 return;
             }
             else
@@ -69,6 +82,33 @@
                 return;
             }
         }
+    }
+}
+
+- (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val
+{
+    if([key compare:@"state"] == 0 && waitAlertViewActive)
+    {
+        if([val integerValue] == 2) // State B
+            return;
+        
+        NSString *title = @"Info";
+        NSString *message = @"";
+        
+        if([val integerValue] < 2)
+            message = @"Fehler beim Starten der Ladung! Fahrzeug wurde abgeschlossen!";
+        if([val integerValue] > 2)
+            message = @"Ladung wurde erfolgreich gestartet!";
+        if([val integerValue] > 4)
+            message = @"Fehler beim Starten der Ladung! Kurzschluss oder nicht bereit!";
+    
+        [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
+        
+        waitAlertViewActive = NO;
+
+        UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+        [view show];
+        
     }
 }
 

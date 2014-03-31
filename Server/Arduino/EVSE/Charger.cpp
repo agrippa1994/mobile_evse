@@ -3,6 +3,7 @@
 #include "PWM.h"
 
 unsigned long g_chargingTime = 0;
+
 bool g_isLoading = false;
 
 void charger_init()
@@ -19,26 +20,24 @@ void charger_update()
 
 void enableCharging(int amps)
 {
-  g_chargingTime = millis();
-  
-  setPWM(amps * 2);
-  
-  g_isLoading = true;
+  setPWMAmpere(amps);
 }
 
 void disableCharging()
 {
-  setPWM(0);
-  g_isLoading = false;
+  setPWMAmpere(0);
 }
 
 void enableRelay()
 {
+  g_chargingTime = millis();
+  g_isLoading = true;
   digitalWrite(PIN_RELAY, HIGH);
 }
 
 void disableRelay()
 {
+  g_isLoading = false;
   digitalWrite(PIN_RELAY, LOW);
 }
 

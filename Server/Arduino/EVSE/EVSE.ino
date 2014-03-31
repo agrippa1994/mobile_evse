@@ -3,7 +3,7 @@
   
  
   Programmbeschreibung:
-  
+  Dieses Programm dient dazu, mit der CP Schaltung zu kommunizieren.
   
 
 */

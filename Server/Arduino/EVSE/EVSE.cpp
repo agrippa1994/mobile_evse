@@ -8,6 +8,9 @@
 #include <string.h>
 #include <stdio.h>
 
+#include <Event.h>
+#include <Timer.h>
+
 int g_requestLoading = 0;
 int g_requestLoadingCurrent = 0;
 int g_requestStopLoading = 0;
@@ -117,59 +120,41 @@ void evseStateChange(eState oldState, eState newState)
   if(newState == oldState)
     return;
   
-  // Sequenz 1.1  
-  if(((oldState == state_A || newState == state_B) || newState == state_A) && !isPWMEnabled())
-  {
-    
-  } 
-  // Sequence 1.2 (Plug-in (w/o S2)) 
-  else if((oldState == state_A && (newState == state_C || newState == state_D)) && !isPWMEnabled())
-  {
-     
-  }
+  // Ausfuehren aller Sequenzen laut Norm!
   
-  // Sequence 2.1 (Uplug at state Bx)
-  else if(  (oldState == state_B && isPWMEnabled()) && (newState == state_A && isPWMEnabled())
-         && (oldState == state_B && !isPWMEnabled()) && (newState == state_A && !isPWMEnabled()))
-  {
-    
-  }
   // Sequence 2.2 (Unplug during charging)
-  else if(  ((oldState == state_C && isPWMEnabled()) || (newState == state_D && isPWMEnabled())) && newState == state_A)
+  if(  ((oldState == state_C && isPWMEnabled()) || (newState == state_D && isPWMEnabled())) && newState == state_A)
   {
-    
-  }
-  else if( (oldState == state_A && isPWMEnabled()) && (newState == state_A && !isPWMEnabled()))
-  {
-    
+    disableCharging();
+    disableRelay();
   }
   
-  // Sequence 3.1 (EVSE Power available (state B))
-  else if( (oldState == state_B && !isPWMEnabled()) && (newState == state_B && isPWMEnabled()))
-  {
-    
-  }
   // Sequence 3.2 (EVSE Power available (state C))
-  else if( (oldState == state_C && !isPWMEnabled()) && (newState == state_C && isPWMEnabled()))
+  else if( (oldState == state_C && !isPWMEnabled()) && (newState == state_C && isPWMEnabled()) && g_requestLoading)
   {
-    
+    enableCharging(g_requestLoadingCurrent);
+    enableRelay();
   }
   
   // Sequence 4 (EV ready to charge)
-  else if( (oldState == state_B) && (newState == state_C || newState == state_D) && isPWMEnabled())
+  else if( (oldState == state_B) && (newState == state_C || newState == state_D) && isPWMEnabled() && g_requestLoading)
   {
-    
+    enableCharging(g_requestLoadingCurrent);
+    enableRelay();
   }
-  
-  // Sequences between 4 and 7 aren't needed
   
   // Sequence 7 (EV stops the charge)
   else if((oldState == state_C || oldState == state_D) && (newState == state_B) && isPWMEnabled())
   {
-    
+     disableCharging();
+     disableRelay();
   }
   
-  
+  else if(newState == state_E || newState == state_F)
+  {
+    disableCharging();
+    disableRelay();
+  }
 }
 
 void send_usb_data()

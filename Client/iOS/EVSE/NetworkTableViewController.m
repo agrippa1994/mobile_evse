@@ -20,6 +20,7 @@
 
 @implementation NetworkTableViewController
 
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [[Client sharedClient] addDelegate:self];

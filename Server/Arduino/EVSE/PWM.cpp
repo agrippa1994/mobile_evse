@@ -48,4 +48,19 @@ bool isPWMEnabled()
   return getPWM() != 0; 
 }
 
+void setPWMAmpere(int ampere)
+{
+  if(ampere < 6 || ampere > 51)
+    return;
+  
+  float I = (float)ampere;
+  
+  float dutyCycle = I / 0.6; // Norm
+  
+  // Skalieren auf 0 - 249
+  
+  float dutyForPWM = (dutyCycle * 2.49);
+  
+  setPWM((int)dutyForPWM);
+}
 
