@@ -1,6 +1,7 @@
 #include "Charger.h"
 #include "Pins.h"
 #include "PWM.h"
+#include "EVSE.h"
 
 unsigned long g_chargingTime = 0;
 
@@ -9,6 +10,10 @@ bool g_isLoading = false;
 void charger_init()
 {
   pinMode(PIN_RELAY,OUTPUT);
+  
+  // Deaktivieren der Ladung
+  disableCharging();
+  disableRelay();
   
   g_chargingTime = 0;
 }
@@ -25,19 +30,23 @@ void enableCharging(int amps)
 
 void disableCharging()
 {
-  setPWMAmpere(0);
+  setPWM(249); // konstante Ausgangsspannung
 }
 
 void enableRelay()
 {
+  g_currentLoadingCurrent = g_requestLoadingCurrent;
   g_chargingTime = millis();
   g_isLoading = true;
+  
   digitalWrite(PIN_RELAY, HIGH);
 }
 
 void disableRelay()
 {
+  g_currentLoadingCurrent = 0;
   g_isLoading = false;
+  
   digitalWrite(PIN_RELAY, LOW);
 }
 

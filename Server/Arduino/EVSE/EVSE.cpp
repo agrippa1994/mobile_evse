@@ -20,6 +20,8 @@ int g_updateSpeed = 200;
 int g_stateForce = 0;
 int g_stateForceState = 0;
 
+int g_currentLoadingCurrent = 0;
+
 // Verarbeiten der Befehle, welche per USB empfangen werden
 // Mögliche Befehle
 //   startloading --current [STROM]
@@ -123,14 +125,14 @@ void evseStateChange(eState oldState, eState newState)
   // Ausfuehren aller Sequenzen laut Norm!
   
   // Sequence 2.2 (Unplug during charging)
-  if(  ((oldState == state_C && isPWMEnabled()) || (newState == state_D && isPWMEnabled())) && newState == state_A)
+  if(((oldState == state_C && isPWMEnabled()) || (newState == state_D && isPWMEnabled())) && newState == state_A)
   {
     disableCharging();
     disableRelay();
   }
   
   // Sequence 3.2 (EVSE Power available (state C))
-  else if( (oldState == state_C && !isPWMEnabled()) && (newState == state_C && isPWMEnabled()) && g_requestLoading)
+  else if((oldState == state_C && !isPWMEnabled()) && (newState == state_C && isPWMEnabled()) && g_requestLoading)
   {
     enableCharging(g_requestLoadingCurrent);
     enableRelay();
@@ -150,7 +152,7 @@ void evseStateChange(eState oldState, eState newState)
      disableRelay();
   }
   
-  else if(newState == state_E || newState == state_F)
+  else if(newState == state_A || newState == state_E || newState == state_F)
   {
     disableCharging();
     disableRelay();
@@ -171,6 +173,7 @@ void send_usb_data()
   addValueToString(data, "temperature", (double)(analogRead(PIN_TEMPERATURE) * 0.0049 * 100));
   addValueToString(data, "chargingTime", chargingTime());
   addValueToString(data, "force", g_stateForce);
+  addValueToString(data, "currentLoadingCurrent", g_currentLoadingCurrent);
   
   Serial.println(data);
 }

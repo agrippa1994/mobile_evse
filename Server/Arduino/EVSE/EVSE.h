@@ -14,4 +14,5 @@ extern int g_updateSpeed;
 extern int g_stateForce;
 extern int g_stateForceState;
 
+extern int g_currentLoadingCurrent;
 #endif

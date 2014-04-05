@@ -14,11 +14,11 @@ const int VOLTAGE_DROP_TOLERANCE = 50;
 // TODO: richtige Werte suchen
 const int StateVoltage[] = {
   0,    // state_None
-  875,  // state_A
-  780,  // state_B
-  690,  // state_C
-  390,  // state_D
-  512,  // state_E
+  1000, // state_A
+  730,  // state_B
+  460,  // state_C
+  200,  // state_D
+  0,    // state_E
   0     // state_F
 };
 
