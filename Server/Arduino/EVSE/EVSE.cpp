@@ -8,14 +8,11 @@
 #include <string.h>
 #include <stdio.h>
 
-#include <Event.h>
-#include <Timer.h>
-
 int g_requestLoading = 0;
 int g_requestLoadingCurrent = 0;
 int g_requestStopLoading = 0;
 
-int g_updateSpeed = 200;
+int g_updateSpeed = 100;
 
 int g_stateForce = 0;
 int g_stateForceState = 0;
@@ -51,8 +48,7 @@ void commandHandler(const char *sz)
   
   else if(strstr(sz, "stoploading") != 0)
   {
-    eState state = getEVSEState();
-    if(!(state == state_C || state == state_D))
+    if(!isLoading())
       return;
       
     g_requestLoading = 0;
@@ -88,7 +84,7 @@ void commandHandler(const char *sz)
       int speed = 0;
       if(sscanf(sz, "config --updatespeed %d", &speed) == 1)
       {
-        if(speed >= 200)
+        if(speed >= 100)
           g_updateSpeed = speed;
       } 
     }
@@ -161,6 +157,12 @@ void evseStateChange(eState oldState, eState newState)
 
 void send_usb_data()
 {
+  static unsigned long last_time = millis();
+  unsigned long now = millis();
+    
+  if(last_time + g_updateSpeed >= now)
+    return;
+      
   String data;
     
   addValueToString(data, "state", getEVSEState(), true);
@@ -175,7 +177,13 @@ void send_usb_data()
   addValueToString(data, "force", g_stateForce);
   addValueToString(data, "currentLoadingCurrent", g_currentLoadingCurrent);
   
+  // Pin-Daten der analogen Pins
+  for(int i=A0, u = 0; i <= A5; i ++, u++)
+    addValueToString(data, String("A") + String(u), analogRead(i));
+  
   Serial.println(data);
+  
+  last_time = now;
 }
 
 // Setup wird beim initialisieren des Programmes aufgerufen
@@ -193,20 +201,9 @@ void setup()
 void loop()
 {
   // Update
-  {
-    statemanager_update();
-    charger_update();
-  }
+  statemanager_update();
+  charger_update();
   
   // Senden der Daten
-  {
-    static unsigned long last_time = millis();
-    unsigned long now = millis();
-    
-    if(last_time + g_updateSpeed >= now)
-      return;
-      
-    send_usb_data();  
-    last_time = now;
-  }
+  send_usb_data();  
 }

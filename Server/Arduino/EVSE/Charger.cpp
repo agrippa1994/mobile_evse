@@ -1,11 +1,24 @@
+#include "Timer.h"
+
 #include "Charger.h"
 #include "Pins.h"
 #include "PWM.h"
 #include "EVSE.h"
 
+// aktuelle Ladezeit in ms
 unsigned long g_chargingTime = 0;
 
+// Ladeinidikator
 bool g_isLoading = false;
+
+// Timer, welcher zum Stoppen der Ladung verwendet wird
+Timer g_stopTimer;
+
+
+void charger_stopChargingHandler(Timer *t)
+{
+  
+}
 
 void charger_init()
 {
@@ -20,7 +33,7 @@ void charger_init()
 
 void charger_update()
 {
-  
+  g_stopTimer.update();  
 }
 
 void enableCharging(int amps)
@@ -30,7 +43,12 @@ void enableCharging(int amps)
 
 void disableCharging()
 {
-  setPWM(249); // konstante Ausgangsspannung
+  if(g_isLoading) // Anfrage zum Stoppen
+  {
+    g_stopTimer.start(3000, charger_stopChargingHandler, false); 
+  }
+  // konstante Ausgangsspannung am CP-Ausgang
+  setPWM(249);
 }
 
 void enableRelay()
