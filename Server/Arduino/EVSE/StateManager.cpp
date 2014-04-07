@@ -4,15 +4,22 @@
 
 #include <Arduino.h>
 
+// Gibt die Größe eines Arrays zurück
 template<typename T, int s> int arraySize(T (&) [s]) { return s; }
 
+// Status
 eState g_State = state_None;
+
+// Callback für Statusänderungen
 __stateChange g_stateChange = 0;
+
+// Toleranz für das Einlesen der Spannungen
 const int VOLTAGE_DROP_TOLERANCE = 50;
 
 
 // TODO: richtige Werte suchen
-const int StateVoltage[] = {
+const int StateVoltage[] = 
+{
   0,    // state_None
   1000, // state_A
   730,  // state_B
@@ -22,6 +29,7 @@ const int StateVoltage[] = {
   0     // state_F
 };
 
+// Liest den Spannungsabfall, bei Force wird der Force-Wert zurückgegeben
 int readVoltageDrop()
 {  
   if(g_stateForce)
@@ -35,14 +43,19 @@ int readVoltageDrop()
   return high;
 }
 
+// Initialisieren des Status-Managers
 void statemanager_init(__stateChange pFunc)
 {
   g_stateChange = pFunc;
 }
 
+// Update des Status-Managers
 void statemanager_update()
 {
+  // Sichern des Statuswertes
   eState oldState = g_State;
+
+  // Lesen der Spannung
   int high = readVoltageDrop();
   
   // Ändern des Statuswertes
@@ -50,12 +63,13 @@ void statemanager_update()
     if(high >= StateVoltage[i] && high <= (StateVoltage[i] + VOLTAGE_DROP_TOLERANCE))
       g_State = (eState) i;
       
-  // Aufruf des Callbacks    
+  // Aufruf des Callbacks, falls eine Änderung war    
   eState newState = g_State;
   if(newState != oldState && g_stateChange)
     g_stateChange(oldState, newState);
 }
 
+// Gibt den aktuellen Status zurück
 eState getEVSEState()
 {
   return g_State;

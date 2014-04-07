@@ -157,6 +157,10 @@ void evseStateChange(eState oldState, eState newState)
 
 void send_usb_data()
 {
+  // Diese Daten sollten nur in einem bestimmten Zeitintervall gesendet werden
+  // Damit das Programm durch eine Verzögerung nicht hängen bleibt, wird das durch
+  // Zeiten abgesichert.
+
   static unsigned long last_time = millis();
   unsigned long now = millis();
     
@@ -190,17 +194,23 @@ void send_usb_data()
 // Hier werden unter anderem alle Objekte initialisiert, aber nicht konstruiert
 void setup()
 {
+  // Initialisieren der Pulsweitenmodulation
   pwm_init();
+
+  // Initialisieren des Ladecontrollers
   charger_init();
   
+  // Initialisieren des State-Managers
   statemanager_init(evseStateChange);
+
+  // Initialisieren des USB-Kommunikation
   usb_init(commandHandler); 
 }
 
 // loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
 void loop()
 {
-  // Update
+  // Updaten des Statusmanagers und Ladecontroller
   statemanager_update();
   charger_update();
   

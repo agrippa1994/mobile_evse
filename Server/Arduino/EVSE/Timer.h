@@ -1,6 +1,8 @@
 #ifndef TIMER_H
 #define TIMER_H
 
+// Timer für den Arduino
+
 class Timer
 {
   typedef void (* timerHandler) (class Timer *);

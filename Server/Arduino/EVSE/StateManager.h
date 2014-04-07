@@ -38,11 +38,14 @@ enum eState
   state_F
 };
 
+// Callback-Typendefinition
 typedef void (* __stateChange)(eState, eState);
 
+// Initialisieren und Update des State-Managers
 void statemanager_init(__stateChange pFunc);
 void statemanager_update();
 
+// Aktueller Status
 eState getEVSEState();
 
 #endif

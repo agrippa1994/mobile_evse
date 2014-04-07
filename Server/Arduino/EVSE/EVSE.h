@@ -5,6 +5,8 @@
 #include "PWM.h"
 #include "USB.h"
 
+// Systemweite globale Variablen
+
 extern int g_requestLoading;
 extern int g_requestLoadingCurrent;
 extern int g_requestStopLoading;

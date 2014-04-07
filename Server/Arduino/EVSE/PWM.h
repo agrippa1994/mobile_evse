@@ -10,8 +10,10 @@ void setPWM(int value);
 // Auslesen der PWM
 int  getPWM();
   
+// Ist die PWm aktiv?  
 bool isPWMEnabled();  
 
+// Umrechnen des Stromes in die zugehörige Pulsweite nach Norm
 void setPWMAmpere(int ampere);
 
 #endif

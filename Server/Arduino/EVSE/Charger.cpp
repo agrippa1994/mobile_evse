@@ -1,5 +1,4 @@
 #include "Timer.h"
-
 #include "Charger.h"
 #include "Pins.h"
 #include "PWM.h"
@@ -15,11 +14,13 @@ bool g_isLoading = false;
 Timer g_stopTimer;
 
 
+// Timer-Callback welcher aufgerufen wird, falls die Ladung deaktiviert wird
 void charger_stopChargingHandler(Timer *t)
 {
   
 }
 
+// Initialisieren des Ladecontrollers
 void charger_init()
 {
   pinMode(PIN_RELAY,OUTPUT);
@@ -31,16 +32,19 @@ void charger_init()
   g_chargingTime = 0;
 }
 
+// Updatedes Ladecontrollers
 void charger_update()
 {
   g_stopTimer.update();  
 }
 
+// Aktivieren der PWM
 void enableCharging(int amps)
 {
   setPWMAmpere(amps);
 }
 
+// Deaktivierne der PWM
 void disableCharging()
 {
   if(g_isLoading) // Anfrage zum Stoppen
@@ -51,6 +55,7 @@ void disableCharging()
   setPWM(249);
 }
 
+// Aktivieren des Relais
 void enableRelay()
 {
   g_currentLoadingCurrent = g_requestLoadingCurrent;
@@ -60,6 +65,7 @@ void enableRelay()
   digitalWrite(PIN_RELAY, HIGH);
 }
 
+// Deaktivieren des Relais
 void disableRelay()
 {
   g_currentLoadingCurrent = 0;
@@ -68,6 +74,7 @@ void disableRelay()
   digitalWrite(PIN_RELAY, LOW);
 }
 
+// Aktuelle Ladezeit
 unsigned long chargingTime()
 {
   if(!g_isLoading)
@@ -76,6 +83,7 @@ unsigned long chargingTime()
   return millis() - g_chargingTime;
 }
 
+// Ist Ladung aktiv?
 bool isLoading()
 {
   return g_isLoading;
