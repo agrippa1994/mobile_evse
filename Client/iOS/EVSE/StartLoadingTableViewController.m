@@ -26,6 +26,8 @@
     
     self.hourPicker.delegate = self;
     self.hourPicker.dataSource = self;
+    
+    self.startLoadingCell.detailTextLabel.text = @"";
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -72,21 +74,52 @@
                 waitAlertViewActive = YES;
                 return;
             }
-            else
-            {
-                NSString *title = @"Fehler";
-                NSString *message = @"Es muss ein Fahrzeug angeschlossen sein und es darf keine Ladung im Gange sein!";
-                
-                UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                [view show];
-                return;
-            }
         }
     }
 }
 
 - (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val
 {
+    if([key compare:@"state"] == 0)
+    {
+        NSInteger state = [val integerValue];
+        if(state == 2)
+        {
+            self.startLoadingCell.textLabel.textColor = [UIColor greenColor];
+            self.startLoadingCell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        }
+        else
+        {
+            self.startLoadingCell.textLabel.textColor = [UIColor redColor];
+            self.startLoadingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        
+        switch (state)
+        {
+            case 0:
+                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Fehler!)";
+                break;
+            case 1:
+                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kein Fahrzeug angeschlossen)";
+                break;
+            case 2:
+                self.startLoadingCell.detailTextLabel.text = @"";
+                break;
+            case 3:
+            case 4:
+                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Ladung aktiv!)";
+                break;
+            case 5:
+                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kurzschluss / Spannungsausfall!)";
+                break;
+            default:
+                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Tankstelle nicht vefügbar!)";
+                break;
+        }
+        
+        [self.tableView reloadData];
+    }
+    
     if([key compare:@"state"] == 0 && waitAlertViewActive)
     {
         if([val integerValue] == 2) // State B

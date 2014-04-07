@@ -1,10 +1,6 @@
 #ifndef EVSE_H
 #define EVSE_H
 
-#include <Arduino.h>
-#include "PWM.h"
-#include "USB.h"
-
 // Systemweite globale Variablen
 
 extern int g_requestLoading;

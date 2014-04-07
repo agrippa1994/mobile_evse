@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>498</width>
-    <height>573</height>
+    <height>574</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -55,10 +55,13 @@
               <string>Intervall: </string>
              </property>
              <property name="minimum">
-              <number>250</number>
+              <number>100</number>
              </property>
              <property name="maximum">
               <number>19999</number>
+             </property>
+             <property name="value">
+              <number>100</number>
              </property>
             </widget>
            </item>

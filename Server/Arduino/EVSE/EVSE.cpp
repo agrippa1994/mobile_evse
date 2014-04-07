@@ -1,13 +1,18 @@
+#include <Arduino.h>
+
 #include "EVSE.h"
 #include "String.h"
 #include "StateManager.h"
 #include "USBData.h"
 #include "Charger.h"
 #include "Pins.h"
+#include "PWM.h"
+#include "USB.h"
 
 #include <string.h>
 #include <stdio.h>
 
+// Definition der globalen Variablen
 int g_requestLoading = 0;
 int g_requestLoadingCurrent = 0;
 int g_requestStopLoading = 0;
@@ -18,6 +23,40 @@ int g_stateForce = 0;
 int g_stateForceState = 0;
 
 int g_currentLoadingCurrent = 0;
+
+// Funktionsdeklarationen
+void commandHandler(const char *sz);
+void evseStateChange(eState oldState, eState newState);
+void send_usb_data();
+
+
+// Setup wird beim initialisieren des Programmes aufgerufen
+// Hier werden unter anderem alle Objekte initialisiert, aber nicht konstruiert
+void setup()
+{
+  // Initialisieren der Pulsweitenmodulation
+  pwm_init();
+
+  // Initialisieren des Ladecontrollers
+  charger_init();
+  
+  // Initialisieren des State-Managers
+  statemanager_init(evseStateChange);
+
+  // Initialisieren des USB-Kommunikation
+  usb_init(commandHandler); 
+}
+
+// loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
+void loop()
+{
+  // Updaten des Statusmanagers und Ladecontroller
+  statemanager_update();
+  charger_update();
+  
+  // Senden der Daten
+  send_usb_data();  
+}
 
 // Verarbeiten der Befehle, welche per USB empfangen werden
 // Mögliche Befehle
@@ -119,39 +158,19 @@ void evseStateChange(eState oldState, eState newState)
     return;
   
   // Ausfuehren aller Sequenzen laut Norm!
-  
-  // Sequence 2.2 (Unplug during charging)
-  if(((oldState == state_C && isPWMEnabled()) || (newState == state_D && isPWMEnabled())) && newState == state_A)
+    if( (((oldState == state_C) || (newState == state_D)) && ((newState == state_A) || (newState == state_B)))
+    ||( (newState == state_A || newState == state_E || newState == state_F)))
   {
     disableCharging();
     disableRelay();
   }
   
-  // Sequence 3.2 (EVSE Power available (state C))
-  else if((oldState == state_C && !isPWMEnabled()) && (newState == state_C && isPWMEnabled()) && g_requestLoading)
+  else if((oldState == state_B) && (newState == state_C || newState == state_D) && g_requestLoading)
   {
     enableCharging(g_requestLoadingCurrent);
     enableRelay();
-  }
-  
-  // Sequence 4 (EV ready to charge)
-  else if( (oldState == state_B) && (newState == state_C || newState == state_D) && isPWMEnabled() && g_requestLoading)
-  {
-    enableCharging(g_requestLoadingCurrent);
-    enableRelay();
-  }
-  
-  // Sequence 7 (EV stops the charge)
-  else if((oldState == state_C || oldState == state_D) && (newState == state_B) && isPWMEnabled())
-  {
-     disableCharging();
-     disableRelay();
-  }
-  
-  else if(newState == state_A || newState == state_E || newState == state_F)
-  {
-    disableCharging();
-    disableRelay();
+
+    g_requestLoading = 0;
   }
 }
 
@@ -188,32 +207,4 @@ void send_usb_data()
   Serial.println(data);
   
   last_time = now;
-}
-
-// Setup wird beim initialisieren des Programmes aufgerufen
-// Hier werden unter anderem alle Objekte initialisiert, aber nicht konstruiert
-void setup()
-{
-  // Initialisieren der Pulsweitenmodulation
-  pwm_init();
-
-  // Initialisieren des Ladecontrollers
-  charger_init();
-  
-  // Initialisieren des State-Managers
-  statemanager_init(evseStateChange);
-
-  // Initialisieren des USB-Kommunikation
-  usb_init(commandHandler); 
-}
-
-// loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
-void loop()
-{
-  // Updaten des Statusmanagers und Ladecontroller
-  statemanager_update();
-  charger_update();
-  
-  // Senden der Daten
-  send_usb_data();  
 }

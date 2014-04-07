@@ -22,6 +22,8 @@
 - (void)viewDidLoad
 {
     waitAlertViewActive = NO;
+    
+    self.stopLoadingCell.detailTextLabel.text = @"";
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -49,21 +51,29 @@
                 waitAlertViewActive = YES;
                 return;
             }
-            else
-            {
-                NSString *title = @"Fehler";
-                NSString *message = @"Es muss ein Ladevorgang vorhanden sein, um sie beenden zu können";
-                
-                UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                [view show];
-                return;
-            }
         }
     }
 }
 
 - (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val
 {
+    if([key compare:@"isLoading"] == 0)
+    {
+        NSInteger isLoading = [val integerValue];
+        if(isLoading)
+        {
+            self.stopLoadingCell.textLabel.textColor = [UIColor redColor];
+            self.stopLoadingCell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            self.stopLoadingCell.detailTextLabel.text = @"";
+        }
+        else
+        {
+            self.stopLoadingCell.textLabel.textColor = [UIColor grayColor];
+            self.stopLoadingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.stopLoadingCell.detailTextLabel.text = @"Es wird kein Fahrzeug geladen!";
+        }
+        [self.tableView reloadData];
+    }
     if([key compare:@"state"] == 0 && waitAlertViewActive)
     {
         NSInteger state = [val integerValue];

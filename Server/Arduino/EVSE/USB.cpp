@@ -1,4 +1,5 @@
-#include "EVSE.h"
+#include <Arduino.h>
+#include "USB.h"
 
 __usbHandler g_pFunc = 0;
 
@@ -24,7 +25,7 @@ void usb_serialEvent()
   
   if(Serial.available() > 0)
   {
-     const char ch = Serial.read();
+    const char ch = Serial.read();
     
     // /n, /r
     if(ch == '\n' || ch == '\r')
