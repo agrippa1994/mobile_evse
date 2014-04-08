@@ -15,6 +15,12 @@ void Timer::stop()
   _isActive = false;
   
 }
+
+void Timer::setTimerInterval(unsigned long ms)
+{
+  _period = ms;
+}
+
 void Timer::update()
 {
   if(!_isActive)

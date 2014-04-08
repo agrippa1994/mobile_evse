@@ -8,6 +8,7 @@
 #include "Pins.h"
 #include "PWM.h"
 #include "USB.h"
+#include "Timer.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -24,10 +25,13 @@ int g_stateForceState = 0;
 
 int g_currentLoadingCurrent = 0;
 
+// USB-Timer
+Timer g_usbTimer;
+
 // Funktionsdeklarationen
 void commandHandler(const char *sz);
 void evseStateChange(eState oldState, eState newState);
-void send_usb_data();
+void send_usb_timer(Timer *t);
 
 
 // Setup wird beim initialisieren des Programmes aufgerufen
@@ -45,6 +49,9 @@ void setup()
 
   // Initialisieren des USB-Kommunikation
   usb_init(commandHandler); 
+
+  // Starten des USB-Timers
+  g_usbTimer.start(g_updateSpeed, send_usb_timer, true);
 }
 
 // loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
@@ -54,8 +61,8 @@ void loop()
   statemanager_update();
   charger_update();
   
-  // Senden der Daten
-  send_usb_data();  
+  // Update des USB-Timers
+  g_usbTimer.update();  
 }
 
 // Verarbeiten der Befehle, welche per USB empfangen werden
@@ -174,20 +181,14 @@ void evseStateChange(eState oldState, eState newState)
   }
 }
 
-void send_usb_data()
-{
-  // Diese Daten sollten nur in einem bestimmten Zeitintervall gesendet werden
-  // Damit das Programm durch eine Verzögerung nicht hängen bleibt, wird das durch
-  // Zeiten abgesichert.
+void send_usb_timer(Timer *p)
+{      
 
-  static unsigned long last_time = millis();
-  unsigned long now = millis();
-    
-  if(last_time + g_updateSpeed >= now)
-    return;
-      
+  // Timer-Intervall auf die Update-Geschwindigkeit setzen
+  p->setTimerInterval(g_updateSpeed);
+
+  // Senden jener Daten, die für die Visualisierungen wichtig sind
   String data;
-    
   addValueToString(data, "state", getEVSEState(), true);
   addValueToString(data, "requestLoading", g_requestLoading);
   addValueToString(data, "requestLoadingCurrent", g_requestLoadingCurrent);
@@ -195,7 +196,7 @@ void send_usb_data()
   addValueToString(data, "isLoading", isLoading());
   addValueToString(data, "updateSpeed", g_updateSpeed);
   addValueToString(data, "PWM", getPWM());
-  addValueToString(data, "temperature", (double)(analogRead(PIN_TEMPERATURE) * 0.0049 * 100));
+  addValueToString(data, "temperature", (double)(analogRead(PIN_TEMPERATURE) * 0.49));
   addValueToString(data, "chargingTime", chargingTime());
   addValueToString(data, "force", g_stateForce);
   addValueToString(data, "currentLoadingCurrent", g_currentLoadingCurrent);
@@ -205,6 +206,4 @@ void send_usb_data()
     addValueToString(data, String("A") + String(u), analogRead(i));
   
   Serial.println(data);
-  
-  last_time = now;
 }
