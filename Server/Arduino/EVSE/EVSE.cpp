@@ -131,7 +131,12 @@ void commandHandler(const char *sz)
 			if(sscanf(sz, "config --updatespeed %d", &speed) == 1)
 			{
 				if(speed >= 100)
+				{
 					g_updateSpeed = speed;
+
+					// Timer-Intervall auf die Update-Geschwindigkeit setzen
+					g_usbTimer.setTimerInterval(g_updateSpeed);
+				}
 			} 
 		}
 		else if(strstr(sz, "config --force") != 0)
@@ -184,10 +189,6 @@ void evseStateChange(eState oldState, eState newState)
 
 void send_usb_timer(Timer *p)
 {
-
-	// Timer-Intervall auf die Update-Geschwindigkeit setzen
-	p->setTimerInterval(g_updateSpeed);
-
 	// Senden jener Daten, die für die Visualisierungen wichtig sind
 	String data;
 	addValueToString(data, "state", getEVSEState(), true);
