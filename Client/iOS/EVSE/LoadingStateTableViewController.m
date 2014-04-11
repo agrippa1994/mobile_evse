@@ -12,7 +12,10 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *loadingCurrentCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *currentLoadingTimeCell;
 @property (weak, nonatomic) IBOutlet UITableViewCell *statusCell;
+@property (weak, nonatomic) IBOutlet UISlider *changeCurrentSlider;
+@property (weak, nonatomic) IBOutlet UITableViewCell *changeCurrentCell;
 
+- (IBAction)currentSliderValueChanged:(id)sender;
 @end
 
 @implementation LoadingStateTableViewController
@@ -46,8 +49,34 @@
                             @"Ladung aktiv / ohne Lüfter", @"Ladung aktiv / mit Lüfter", @"Kurzschluss oder Fehler",
                             @"Tankstelle nicht verfügbar", nil];
         
-        self.statusCell.detailTextLabel.text = [strings objectAtIndex:[val integerValue]];
+        NSInteger state = [val integerValue];
+        self.statusCell.detailTextLabel.text = [strings objectAtIndex:state];
     }
+    
+    if([key compare:@"isLoading" options:NSCaseInsensitiveSearch] == 0)
+    {
+        NSInteger state = [val integerValue];
+        if(state)
+        {
+            self.changeCurrentCell.detailTextLabel.text = @"";
+            self.changeCurrentCell.textLabel.textColor = [UIColor greenColor];
+            self.changeCurrentCell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            
+        }
+        else
+        {
+            self.changeCurrentCell.detailTextLabel.text = @"Kein Ladung aktiv!";
+            self.changeCurrentCell.textLabel.textColor = [UIColor redColor];
+            self.changeCurrentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+
+    }
+}
+
+- (IBAction)currentSliderValueChanged:(id)sender
+{
+    UISlider *slider = (UISlider *)sender;
+    self.changeCurrentCell.textLabel.text = [NSString stringWithFormat:@"Ladestrom auf %ldA ändern", ((long)(NSInteger)[slider value])];
 }
 
 @end
