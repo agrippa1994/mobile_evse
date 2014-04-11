@@ -5,26 +5,26 @@
 
 class Timer
 {
-  typedef void (* timerHandler) (class Timer *);
-  
-  unsigned long _startTime;
-  unsigned long _period;
-  bool          _repeat;
-  bool          _isActive;
-  timerHandler  _handler;
-  
+	typedef void (* timerHandler) (class Timer *);
+
+	unsigned long	_startTime;
+	unsigned long	_period;
+	bool			_repeat;
+	bool			_isActive;
+	timerHandler	_handler;
+
 public:
-  // Startet den Timer
-  void start(unsigned long ms, timerHandler t, bool repeat = false);
-  
-  // Stoppt den Timer
-  void stop();
+	// Startet den Timer
+	void start(unsigned long ms, timerHandler t, bool repeat = false);
 
-  // Setzen des Timer-Intervalls
-  void setTimerInterval(unsigned long ms);
+	// Stoppt den Timer
+	void stop();
 
-  // Muss aufgerufen werden, um den Timer auszuführen
-  void update();
+	// Setzen des Timer-Intervalls
+	void setTimerInterval(unsigned long ms);
+
+	// Muss aufgerufen werden, um den Timer auszuführen
+	void update();
 };
 
 #endif
