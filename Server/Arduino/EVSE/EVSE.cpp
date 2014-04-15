@@ -91,6 +91,8 @@ void commandHandler(const char *sz)
 			g_requestLoadingCurrent = current;
 			enableCharging(g_requestLoadingCurrent);
 		}
+
+		return;
 	}
 
 	else if(strstr(sz, "stoploading") != 0)
@@ -101,12 +103,14 @@ void commandHandler(const char *sz)
 		g_requestLoading = 0;
 		g_requestLoadingCurrent = 0;
 		disableCharging();
+
+		return;
 	}
 
 	else if(strstr(sz, "changecurrent --current") != 0)
 	{
 		eState state = getEVSEState();
-		if(state != state_C && state != s)
+		if(state != state_C && state != state_D)
 			return;
 
 		int current = 0;
@@ -115,6 +119,8 @@ void commandHandler(const char *sz)
 			if(current >= 6 || current <= 18)
 				setPWMAmpere(current);
 		}
+
+		return;
 	}
 
 	else if(strstr(sz, "config") != 0)
@@ -126,6 +132,8 @@ void commandHandler(const char *sz)
 			{
 				setPWM(pwm);
 			} 
+
+			return;
 		}
 		else if(strstr(sz, "config --digitalWrite") != 0)
 		{
@@ -138,6 +146,8 @@ void commandHandler(const char *sz)
 				if(val == 0 || val == 1)
 					digitalWrite(pin, val);
 			} 
+
+			return;
 		}
 		else if(strstr(sz, "config --updatespeed") != 0)
 		{
@@ -152,6 +162,8 @@ void commandHandler(const char *sz)
 					g_usbTimer.setTimerInterval(g_updateSpeed);
 				}
 			} 
+
+			return;
 		}
 		else if(strstr(sz, "config --force") != 0)
 		{
@@ -172,6 +184,8 @@ void commandHandler(const char *sz)
 				g_stateForceState = idx;
 				g_stateForce = 1;
 			}
+
+			return;
 		}
 	}
 }
