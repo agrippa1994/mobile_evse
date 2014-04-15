@@ -19,7 +19,7 @@ int g_requestLoading = 0;
 int g_requestLoadingCurrent = 0;
 int g_requestStopLoading = 0;
 
-int g_updateSpeed = 50;
+int g_updateSpeed = 200;
 
 int g_stateForce = 0;
 int g_stateForceState = 0;
@@ -70,6 +70,7 @@ void loop()
 // Mögliche Befehle
 // 		startloading --current [STROM]
 // 		stoploading
+// 		changecurrent --current [STROM]
 //   	config --pwm [PWM]
 //   	config --digitalWrite [PIN] --value [0/1]
 //   	config --updatespeed [SPEED in ms]
@@ -90,7 +91,6 @@ void commandHandler(const char *sz)
 			g_requestLoadingCurrent = current;
 			enableCharging(g_requestLoadingCurrent);
 		}
-		return;
 	}
 
 	else if(strstr(sz, "stoploading") != 0)
@@ -101,7 +101,20 @@ void commandHandler(const char *sz)
 		g_requestLoading = 0;
 		g_requestLoadingCurrent = 0;
 		disableCharging();
-		return;
+	}
+
+	else if(strstr(sz, "changecurrent --current") != 0)
+	{
+		eState state = getEVSEState();
+		if(state != state_C && state != s)
+			return;
+
+		int current = 0;
+		if(sscanf(sz, "changecurrent --current %d") == 1)
+		{
+			if(current >= 6 || current <= 18)
+				setPWMAmpere(current);
+		}
 	}
 
 	else if(strstr(sz, "config") != 0)
@@ -131,7 +144,7 @@ void commandHandler(const char *sz)
 			int speed = 0;
 			if(sscanf(sz, "config --updatespeed %d", &speed) == 1)
 			{
-				if(speed >= 50)
+				if(speed >= 200)
 				{
 					g_updateSpeed = speed;
 

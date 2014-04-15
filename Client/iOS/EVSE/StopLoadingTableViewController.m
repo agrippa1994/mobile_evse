@@ -63,17 +63,17 @@
         if(isLoading)
         {
             self.stopLoadingCell.textLabel.textColor = [UIColor redColor];
-            self.stopLoadingCell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            self.stopLoadingCell.userInteractionEnabled = YES;
             self.stopLoadingCell.detailTextLabel.text = @"";
         }
         else
         {
             self.stopLoadingCell.textLabel.textColor = [UIColor grayColor];
-            self.stopLoadingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.stopLoadingCell.userInteractionEnabled = NO;
             self.stopLoadingCell.detailTextLabel.text = @"Es wird kein Fahrzeug geladen!";
         }
-        [self.tableView reloadData];
     }
+    
     if([key compare:@"state"] == 0 && waitAlertViewActive)
     {
         NSInteger state = [val integerValue];

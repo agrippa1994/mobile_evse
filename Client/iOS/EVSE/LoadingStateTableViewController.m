@@ -14,6 +14,7 @@
 @property (weak, nonatomic) IBOutlet UITableViewCell *statusCell;
 @property (weak, nonatomic) IBOutlet UISlider *changeCurrentSlider;
 @property (weak, nonatomic) IBOutlet UITableViewCell *changeCurrentCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *temperatureCell;
 
 - (IBAction)currentSliderValueChanged:(id)sender;
 @end
@@ -59,24 +60,45 @@
         if(state)
         {
             self.changeCurrentCell.detailTextLabel.text = @"";
-            self.changeCurrentCell.textLabel.textColor = [UIColor greenColor];
-            self.changeCurrentCell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            self.changeCurrentCell.textLabel.textColor = [UIColor blackColor];
+            self.changeCurrentCell.userInteractionEnabled = YES;
+            self.changeCurrentSlider.userInteractionEnabled = YES;
             
         }
         else
         {
-            self.changeCurrentCell.detailTextLabel.text = @"Kein Ladung aktiv!";
-            self.changeCurrentCell.textLabel.textColor = [UIColor redColor];
-            self.changeCurrentCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.changeCurrentCell.detailTextLabel.text = @"Keine Ladung aktiv!";
+            self.changeCurrentCell.textLabel.textColor = [UIColor grayColor];
+            self.changeCurrentCell.detailTextLabel.textColor = [UIColor redColor];
+            self.changeCurrentCell.userInteractionEnabled = NO;
+            self.changeCurrentSlider.userInteractionEnabled = NO;
+            self.changeCurrentSlider.value = 0.0f;
         }
-
+    }
+    
+    if([key compare:@"temperature" options:NSCaseInsensitiveSearch] == 0)
+    {
+        self.temperatureCell.detailTextLabel.text = [NSString stringWithFormat:@"%.0f°C", [val floatValue]];
     }
 }
 
 - (IBAction)currentSliderValueChanged:(id)sender
 {
     UISlider *slider = (UISlider *)sender;
-    self.changeCurrentCell.textLabel.text = [NSString stringWithFormat:@"Ladestrom auf %ldA ändern", ((long)(NSInteger)[slider value])];
+    
+    self.changeCurrentCell.textLabel.adjustsFontSizeToFitWidth = YES;
+    self.changeCurrentCell.textLabel.text = [NSString stringWithFormat:@"Ladestrom auf %dA ändern", (NSInteger)[slider value]];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+    if(cell == self.changeCurrentCell)
+    {
+        [[Client sharedClient] send:[NSString stringWithFormat:@"changecurrent --current %d", (NSInteger)self.changeCurrentSlider.value]];
+    }
 }
 
 @end

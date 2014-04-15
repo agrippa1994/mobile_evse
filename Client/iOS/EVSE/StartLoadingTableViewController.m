@@ -86,12 +86,12 @@
         if(state == 2)
         {
             self.startLoadingCell.textLabel.textColor = [UIColor greenColor];
-            self.startLoadingCell.selectionStyle = UITableViewCellSelectionStyleDefault;
+            self.startLoadingCell.userInteractionEnabled = YES;
         }
         else
         {
             self.startLoadingCell.textLabel.textColor = [UIColor redColor];
-            self.startLoadingCell.selectionStyle = UITableViewCellSelectionStyleNone;
+            self.startLoadingCell.userInteractionEnabled = NO;
         }
         
         switch (state)
