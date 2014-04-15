@@ -19,6 +19,7 @@ ServerManager::ServerManager(QWidget *parent) :
     ui->setupUi(this);
 
     QObject::connect(ui->tableWidget, SIGNAL(customContextMenuRequested(QPoint)), SLOT(tableRightClick(QPoint)));
+    QObject::connect(ui->connectButton, SIGNAL(clicked()), SLOT(connectButtonClicked()));
 }
 
 ServerManager::~ServerManager()
@@ -124,3 +125,12 @@ void ServerManager::tableRightClick(const QPoint& p)
     }
 }
 
+void ServerManager::connectButtonClicked()
+{
+    auto items = ui->tableWidget->selectedItems();
+    if(items.isEmpty())
+        return;
+
+    emit ConnectionRequest(ui->tableWidget->item(items[0]->row(), 1)->text());
+    hide();
+}

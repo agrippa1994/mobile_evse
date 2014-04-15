@@ -9,6 +9,7 @@
 #include "PWM.h"
 #include "USB.h"
 #include "Timer.h"
+#include "Temperature.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -18,7 +19,7 @@ int g_requestLoading = 0;
 int g_requestLoadingCurrent = 0;
 int g_requestStopLoading = 0;
 
-int g_updateSpeed = 100;
+int g_updateSpeed = 50;
 
 int g_stateForce = 0;
 int g_stateForceState = 0;
@@ -130,7 +131,7 @@ void commandHandler(const char *sz)
 			int speed = 0;
 			if(sscanf(sz, "config --updatespeed %d", &speed) == 1)
 			{
-				if(speed >= 100)
+				if(speed >= 50)
 				{
 					g_updateSpeed = speed;
 
@@ -198,7 +199,7 @@ void send_usb_timer(Timer *p)
 	addValueToString(data, "isLoading", isLoading());
 	addValueToString(data, "updateSpeed", g_updateSpeed);
 	addValueToString(data, "PWM", getPWM());
-	addValueToString(data, "temperature", (double)(analogRead(PIN_TEMPERATURE) * 0.49));
+	addValueToString(data, "temperature", readTemperature());
 	addValueToString(data, "chargingTime", chargingTime());
 	addValueToString(data, "force", g_stateForce);
 	addValueToString(data, "currentLoadingCurrent", g_currentLoadingCurrent);

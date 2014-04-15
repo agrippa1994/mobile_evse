@@ -24,6 +24,7 @@ protected:
 
 private slots:
     void tableRightClick(const QPoint&);
+    void connectButtonClicked();
 
 private:
     Ui::ServerManager *ui;

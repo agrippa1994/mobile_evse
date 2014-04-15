@@ -176,17 +176,11 @@ void EVSEWindow::hideEvent(QHideEvent *p)
 void EVSEWindow::setEVSEState(int row)
 {
     for(int c = 0; c < ui->stateTable->columnCount(); c ++)
-    {
         for(int r = 0; r < ui->stateTable->rowCount(); r ++)
-        {
             ui->stateTable->item(r, c)->setBackground(QBrush());
-        }
-    }
 
     for(int i=0;i<ui->stateTable->columnCount();i++)
-    {
         ui->stateTable->item(row, i)->setBackground(QBrush(QColor(0, 255, 0)));
-    }
 }
 
 void EVSEWindow::networkLog(const QString &str)
