@@ -13,6 +13,9 @@ void disableCharging();
 void enableRelay();
 void disableRelay();
 
+// Ändern des Ladestromes
+void changeLoadingCurrent(int amps);
+
 // Gibt die aktuelle Ladezeit in ms zurück
 unsigned long chargingTime();
 

@@ -117,7 +117,7 @@ void commandHandler(const char *sz)
 		if(sscanf(sz, "changecurrent --current %d", &current) == 1)
 		{
 			if(current >= 6 || current <= 18)
-				setPWMAmpere(current);
+				changeLoadingCurrent(current);
 		}
 
 		return;

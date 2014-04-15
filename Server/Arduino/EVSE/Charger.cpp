@@ -75,6 +75,16 @@ void disableRelay()
 	digitalWrite(PIN_RELAY, LOW);
 }
 
+// Abändern des Ladestromes
+void changeLoadingCurrent(int amps)
+{
+	if((amps >= 6 || amps <= 18) && isLoading())
+	{
+		g_currentLoadingCurrent = amps;
+		setPWMAmpere(amps);
+	}		
+}
+
 // Aktuelle Ladezeit
 unsigned long chargingTime()
 {
