@@ -246,13 +246,22 @@
             </objects>
             <point key="canvasLocation" x="-2278" y="3144"/>
         </scene>
-        <!--Table View Controller - Programminformation-->
-        <scene sceneID="UuT-yg-IU2">
+        <!--View Controller-->
+        <scene sceneID="C3v-ri-Itz">
             <objects>
-                <tableViewController id="A8F-ra-tJf" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" title="Programminformation" id="pgy-LV-AHK"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="F6O-Pl-gg7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController id="ucI-dy-73j" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="3kw-Zw-rZl"/>
+                        <viewControllerLayoutGuide type="bottom" id="Lte-AT-HmY"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="jdG-5E-081">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="gk8-kC-LCY"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FDK-Yl-EmQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1117" y="5085"/>
         </scene>
@@ -264,7 +273,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <connections>
-                        <segue destination="A8F-ra-tJf" kind="relationship" relationship="rootViewController" id="N7b-QL-SJV"/>
+                        <segue destination="ucI-dy-73j" kind="relationship" relationship="rootViewController" id="QhO-sP-cMk"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="0EI-i1-wGG" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -87,7 +87,7 @@
     UISlider *slider = (UISlider *)sender;
     
     self.changeCurrentCell.textLabel.adjustsFontSizeToFitWidth = YES;
-    self.changeCurrentCell.textLabel.text = [NSString stringWithFormat:@"Ladestrom auf %dA ändern", (NSInteger)[slider value]];
+    self.changeCurrentCell.textLabel.text = [NSString stringWithFormat:@"Ladestrom auf %ldA ändern", (long)slider.value];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -97,7 +97,7 @@
     
     if(cell == self.changeCurrentCell)
     {
-        [[Client sharedClient] send:[NSString stringWithFormat:@"changecurrent --current %d", (NSInteger)self.changeCurrentSlider.value]];
+        [[Client sharedClient] send:[NSString stringWithFormat:@"changecurrent --current %ld", (long)self.changeCurrentSlider.value]];
     }
 }
 
