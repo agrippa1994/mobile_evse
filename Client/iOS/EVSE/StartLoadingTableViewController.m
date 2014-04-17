@@ -12,22 +12,27 @@
 @interface StartLoadingTableViewController ()
 {
     UIAlertView *waitAlertView;
-    BOOL waitAlertViewActive;
+    BOOL waitAlertViewForStartActive;
+    BOOL waitAlertViewForStopActive;
 }
 @property (weak, nonatomic) IBOutlet UIPickerView *hourPicker;
 @property (weak, nonatomic) IBOutlet UITableViewCell *startLoadingCell;
+@property (weak, nonatomic) IBOutlet UITableViewCell *stopLoadingCell;
+
 @end
 
 @implementation StartLoadingTableViewController
 
 - (void)viewDidLoad
 {
-    waitAlertViewActive = NO;
+    waitAlertViewForStartActive = NO;
+    waitAlertViewForStopActive = NO;
     
     self.hourPicker.delegate = self;
     self.hourPicker.dataSource = self;
     
     self.startLoadingCell.detailTextLabel.text = @"";
+    self.stopLoadingCell.detailTextLabel.text = @"";
 }
 
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
@@ -71,7 +76,29 @@
                 
                 waitAlertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                 [waitAlertView show];
-                waitAlertViewActive = YES;
+                waitAlertViewForStartActive = YES;
+                return;
+            }
+        }
+    }
+    
+    if(cell == self.stopLoadingCell)
+    {
+        NSString *state = [[[Client sharedClient] keyAndValues] objectForKey:@"isLoading"];
+        if(state != nil)
+        {
+            if([state compare:@"1"] == 0) // Ladevorgang
+            {
+                [[Client sharedClient] send:@"stoploading"];
+                
+                NSString *title = @"Info";
+                NSString *message = @"Die Ladung wird gestoppt!\n"
+                "Das kann mehrere Sekunden in Anspruch nehmen!\n"
+                "Bitte trennen Sie nicht die Verbindung zu Ihrem Fahrzeug!";
+                
+                waitAlertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
+                [waitAlertView show];
+                waitAlertViewForStopActive = YES;
                 return;
             }
         }
@@ -117,32 +144,82 @@
                 break;
         }
         
-        [self.tableView reloadData];
+        if(waitAlertViewForStartActive)
+        {
+            if(state != 2)
+            {
+                NSString *title = @"Info";
+                NSString *message = @"";
+                
+                if([val integerValue] < 2)
+                    message = @"Fehler beim Starten der Ladung! Fahrzeug wurde abgeschlossen!";
+                if([val integerValue] > 2)
+                    message = @"Ladung wurde erfolgreich gestartet!";
+                if([val integerValue] > 4)
+                    message = @"Fehler beim Starten der Ladung! Kurzschluss oder nicht bereit!";
+                
+                [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
+                waitAlertViewForStartActive = NO;
+                
+                UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [view show];
+            }
+        }
+        
+        if(waitAlertViewForStopActive)
+        {
+            if(state != 3 && state != 4)
+            {
+                BOOL isLoading = [((NSString *)[[[Client sharedClient] keyAndValues] objectForKey:@"isLoading"]) compare:@"1"] == 0;
+                
+                if(!isLoading)
+                {
+                    NSString *title = @"Info";
+                    NSString *message = @"";
+                    
+                    switch(state)
+                    {
+                        case 1:
+                            message = @"Die Ladung wurde beendet (Fahrzeug direkt abgeschlossen!)";
+                            break;
+                        case 2:
+                            message = @"Die Ladung wurde erfolgreich beendet\n"
+                            "Das Fahrzeug kann jetzt abgeschlossen werden!";
+                            break;
+                        default:
+                            message = @"Schwerer Fehler!";
+                            break;
+                    }
+                    
+                    [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
+                    waitAlertViewForStopActive = NO;
+                    
+                    UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                    [view show];
+                }
+            }
+        }
     }
     
-    if([key compare:@"state"] == 0 && waitAlertViewActive)
+    if([key compare:@"isLoading"] == 0)
     {
-        if([val integerValue] == 2) // State B
-            return;
-        
-        NSString *title = @"Info";
-        NSString *message = @"";
-        
-        if([val integerValue] < 2)
-            message = @"Fehler beim Starten der Ladung! Fahrzeug wurde abgeschlossen!";
-        if([val integerValue] > 2)
-            message = @"Ladung wurde erfolgreich gestartet!";
-        if([val integerValue] > 4)
-            message = @"Fehler beim Starten der Ladung! Kurzschluss oder nicht bereit!";
-    
-        [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
-        
-        waitAlertViewActive = NO;
-
-        UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-        [view show];
-        
+        NSInteger isLoading = [val integerValue];
+        if(isLoading)
+        {
+            self.stopLoadingCell.textLabel.textColor = [UIColor redColor];
+            self.stopLoadingCell.userInteractionEnabled = YES;
+            self.stopLoadingCell.detailTextLabel.text = @"";
+        }
+        else
+        {
+            self.stopLoadingCell.textLabel.textColor = [UIColor grayColor];
+            self.stopLoadingCell.userInteractionEnabled = NO;
+            self.stopLoadingCell.detailTextLabel.text = @"Es wird kein Fahrzeug geladen!";
+        }
     }
+    
+    [self.tableView reloadData];
+
 }
 
 @end

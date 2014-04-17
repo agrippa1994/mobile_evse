@@ -11,7 +11,6 @@
 		3CD3382318E9AD35000CF197 /* LoadingStateTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3CD3382218E9AD35000CF197 /* LoadingStateTableViewController.m */; };
 		6466275E18DDDF2300BB33D2 /* iPadViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6466275D18DDDF2300BB33D2 /* iPadViewController.m */; };
 		646FBE9418D5D6FC00207C0D /* StartLoadingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 646FBE9318D5D6FC00207C0D /* StartLoadingTableViewController.m */; };
-		646FBE9718D5D70E00207C0D /* StopLoadingTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 646FBE9618D5D70E00207C0D /* StopLoadingTableViewController.m */; };
 		64B6161018C7A1DF003764CE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B6160F18C7A1DF003764CE /* Foundation.framework */; };
 		64B6161218C7A1DF003764CE /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B6161118C7A1DF003764CE /* CoreGraphics.framework */; };
 		64B6161418C7A1DF003764CE /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 64B6161318C7A1DF003764CE /* UIKit.framework */; };
@@ -49,8 +48,6 @@
 		6466275D18DDDF2300BB33D2 /* iPadViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = iPadViewController.m; sourceTree = "<group>"; };
 		646FBE9218D5D6FC00207C0D /* StartLoadingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StartLoadingTableViewController.h; sourceTree = "<group>"; };
 		646FBE9318D5D6FC00207C0D /* StartLoadingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StartLoadingTableViewController.m; sourceTree = "<group>"; };
-		646FBE9518D5D70E00207C0D /* StopLoadingTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StopLoadingTableViewController.h; sourceTree = "<group>"; };
-		646FBE9618D5D70E00207C0D /* StopLoadingTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StopLoadingTableViewController.m; sourceTree = "<group>"; };
 		64B6160C18C7A1DF003764CE /* EVSE.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EVSE.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		64B6160F18C7A1DF003764CE /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		64B6161118C7A1DF003764CE /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -142,8 +139,6 @@
 				64B6164E18C7A57B003764CE /* Client.m */,
 				646FBE9218D5D6FC00207C0D /* StartLoadingTableViewController.h */,
 				646FBE9318D5D6FC00207C0D /* StartLoadingTableViewController.m */,
-				646FBE9518D5D70E00207C0D /* StopLoadingTableViewController.h */,
-				646FBE9618D5D70E00207C0D /* StopLoadingTableViewController.m */,
 				3CD3382118E9AD35000CF197 /* LoadingStateTableViewController.h */,
 				3CD3382218E9AD35000CF197 /* LoadingStateTableViewController.m */,
 				64B6165018C7B54E003764CE /* NetworkTableViewController.m */,
@@ -283,7 +278,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				646FBE9718D5D70E00207C0D /* StopLoadingTableViewController.m in Sources */,
 				64B6164F18C7A57B003764CE /* Client.m in Sources */,
 				64B6162018C7A1DF003764CE /* AppDelegate.m in Sources */,
 				3CD3382318E9AD35000CF197 /* LoadingStateTableViewController.m in Sources */,
