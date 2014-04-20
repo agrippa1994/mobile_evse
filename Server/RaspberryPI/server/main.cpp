@@ -12,30 +12,32 @@
 
 using namespace std;
 
+// io_service
 boost::asio::io_service g_io;
 
+// I/O-Objekte
 server svr(g_io);
 arduino ar(g_io);
 
+// TCP-Server Callback
 void on_tcp_data(const std::string &data)
 {
-    LOG(info);
-    ar.send(data);
+    ar.send(data);  // Senden der Daten an den Arduino
 }
 
+// Arduino Callback
 void on_usb_data(const std::string &data)
 {
-    LOG(info);
-    svr.sendToAll(data);
+    svr.sendToAll(data);    // Daten an den Server schicken
+                            // Der Server schickt die Daten an die Clienten
 }
 
 int main()
 {
-    LOG(info);
-
     tcp_data = on_tcp_data;
     usb_data = on_usb_data;
 
+    // Starten des io_service
     g_io.run();
     return 0;
 }
