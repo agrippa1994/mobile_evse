@@ -37,3 +37,7 @@ void Timer::update()
 	}
 }
 
+bool Timer::isActive()
+{
+	return _isActive;
+}

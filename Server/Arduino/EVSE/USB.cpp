@@ -20,7 +20,7 @@ void usb_init(__usbHandler pFunc)
 
 void usb_serialEvent()
 {
-	static char szBuffer[512] = {0};
+	static char szBuffer[256] = {0};
 	static size_t BufferOffset = 0;
 
 	if(Serial.available() > 0)

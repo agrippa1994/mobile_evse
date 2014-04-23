@@ -3,6 +3,7 @@
 #include "Pins.h"
 #include "PWM.h"
 #include "EVSE.h"
+#include "StateManager.h"
 
 // aktuelle Ladezeit in ms
 unsigned long g_chargingTime = 0;
@@ -17,7 +18,11 @@ Timer g_stopTimer;
 // Timer-Callback welcher aufgerufen wird, falls die Ladung deaktiviert wird
 void charger_stopChargingHandler(Timer *t)
 {
+	eState state = getEVSEState();
+	if(state != state_C && state != state_D)
+		return;
 
+	disableRelay();
 }
 
 // Initialisieren des Ladecontrollers
@@ -49,7 +54,7 @@ void disableCharging()
 {
 	if(g_isLoading) // Anfrage zum Stoppen
 	{
-		g_stopTimer.start(3000, charger_stopChargingHandler, false); 
+		g_stopTimer.start(4000, charger_stopChargingHandler, false); 
 	}
 
 	// konstante Ausgangsspannung am CP-Ausgang
@@ -59,6 +64,8 @@ void disableCharging()
 // Aktivieren des Relais
 void enableRelay()
 {
+	g_stopTimer.stop();
+	
 	g_currentLoadingCurrent = g_requestLoadingCurrent;
 	g_chargingTime = millis();
 	g_isLoading = true;
@@ -69,6 +76,9 @@ void enableRelay()
 // Deaktivieren des Relais
 void disableRelay()
 {
+	// Stoppen des Timers
+	g_stopTimer.stop();
+
 	g_currentLoadingCurrent = 0;
 	g_isLoading = false;
 

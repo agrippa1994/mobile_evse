@@ -8,7 +8,7 @@
 template<typename T, int s> int arraySize(T (&) [s]) { return s; }
 
 // Status
-eState g_State = state_None;
+eState g_State = state_F;
 
 // Callback für Statusänderungen
 __stateChange g_stateChange = 0;
@@ -20,13 +20,12 @@ const int VOLTAGE_DROP_TOLERANCE = 50;
 // TODO: richtige Werte suchen
 const int StateVoltage[] = 
 {
-	0,		// state_None
 	1000,	// state_A
 	730, 	// state_B
 	460,	// state_C
 	200,	// state_D
 	0,		// state_E
-	0		// state_F
+	1024	// state_F
 };
 
 // Liest den Spannungsabfall, bei Force wird der Force-Wert zurückgegeben
@@ -61,7 +60,7 @@ void statemanager_update()
 	// Ändern des Statuswertes
 	for(int i=0;i<arraySize(StateVoltage); i++)
 		if(high >= StateVoltage[i] && high <= (StateVoltage[i] + VOLTAGE_DROP_TOLERANCE))
-			g_State = (eState) i;
+			g_State = (eState) (i + 1);
 
 	// Aufruf des Callbacks, falls eine Änderung war    
 	eState newState = g_State;

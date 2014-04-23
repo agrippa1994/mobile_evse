@@ -5,7 +5,7 @@
 void charger_init();
 void charger_update();
 
-// Aktivieren / Deaktivieren der Ladung (nur die Aktivierung der PWM)
+// Aktivieren / Deaktivieren der Ladung (Betrifft nur PWM!)
 void enableCharging(int amps);
 void disableCharging();
 

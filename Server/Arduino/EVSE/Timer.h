@@ -25,6 +25,9 @@ public:
 
 	// Muss aufgerufen werden, um den Timer auszuführen
 	void update();
+
+	// Überprüft, ob der Timer aktiv ist
+	bool isActive();
 };
 
 #endif

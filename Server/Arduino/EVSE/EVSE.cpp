@@ -198,7 +198,7 @@ void evseStateChange(eState oldState, eState newState)
 		return;
 
 	// Ausfuehren aller Sequenzen laut Norm!
-	if( (((oldState == state_C) || (newState == state_D)) && ((newState == state_A) || (newState == state_B)))
+	if( (((oldState == state_C) || (oldState == state_D)) && ((newState == state_A) || (newState == state_B)))
 	||( (newState == state_A || newState == state_E || newState == state_F)))
 	{
 		disableCharging();
@@ -217,7 +217,7 @@ void evseStateChange(eState oldState, eState newState)
 
 void send_usb_timer(Timer *p)
 {
-	// Senden jener Daten, die für die Visualisierungen wichtig sind
+	// Senden jener Daten, die für die Visualisierungen wichtig sind!
 	String data;
 	addValueToString(data, "state", getEVSEState(), true);
 	addValueToString(data, "requestLoading", g_requestLoading);
