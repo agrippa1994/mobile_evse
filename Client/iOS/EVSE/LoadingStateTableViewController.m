@@ -46,7 +46,7 @@
     
     if([key compare:@"state" options:NSCaseInsensitiveSearch] == 0)
     {
-        NSArray *strings = [NSArray arrayWithObjects:@"Keiner",@"Kein Fahrzeug angeschlossen", @"Fahrzeug angeschlossen",
+        NSArray *strings = [NSArray arrayWithObjects:@"Kein Fahrzeug angeschlossen", @"Fahrzeug angeschlossen",
                             @"Ladung aktiv / ohne Lüfter", @"Ladung aktiv / mit Lüfter", @"Kurzschluss oder Fehler",
                             @"Tankstelle nicht verfügbar", nil];
         
