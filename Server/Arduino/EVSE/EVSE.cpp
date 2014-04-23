@@ -178,7 +178,7 @@ void commandHandler(const char *sz)
 				}
 
 				int idx = atoi(param);     
-				if(idx < 0 || idx > 6)
+				if(idx < 0 || idx > 5)
 					return;
 
 				g_stateForceState = idx;

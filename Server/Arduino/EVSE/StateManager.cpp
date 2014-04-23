@@ -60,7 +60,7 @@ void statemanager_update()
 	// Ändern des Statuswertes
 	for(int i=0;i<arraySize(StateVoltage); i++)
 		if(high >= StateVoltage[i] && high <= (StateVoltage[i] + VOLTAGE_DROP_TOLERANCE))
-			g_State = (eState) (i + 1);
+			g_State = (eState) i;
 
 	// Aufruf des Callbacks, falls eine Änderung war    
 	eState newState = g_State;

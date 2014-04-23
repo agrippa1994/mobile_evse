@@ -29,7 +29,7 @@
 
 enum eState
 {
-	state_A = 1,
+	state_A = 0,
 	state_B,
 	state_C,
 	state_D,
