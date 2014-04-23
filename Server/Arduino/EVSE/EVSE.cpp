@@ -115,10 +115,8 @@ void commandHandler(const char *sz)
 
 		int current = 0;
 		if(sscanf(sz, "changecurrent --current %d", &current) == 1)
-		{
 			if(current >= 6 || current <= 18)
 				changeLoadingCurrent(current);
-		}
 
 		return;
 	}
@@ -129,9 +127,7 @@ void commandHandler(const char *sz)
 		{
 			int pwm = 0;
 			if(sscanf(sz, "config --pwm %d", &pwm) == 1)
-			{
 				setPWM(pwm);
-			} 
 
 			return;
 		}
