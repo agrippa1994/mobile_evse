@@ -1,5 +1,6 @@
 #include "EVSE.h"
 #include "Pins.h"
+#include "PWM.h"
 
 void pwm_init()
 {
@@ -13,11 +14,11 @@ void setPWM(int value)
 	if(value < 0 || value > 249)
 		return;
 
-	if(value == 0)
+	if(value == PWM_POS_12V)
 	{
 		digitalWrite(PIN_PWM, LOW);
 	}
-	else if (value == 249)
+	else if (value == PWM_NEG_12V)
 	{
 		digitalWrite(PIN_PWM, HIGH); 
 	}
@@ -61,6 +62,6 @@ void setPWMAmpere(int ampere)
 
 	float dutyForPWM = (dutyCycle * 2.49);
 
-	setPWM((int)dutyForPWM);
+	setPWM(249 - (int)dutyForPWM);
 }
 

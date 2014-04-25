@@ -1,6 +1,9 @@
 #ifndef PWM_H
 #define PWM_H
 
+#define PWM_POS_12V 0
+#define PWM_NEG_12V 249
+
 // Initialisieren der PWM
 void pwm_init();
 

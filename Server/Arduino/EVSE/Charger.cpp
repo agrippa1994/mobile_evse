@@ -49,7 +49,7 @@ void enableCharging(int amps)
 	setPWMAmpere(amps);
 }
 
-// Deaktivierne der PWM
+// Deaktivieren der PWM
 void disableCharging()
 {
 	if(g_isLoading) // Anfrage zum Stoppen
@@ -58,7 +58,7 @@ void disableCharging()
 	}
 
 	// konstante Ausgangsspannung am CP-Ausgang
-	setPWM(249);
+	setPWM(PWM_POS_12V);
 }
 
 // Aktivieren des Relais
