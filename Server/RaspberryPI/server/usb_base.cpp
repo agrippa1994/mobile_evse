@@ -41,7 +41,7 @@ bool usb_base::open()
 #ifdef Q_OS_WIN
             QSettings settings("settings.ini", QSettings::IniFormat);
             std::string device(settings.value("port", "COM1").toString().toStdString());
-#elif
+#else
             std::string device((boost::filesystem::exists("/dev/ttyUSB0")) ? "/dev/ttyUSB0" : "/dev/ttyUSB1");
 #endif
             m_usb.open(device);

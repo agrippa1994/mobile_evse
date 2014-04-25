@@ -46,6 +46,7 @@ linux-rasp-pi-g++
     BOOST_DIR = /usr/local/boost_arm
 }
 
+
 #BOOST_DIR = /usr/local/boost_x64
 BOOST_DIR_LIBS = $$BOOST_DIR/lib/
 
@@ -56,6 +57,14 @@ unix:!macx: LIBS += $$BOOST_DIR_LIBS/libboost_system.a
 unix:!macx: LIBS += -lpthread
 unix:!macx: LIBS += -lrt
 
+win32: LIBS += C:/Qt/Qt5.2.1/Tools/mingw48_32/i686-w64-mingw32/lib/libboost_log-mgw48-mt-1_55.a
+win32: LIBS += C:/Qt/Qt5.2.1/Tools/mingw48_32/i686-w64-mingw32/lib/libboost_log_setup-mgw48-mt-1_55.a
+win32: LIBS += C:/Qt/Qt5.2.1/Tools/mingw48_32/i686-w64-mingw32/lib/libboost_filesystem-mgw48-mt-1_55.a
+win32: LIBS += C:/Qt/Qt5.2.1/Tools/mingw48_32/i686-w64-mingw32/lib/libboost_thread-mgw48-mt-1_55.a
+win32: LIBS += C:/Qt/Qt5.2.1/Tools/mingw48_32/i686-w64-mingw32/lib/libboost_system-mgw48-mt-1_55.a
+win32: LIBS += C:/Qt/Qt5.2.1/Tools/mingw48_32/i686-w64-mingw32/lib/libws2_32.a
+win32: LIBS += C:/Qt/Qt5.2.1/Tools/mingw48_32/i686-w64-mingw32/lib/libmswsock.a
+
 # Boost Ordner
 INCLUDEPATH += $$BOOST_DIR
 
@@ -64,5 +73,8 @@ INCLUDEPATH += $$PWD
 
 #Abhängigkeiten
 DEPENDPATH += $$BOOST_DIR
+
+
+
 
 
