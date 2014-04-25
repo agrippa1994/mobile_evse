@@ -56,6 +56,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if(waitAlertViewForStartActive || waitAlertViewForStopActive)
+        return;
+    
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     
     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -65,14 +68,14 @@
         NSString *state = [[[Client sharedClient] keyAndValues] objectForKey:@"state"];
         if(state != nil)
         {
-            if([state compare:@"2"] == 0) // State B
+            if([state compare:@"1"] == 0) // State B
             {
                 int currents[] = {18, 16, 14, 13, 12, 11, 10, 9, 8};
                 NSUInteger idx = [self.hourPicker selectedRowInComponent:0];
                 [[Client sharedClient] send:[NSString stringWithFormat:@"startloading --current %d", currents[idx]]];
                 
                 NSString *title = @"Info";
-                NSString *message = @"Warte bis die Ladung gestartet wird...";
+                NSString *message = @"Die Ladung wird in einem kurzen Augenblick gestartet...";
                 
                 waitAlertView = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:nil otherButtonTitles:nil, nil];
                 [waitAlertView show];
@@ -110,7 +113,7 @@
     if([key compare:@"state"] == 0)
     {
         NSInteger state = [val integerValue];
-        if(state == 2)
+        if(state == 1)
         {
             self.startLoadingCell.textLabel.textColor = [UIColor greenColor];
             self.startLoadingCell.userInteractionEnabled = YES;
@@ -124,19 +127,16 @@
         switch (state)
         {
             case 0:
-                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Fehler!)";
-                break;
-            case 1:
                 self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kein Fahrzeug angeschlossen)";
                 break;
-            case 2:
+            case 1:
                 self.startLoadingCell.detailTextLabel.text = @"";
                 break;
+            case 2:
             case 3:
-            case 4:
                 self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Ladung aktiv!)";
                 break;
-            case 5:
+            case 4:
                 self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kurzschluss / Spannungsausfall!)";
                 break;
             default:
@@ -146,16 +146,16 @@
         
         if(waitAlertViewForStartActive)
         {
-            if(state != 2)
+            if(state != 1)
             {
                 NSString *title = @"Info";
                 NSString *message = @"";
                 
-                if([val integerValue] < 2)
+                if([val integerValue] < 1)
                     message = @"Fehler beim Starten der Ladung! Fahrzeug wurde abgeschlossen!";
-                if([val integerValue] > 2)
+                if([val integerValue] > 1)
                     message = @"Ladung wurde erfolgreich gestartet!";
-                if([val integerValue] > 4)
+                if([val integerValue] > 3)
                     message = @"Fehler beim Starten der Ladung! Kurzschluss oder nicht bereit!";
                 
                 [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
@@ -168,8 +168,6 @@
         
         if(waitAlertViewForStopActive)
         {
-            if(state != 3 && state != 4)
-            {
                 BOOL isLoading = [((NSString *)[[[Client sharedClient] keyAndValues] objectForKey:@"isLoading"]) compare:@"1"] == 0;
                 
                 if(!isLoading)
@@ -179,12 +177,17 @@
                     
                     switch(state)
                     {
+                        case 0:
+                            message = @"Die Ladung wurde beendet (Fahrzeug direkt abgeschlossen!).";
+                            break;
                         case 1:
-                            message = @"Die Ladung wurde beendet (Fahrzeug direkt abgeschlossen!)";
+                            message = @"Die Ladung wurde erfolgreich beendet.\n"
+                            "Das Fahrzeug kann jetzt abgeschlossen werden!";
                             break;
                         case 2:
-                            message = @"Die Ladung wurde erfolgreich beendet\n"
-                            "Das Fahrzeug kann jetzt abgeschlossen werden!";
+                        case 3:
+                            message = @"Das Fahrzeug hat nicht auf die Stop-Anfrage reagiert!\n"
+                            "Die Tankstelle musste im darauf hin die Ladung unterbrechen!";
                             break;
                         default:
                             message = @"Schwerer Fehler!";
@@ -197,7 +200,6 @@
                     UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
                     [view show];
                 }
-            }
         }
     }
     
