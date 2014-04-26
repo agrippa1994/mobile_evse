@@ -73,13 +73,13 @@
               <string>Intervall: </string>
              </property>
              <property name="minimum">
-              <number>100</number>
+              <number>200</number>
              </property>
              <property name="maximum">
               <number>19999</number>
              </property>
              <property name="value">
-              <number>100</number>
+              <number>200</number>
              </property>
             </widget>
            </item>
@@ -139,7 +139,7 @@
               <string>Stromstärke:</string>
              </property>
              <property name="minimum">
-              <number>5</number>
+              <number>6</number>
              </property>
              <property name="maximum">
               <number>20</number>
@@ -627,6 +627,54 @@
     <hint type="destinationlabel">
      <x>921</x>
      <y>703</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pwmSpinBox</sender>
+   <signal>editingFinished()</signal>
+   <receiver>pwmButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>54</x>
+     <y>395</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>517</x>
+     <y>396</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pwmDial</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>pwmSpinBox</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>142</x>
+     <y>407</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>69</x>
+     <y>386</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pwmSpinBox</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>pwmDial</receiver>
+   <slot>setValue(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>55</x>
+     <y>385</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>125</x>
+     <y>373</y>
     </hint>
    </hints>
   </connection>

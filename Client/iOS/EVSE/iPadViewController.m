@@ -1,11 +1,3 @@
-//
-//  iPadViewController.m
-//  EVSE
-//
-//  Created by Manuel on 22.03.14.
-//  Copyright (c) 2014 Manuel. All rights reserved.
-//
-
 #import "iPadViewController.h"
 
 @interface iPadViewController ()

@@ -1,11 +1,3 @@
-//
-//  StartLoadingTableViewController.m
-//  EVSE
-//
-//  Created by Manuel on 16.03.14.
-//  Copyright (c) 2014 Manuel. All rights reserved.
-//
-
 #import "StartLoadingTableViewController.h"
 
 
@@ -35,6 +27,18 @@
     self.stopLoadingCell.detailTextLabel.text = @"";
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    if(![waitAlertView isHidden])
+        [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
+    
+    waitAlertViewForStartActive = NO;
+    waitAlertViewForStopActive = NO;
+
+    
+    [super viewDidDisappear:animated];
+}
+
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
     return 1;
@@ -42,13 +46,13 @@
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    return 9;
+    return 10;
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component
 {
     NSMutableArray *hours = [NSMutableArray array];
-    for(int i=4; i<=12; i++)
+    for(int i=3; i<=12; i++)
         [hours addObject:[NSString stringWithFormat:@"%d Stunden", i]];
     
     return [hours objectAtIndex:row];
@@ -68,9 +72,9 @@
         NSString *state = [[[Client sharedClient] keyAndValues] objectForKey:@"state"];
         if(state != nil)
         {
-            if([state compare:@"1"] == 0) // State B
+            if([state compare:@"1"] == 0 || [state compare:@"2"] == 0 || [state compare:@"3"] == 0) // State B C D
             {
-                int currents[] = {18, 16, 14, 13, 12, 11, 10, 9, 8};
+                int currents[] = {20, 18, 16, 14, 13, 12, 11, 10, 9, 8};
                 NSUInteger idx = [self.hourPicker selectedRowInComponent:0];
                 [[Client sharedClient] send:[NSString stringWithFormat:@"startloading --current %d", currents[idx]]];
                 
@@ -110,10 +114,12 @@
 
 - (void)client:(Client *)p onKeyAndValue:(NSString *)key value:(NSString *)val
 {
+    BOOL isLoading = [((NSString *)[[[Client sharedClient] keyAndValues] objectForKey:@"isLoading"]) compare:@"1"] == 0;
+    
     if([key compare:@"state"] == 0)
     {
         NSInteger state = [val integerValue];
-        if(state == 1)
+        if((state == 1 || state == 2 || state == 3) && !isLoading)
         {
             self.startLoadingCell.textLabel.textColor = [UIColor greenColor];
             self.startLoadingCell.userInteractionEnabled = YES;
@@ -124,25 +130,29 @@
             self.startLoadingCell.userInteractionEnabled = NO;
         }
         
-        switch (state)
+        if(isLoading)
         {
-            case 0:
-                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kein Fahrzeug angeschlossen)";
-                break;
-            case 1:
-                self.startLoadingCell.detailTextLabel.text = @"";
-                break;
-            case 2:
-            case 3:
-                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Ladung aktiv!)";
-                break;
-            case 4:
-                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kurzschluss / Spannungsausfall!)";
-                break;
-            default:
-                self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Tankstelle nicht vefügbar!)";
-                break;
+            self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich, da ein Fahrzeug bereits geladen wird";
         }
+        else
+        {
+            switch (state)
+            {
+                case 0:
+                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kein Fahrzeug angeschlossen)";
+                    break;
+                case 4:
+                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kurzschluss / Spannungsausfall!)";
+                    break;
+                case 5:
+                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Tankstelle nicht vefügbar!)";
+                    break;
+                default:
+                    self.startLoadingCell.detailTextLabel.text = @"";
+                    break;
+            }
+        }
+        
         
         if(waitAlertViewForStartActive)
         {
@@ -168,38 +178,36 @@
         
         if(waitAlertViewForStopActive)
         {
-                BOOL isLoading = [((NSString *)[[[Client sharedClient] keyAndValues] objectForKey:@"isLoading"]) compare:@"1"] == 0;
+            if(!isLoading)
+            {
+                NSString *title = @"Info";
+                NSString *message = @"";
                 
-                if(!isLoading)
+                switch(state)
                 {
-                    NSString *title = @"Info";
-                    NSString *message = @"";
-                    
-                    switch(state)
-                    {
-                        case 0:
-                            message = @"Die Ladung wurde beendet (Fahrzeug direkt abgeschlossen!).";
-                            break;
-                        case 1:
-                            message = @"Die Ladung wurde erfolgreich beendet.\n"
-                            "Das Fahrzeug kann jetzt abgeschlossen werden!";
-                            break;
-                        case 2:
-                        case 3:
-                            message = @"Das Fahrzeug hat nicht auf die Stop-Anfrage reagiert!\n"
-                            "Die Tankstelle musste im darauf hin die Ladung unterbrechen!";
-                            break;
-                        default:
-                            message = @"Schwerer Fehler!";
-                            break;
-                    }
-                    
-                    [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
-                    waitAlertViewForStopActive = NO;
-                    
-                    UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
-                    [view show];
+                    case 0:
+                        message = @"Die Ladung wurde beendet (Fahrzeug direkt abgeschlossen!).";
+                        break;
+                    case 1:
+                        message = @"Die Ladung wurde erfolgreich beendet.\n"
+                        "Das Fahrzeug kann jetzt abgeschlossen werden!";
+                        break;
+                    case 2:
+                    case 3:
+                        message = @"Das Fahrzeug hat nicht auf die Stop-Anfrage reagiert!\n"
+                        "Die Tankstelle musste im darauf hin die Ladung unterbrechen!";
+                        break;
+                    default:
+                        message = @"Schwerer Fehler!";
+                        break;
                 }
+                
+                [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
+                waitAlertViewForStopActive = NO;
+                
+                UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+                [view show];
+            }
         }
     }
     

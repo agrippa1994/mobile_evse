@@ -73,8 +73,3 @@ INCLUDEPATH += $$PWD
 
 #Abhängigkeiten
 DEPENDPATH += $$BOOST_DIR
-
-
-
-
-

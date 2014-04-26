@@ -88,7 +88,7 @@ void disableRelay()
 // Abändern des Ladestromes
 void changeLoadingCurrent(int amps)
 {
-	if((amps >= 6 || amps <= 18) && isLoading())
+	if((amps >= 6 || amps <= 20) && isLoading())
 	{
 		g_currentLoadingCurrent = amps;
 		setPWMAmpere(amps);

@@ -38,7 +38,7 @@ enum eState
 };
 
 // Callback-Typendefinition
-typedef void (* __stateChange)(eState, eState);
+typedef void (* __stateChange)(eState);
 
 // Initialisieren und Update des State-Managers
 void statemanager_init(__stateChange pFunc);

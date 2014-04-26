@@ -2,10 +2,8 @@
 #define EVSE_H
 
 // Systemweite globale Variablen
-
 extern int g_requestLoading;
 extern int g_requestLoadingCurrent;
-extern int g_requestStopLoading;
 
 extern int g_updateSpeed;
 

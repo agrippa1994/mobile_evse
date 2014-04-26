@@ -1,18 +1,11 @@
-//
-//  NetworkTableViewController.m
-//  EVSE
-//
-//  Created by Manuel on 05.03.14.
-//  Copyright (c) 2014 Manuel. All rights reserved.
-//
-
 #import "NetworkTableViewController.h"
-
 #import <SystemConfiguration/CaptiveNetwork.h>
 
 @interface NetworkTableViewController ()
 
 @property (weak, nonatomic) IBOutlet UITableViewCell *Connect;
+@property (weak, nonatomic) IBOutlet UITableViewCell *ConnectIP;
+@property (weak, nonatomic) IBOutlet UITextField *ipTextField;
 
 - (BOOL) isWlanConnectedToEVSE;
 
@@ -20,6 +13,10 @@
 
 @implementation NetworkTableViewController
 
+- (void)viewDidLoad
+{
+    self.ipTextField.delegate = self;
+}
 
 - (void)viewDidAppear:(BOOL)animated
 {
@@ -34,7 +31,8 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-    
+    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+
     if(cell == self.Connect)
     {
         if(![self isWlanConnectedToEVSE])
@@ -53,8 +51,25 @@
             [[Client sharedClient] connect:@"10.0.10.1" withPort:2425];
         }
     }
+    if(cell == self.ConnectIP)
+    {
+        NSString *ip = [self.ipTextField text];
+        if(![ip length])
+        {
+            NSString *title = @"Fehler";
+            NSString *message = @"Bitte geben Sie eine gültige IP-Adresse an!";
+            
+            UIAlertView *view = [[UIAlertView alloc] initWithTitle:title message:message delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil];
+            
+            [view show];
+        }
+        else
+        {
+            // Verbinden mit dem Server
+            [[Client sharedClient] connect:ip withPort:2425];
+        }
+    }
     
-    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 - (BOOL) isWlanConnectedToEVSE
@@ -92,4 +107,9 @@
     [view show];
 }
 
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [textField resignFirstResponder];
+    return YES;
+}
 @end

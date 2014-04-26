@@ -115,9 +115,9 @@ void EVSEWindow::btn_commandwindow()
     if(sender() == ui->intervalButton)      bSend = sendAndRead(QString().sprintf("config --updatespeed %d", ui->intevalSpinBox->value()));
     else if(sender() == ui->startButton)
     {
-        if(_valKeys["state"] != "1") // State B
+        if(_valKeys["state"] != "1" && _valKeys["state"] != "2" && _valKeys["state"] != "3") // State B C D
         {
-            QString msg = "Die Ladung kann nicht gestartet werden, da kein Fahrzeug angeschlossen ist!";
+            QString msg = "Die Ladung kann nicht gestartet werden, da es der Status nicht zulässt!";
             QMessageBox::warning(this, "Info", msg, "OK");
             return;
         }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C64" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Gge-92-nYS">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="5056" systemVersion="13C1021" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="Gge-92-nYS">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="3733"/>
     </dependencies>
@@ -45,7 +45,7 @@
                                                     <rect key="frame" x="15" y="3" width="39" height="22"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="18"/>
-                                                    <color key="textColor" red="0.0" green="0.50196081400000003" blue="0.25098040700000002" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="textColor" red="0.0" green="0.56078433990478516" blue="0.34509804844856262" alpha="1" colorSpace="deviceRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Kcy-2l-HpP">
@@ -151,7 +151,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Verbinden" footerTitle="Sie müssen sich im Tankstellennetzwerk befinden, um eine Verbindung aufbauen zu können." id="9M8-bg-9U8">
+                            <tableViewSection headerTitle="Verbinden per WLAN" footerTitle="Sie müssen sich im Tankstellennetzwerk befinden, um eine Verbindung aufbauen zu können." id="9M8-bg-9U8">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="y8D-i4-Qye" style="IBUITableViewCellStyleDefault" id="0QF-dQ-O9R">
                                         <rect key="frame" x="0.0" y="55" width="320" height="44"/>
@@ -172,6 +172,49 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
+                            <tableViewSection headerTitle="Verbinden per IP" id="RTh-A3-6xW">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" id="32h-8u-u0I">
+                                        <rect key="frame" x="0.0" y="207" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="32h-8u-u0I" id="oho-uc-Qes">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="IP-Adresse oder  Hostname" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Al6-UJ-Csb">
+                                                    <rect key="frame" x="20" y="7" width="280" height="30"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="URL" returnKeyType="done"/>
+                                                </textField>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="Al6-UJ-Csb" firstAttribute="top" secondItem="oho-uc-Qes" secondAttribute="top" constant="7" id="glp-mL-Gyd"/>
+                                                <constraint firstAttribute="bottom" secondItem="Al6-UJ-Csb" secondAttribute="bottom" constant="6" id="jeL-hJ-f4W"/>
+                                                <constraint firstAttribute="trailing" secondItem="Al6-UJ-Csb" secondAttribute="trailing" constant="20" symbolic="YES" id="oeP-xC-DPJ"/>
+                                                <constraint firstItem="Al6-UJ-Csb" firstAttribute="leading" secondItem="oho-uc-Qes" secondAttribute="leading" constant="20" symbolic="YES" id="t1L-xg-iTp"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="90S-vi-dNN" style="IBUITableViewCellStyleDefault" id="IAm-qG-QJ0">
+                                        <rect key="frame" x="0.0" y="251" width="320" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="IAm-qG-QJ0" id="fjA-YH-lE9">
+                                            <rect key="frame" x="0.0" y="0.0" width="320" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="left" text="Verbinden" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="90S-vi-dNN">
+                                                    <rect key="frame" x="15" y="0.0" width="290" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
                         </sections>
                         <connections>
                             <outlet property="dataSource" destination="Ozs-cg-v3E" id="gzm-oi-UNQ"/>
@@ -180,6 +223,8 @@
                     </tableView>
                     <connections>
                         <outlet property="Connect" destination="0QF-dQ-O9R" id="qsm-lA-6ym"/>
+                        <outlet property="ConnectIP" destination="IAm-qG-QJ0" id="wRJ-Za-bEb"/>
+                        <outlet property="ipTextField" destination="Al6-UJ-Csb" id="b1W-19-Rym"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="CBx-V6-0kb" userLabel="First Responder" sceneMemberID="firstResponder"/>

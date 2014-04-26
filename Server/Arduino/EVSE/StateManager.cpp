@@ -14,17 +14,17 @@ eState g_State = state_F;
 __stateChange g_stateChange = 0;
 
 // Toleranz für das Einlesen der Spannungen
-const int VOLTAGE_DROP_TOLERANCE = 50;
+const int VOLTAGE_DROP_TOLERANCE = 60;
 
 
 // TODO: richtige Werte suchen
 const int StateVoltage[] = 
 {
-	740,	// state_A
-	645, 	// state_B
-	555,	// state_C
-	400,	// state_D
-	360,	// state_E
+	770,	// state_A
+	680, 	// state_B
+	600,	// state_C
+	510,	// state_D
+	420,	// state_E
 	1024	// state_F
 };
 
@@ -65,7 +65,7 @@ void statemanager_update()
 	// Aufruf des Callbacks, falls eine Änderung war    
 	eState newState = g_State;
 	if(newState != oldState && g_stateChange)
-		g_stateChange(oldState, newState);
+		g_stateChange(newState);
 }
 
 // Gibt den aktuellen Status zurück

@@ -4,7 +4,7 @@
 
 double readTemperature()
 {
-	static int readCycles = 5;
+	static int readCycles = 3;
 	int readedValues[readCycles];
 
 	for(int i=0; i<readCycles; i++)

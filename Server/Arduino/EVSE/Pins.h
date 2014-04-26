@@ -4,7 +4,7 @@
 #include <Arduino.h>
 
 // digitale Pins
-const int PIN_RELAY = 13; 	// Zurzeit wird Pin 13 (Led) für das Relais angenommen
+const int PIN_RELAY = 11;
 const int PIN_PWM = 10;		// PWM-Pin (Pin 10)
 
 // analoge Pins

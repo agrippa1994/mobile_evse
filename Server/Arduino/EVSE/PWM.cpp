@@ -59,7 +59,6 @@ void setPWMAmpere(int ampere)
 	float dutyCycle = I / 0.6; // Norm
 
 	// Skalieren auf 0 - 249
-
 	float dutyForPWM = (dutyCycle * 2.49);
 
 	setPWM(249 - (int)dutyForPWM);

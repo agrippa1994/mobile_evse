@@ -17,7 +17,6 @@
 // Definition der globalen Variablen
 int g_requestLoading = 0;
 int g_requestLoadingCurrent = 0;
-int g_requestStopLoading = 0;
 
 int g_updateSpeed = 200;
 
@@ -31,7 +30,7 @@ Timer g_usbTimer;
 
 // Funktionsdeklarationen
 void commandHandler(const char *sz);
-void evseStateChange(eState oldState, eState newState);
+void evseStateChange(eState newState);
 void send_usb_timer(Timer *t);
 
 
@@ -80,16 +79,17 @@ void commandHandler(const char *sz)
 {
 	if(strstr(sz, "startloading --current") != 0)
 	{
-		if(getEVSEState() != state_B)
-			return;
-
 		int current = 0;
 		if(sscanf(sz, "startloading --current %d", &current) == 1)
 		{
+			if(current < 6 || current > 20)
+				return;
+
 			g_requestLoading = 1;
-			g_requestStopLoading = 0; 
 			g_requestLoadingCurrent = current;
+			
 			enableCharging(g_requestLoadingCurrent);
+			evseStateChange(getEVSEState());
 		}
 
 		return;
@@ -115,7 +115,7 @@ void commandHandler(const char *sz)
 
 		int current = 0;
 		if(sscanf(sz, "changecurrent --current %d", &current) == 1)
-			if(current >= 6 || current <= 18)
+			if(current >= 6 || current <= 20)
 				changeLoadingCurrent(current);
 
 		return;
@@ -188,26 +188,40 @@ void commandHandler(const char *sz)
 
 // Callback für den genormten EVSE Status
 // Wird aufgerufen, falls eine Änderung erfolgt
-void evseStateChange(eState oldState, eState newState)
+void evseStateChange(eState newState)
 {
-	if(newState == oldState)
-		return;
-
-	// Ausfuehren aller Sequenzen laut Norm!
-	if( (((oldState == state_C) || (oldState == state_D)) && ((newState == state_A) || (newState == state_B)))
-	||( (newState == state_A || newState == state_E || newState == state_F)))
+	if(newState == state_A)
 	{
 		disableCharging();
 		disableRelay();
-	}
-
-	else if((oldState == state_B) && (newState == state_C || newState == state_D) && g_requestLoading)
-	{
-		enableCharging(g_requestLoadingCurrent);
-		enableRelay();
 
 		g_requestLoading = 0;
 		g_requestLoadingCurrent = 0;
+
+		return;
+	}
+
+	if(newState == state_B)
+	{
+		if(!g_requestLoading)
+			disableCharging();
+		
+		disableRelay();		
+		return;
+	}
+
+	if(newState == state_C || newState == state_D)
+	{
+		if(g_requestLoading)
+			enableRelay();
+
+		return;
+	}
+
+	if(newState == state_E || newState == state_F)
+	{
+		disableRelay();
+		return;
 	}
 }
 
@@ -218,7 +232,6 @@ void send_usb_timer(Timer *p)
 	addValueToString(data, "state", getEVSEState(), true);
 	addValueToString(data, "requestLoading", g_requestLoading);
 	addValueToString(data, "requestLoadingCurrent", g_requestLoadingCurrent);
-	addValueToString(data, "requestStopLoading", g_requestStopLoading);
 	addValueToString(data, "isLoading", isLoading());
 	addValueToString(data, "updateSpeed", g_updateSpeed);
 	addValueToString(data, "PWM", getPWM());

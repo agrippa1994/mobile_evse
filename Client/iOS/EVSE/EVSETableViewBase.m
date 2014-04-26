@@ -1,11 +1,3 @@
-//
-//  EVSETableViewBase.m
-//  EVSE
-//
-//  Created by Mani on 24.03.14.
-//  Copyright (c) 2014 Manuel. All rights reserved.
-//
-
 #import "EVSETableViewBase.h"
 
 @interface EVSETableViewBase ()
