@@ -60,7 +60,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Stoppen der Ladung" footerTitle="Der Stopvorgang kann mehrere Sekunden in Anspruch nehmen!" id="3IR-XH-SMc">
+                            <tableViewSection headerTitle="Stoppen der Ladung" footerTitle="Der Stoppvorgang kann mehrere Sekunden in Anspruch nehmen!" id="3IR-XH-SMc">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="zLm-Jc-uCm" detailTextLabel="roX-51-zbH" style="IBUITableViewCellStyleSubtitle" id="tFk-o8-3yM">
                                         <rect key="frame" x="0.0" y="438" width="768" height="44"/>
@@ -252,7 +252,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                         <sections>
-                            <tableViewSection headerTitle="Verbinden" footerTitle="Sie müssen sich im Tankstellennetzwerk befinden, um eine Verbindung aufbauen zu können." id="d2b-JB-ho4">
+                            <tableViewSection headerTitle="Verbinden per WLAN" footerTitle="Sie müssen sich im Tankstellennetzwerk befinden, um eine Verbindung aufbauen zu können." id="d2b-JB-ho4">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="Epi-nz-aGU" style="IBUITableViewCellStyleDefault" id="Dan-iH-KmA">
                                         <rect key="frame" x="0.0" y="55" width="540" height="44"/>

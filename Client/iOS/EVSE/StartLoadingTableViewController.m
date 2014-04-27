@@ -132,20 +132,20 @@
         
         if(isLoading)
         {
-            self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich, da ein Fahrzeug bereits geladen wird";
+            self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich, da ein Fahrzeug bereits geladen wird!";
         }
         else
         {
             switch (state)
             {
                 case 0:
-                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kein Fahrzeug angeschlossen)";
+                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kein Fahrzeug angeschlossen)!";
                     break;
                 case 4:
-                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kurzschluss / Spannungsausfall!)";
+                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Kurzschluss / Spannungsausfall)!";
                     break;
                 case 5:
-                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Tankstelle nicht vefügbar!)";
+                    self.startLoadingCell.detailTextLabel.text = @"Start nicht möglich (Tankstelle nicht vefügbar)!";
                     break;
                 default:
                     self.startLoadingCell.detailTextLabel.text = @"";
@@ -166,7 +166,7 @@
                 if([val integerValue] > 1)
                     message = @"Ladung wurde erfolgreich gestartet!";
                 if([val integerValue] > 3)
-                    message = @"Fehler beim Starten der Ladung! Kurzschluss oder nicht bereit!";
+                    message = @"Fehler beim Starten der Ladung! Kurzschluss bzw. Tankstelle ist nicht bereit!";
                 
                 [waitAlertView dismissWithClickedButtonIndex:0 animated:YES];
                 waitAlertViewForStartActive = NO;
@@ -186,7 +186,7 @@
                 switch(state)
                 {
                     case 0:
-                        message = @"Die Ladung wurde beendet (Fahrzeug direkt abgeschlossen!).";
+                        message = @"Die Ladung wurde beendet (Fahrzeug direkt abgeschlossen).";
                         break;
                     case 1:
                         message = @"Die Ladung wurde erfolgreich beendet.\n"
@@ -194,8 +194,8 @@
                         break;
                     case 2:
                     case 3:
-                        message = @"Das Fahrzeug hat nicht auf die Stop-Anfrage reagiert!\n"
-                        "Die Tankstelle musste im darauf hin die Ladung unterbrechen!";
+                        message = @"Das Fahrzeug hat nicht auf die Stopp-Anfrage reagiert!\n"
+                        "Die Tankstelle musste darauf hin die Ladung unterbrechen!";
                         break;
                     default:
                         message = @"Schwerer Fehler!";

@@ -60,7 +60,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Stoppen der Ladung" footerTitle="Der Stopvorgang kann mehrere Sekunden in Anspruch nehmen!" id="Sel-9r-hGx">
+                            <tableViewSection headerTitle="Stoppen der Ladung" footerTitle="Der Stoppvorgang kann mehrere Sekunden in Anspruch nehmen!" id="Sel-9r-hGx">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" textLabel="cu6-pY-RpS" detailTextLabel="fhS-hz-0Wv" style="IBUITableViewCellStyleSubtitle" id="fR5-1W-BXX">
                                         <rect key="frame" x="0.0" y="471" width="320" height="44"/>
@@ -435,6 +435,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="lqf-kz-cuy"/>
+        <segue reference="agA-Oi-EIE"/>
     </inferredMetricsTieBreakers>
 </document>

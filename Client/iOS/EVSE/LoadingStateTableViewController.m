@@ -38,11 +38,21 @@
     
     if([key compare:@"state" options:NSCaseInsensitiveSearch] == 0)
     {
-        NSArray *strings = [NSArray arrayWithObjects:@"Kein Fahrzeug angeschlossen", @"Fahrzeug angeschlossen",
-                            @"Ladung aktiv / ohne Lüfter", @"Ladung aktiv / mit Lüfter", @"Kurzschluss oder Fehler",
+        NSMutableArray *strings = [NSMutableArray arrayWithObjects:@"Kein Fahrzeug angeschlossen.", @"Fahrzeug angeschlossen.",
+                            @"Fahrzeug angeschlossen.", @"Fahrzeug angeschlossen.", @"Kurzschluss oder Fehler.",
                             @"Tankstelle nicht verfügbar", nil];
         
+        BOOL isLoading = [((NSString *)[[[Client sharedClient] keyAndValues] objectForKey:@"isLoading"]) compare:@"1"] == 0;
         NSInteger state = [val integerValue];
+        
+        if(isLoading)
+        {
+            if(state == 3) // State C
+                [strings replaceObjectAtIndex:state withObject:@"Ladung aktiv / ohne Lüfter."];
+            if(state == 4) // State D
+                [strings replaceObjectAtIndex:state withObject:@"Ladung aktiv / mit Lüfter."];
+        }
+        
         self.statusCell.detailTextLabel.text = [strings objectAtIndex:state];
     }
     
