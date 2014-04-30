@@ -2,12 +2,15 @@
 #include "Pins.h"
 #include "PWM.h"
 
+//! Initialisieren der Pulsweitenmodulation
 void pwm_init()
 {
 	// Pin 10 wird für die PWM verwendet
 	pinMode(PIN_PWM, OUTPUT);
 }
 
+//! Setzen der Pulsweitenmodulation
+//! @param value Muss ein Wert zwischen 0 und 249 sein. Er gibt das Tastverhältnis der Pulsweitenmodulation an.
 void setPWM(int value)
 {
 	// Value stimmt nicht
@@ -38,17 +41,20 @@ void setPWM(int value)
 	OCR1B = value; 
 }
 
-// Gibt das Tastverhältnis der PWM zurück (0-249)
+//! @return Gibt das aktuelle Tastverhältnis der Pulsweitenmodulation zurück
 int getPWM()
 {
 	return OCR1B; 
 }
 
+//! @return Gibt zurück, ob die Pulsweitenmodulation aktiv / inaktiv ist.
 bool isPWMEnabled()
 {
 	return getPWM() != 0; 
 }
 
+//! Berechnet das Tastverhältnis der Pulsweitenmodulation, für einen bestimmten Ladestrom und setzt danach diese PWM.
+//! @param ampere Strom in A
 void setPWMAmpere(int ampere)
 {
 	if(ampere < 6 || ampere > 51)

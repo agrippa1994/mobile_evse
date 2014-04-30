@@ -4,31 +4,31 @@
 
 #include <Arduino.h>
 
-// Gibt die Größe eines Arrays zurück
+//! Gibt die Größe eines Arrays zurück
 template<typename T, int s> int arraySize(T (&) [s]) { return s; }
 
-// Status
+//! Status
 eState g_State = state_F;
 
-// Callback für Statusänderungen
+//! Callback für Statusänderungen
 __stateChange g_stateChange = 0;
 
-// Toleranz für das Einlesen der Spannungen
+//! Toleranz für das Einlesen der Spannungen
 const int VOLTAGE_DROP_TOLERANCE = 60;
 
-
-// TODO: richtige Werte suchen
+//! Spannungen, welche den Status bestimmen.
 const int StateVoltage[] = 
 {
-	770,	// state_A
-	680, 	// state_B
-	600,	// state_C
-	510,	// state_D
-	420,	// state_E
-	1024	// state_F
+	770,	///< Spannungsabfall für Status A.
+	680, 	///< Spannungsabfall für Status B.
+	600,	///< Spannungsabfall für Status C.
+	510,	///< Spannungsabfall für Status D.
+	420,	///< Spannungsabfall für Status E.
+	1024	///< Spannungsabfall für Status F (kann nie erreicht werden!).
 };
 
-// Liest den Spannungsabfall, bei Force wird der Force-Wert zurückgegeben
+//! Liest den Spannungsabfall, bei Force wird der Force-Wert zurückgegeben
+//! @return Gibt den Spannungsabfall zurück.
 int readVoltageDrop()
 {
 	if(g_stateForce)
@@ -42,13 +42,15 @@ int readVoltageDrop()
 	return high;
 }
 
-// Initialisieren des Status-Managers
+//! Initialisieren des Status-Managers
+//! @param pFunc Funktionszeiger dur einer Callback-Funktion
+//! @see __stateChange()
 void statemanager_init(__stateChange pFunc)
 {
 	g_stateChange = pFunc;
 }
 
-// Update des Status-Managers
+//! Update des Status-Managers
 void statemanager_update()
 {
 	// Sichern des Statuswertes
@@ -68,7 +70,8 @@ void statemanager_update()
 		g_stateChange(newState);
 }
 
-// Gibt den aktuellen Status zurück
+//! @return Gibt den aktuellen Status des Fahrzeuges zurück
+//! @see eState()
 eState getEVSEState()
 {
 	return g_State;

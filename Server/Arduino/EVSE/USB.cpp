@@ -3,12 +3,15 @@
 
 __usbHandler g_pFunc = 0;
 
+//! Wird aufgerufen, falls eine Nachricht von der Visualisierung angekommen ist.
 void usb_onCommand(const char *szStr)
 {
 	if(g_pFunc)
 		g_pFunc(szStr);
 }
 
+//! Initialisieren des USB-Ports
+//! @param pFunc Funktionszeiger zu einer Callback-Funktion
 void usb_init(__usbHandler pFunc)
 {
 	g_pFunc = pFunc;
@@ -18,6 +21,7 @@ void usb_init(__usbHandler pFunc)
 	while(!Serial); 
 }
 
+//! Verarbeiten der eingehenden Bytes vom USB-Port
 void usb_serialEvent()
 {
 	static char szBuffer[256] = {0};
@@ -49,8 +53,7 @@ void usb_serialEvent()
 	} 
 }
 
-// serialEvent() ist der Interrupt-Handler des Serialports
-// Es wird hier verwendet, um Daten direkt beim Empfang zu lesen
+//! Interrupt-Timer des Arduinos auf dem RX-Pin
 void serialEvent()
 {
 	usb_serialEvent();

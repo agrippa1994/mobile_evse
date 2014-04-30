@@ -29,15 +29,15 @@
 
 enum eState
 {
-	state_A = 0,
-	state_B,
-	state_C,
-	state_D,
-	state_E,
-	state_F
+	state_A = 0,	///< Status A des Elektrofahrzeuges
+	state_B,		///< Status B des Elektrofahrzeuges
+	state_C,		///< Status C des Elektrofahrzeuges
+	state_D,		///< Status D des Elektrofahrzeuges
+	state_E,		///< Status E des Elektrofahrzeuges
+	state_F			///< Status F des Elektrofahrzeuges
 };
 
-// Callback-Typendefinition
+//! Callback-Typendefinition für die Statusänderung
 typedef void (* __stateChange)(eState);
 
 // Initialisieren und Update des State-Managers

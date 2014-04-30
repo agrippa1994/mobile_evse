@@ -14,18 +14,27 @@
 #include <string.h>
 #include <stdio.h>
 
-// Definition der globalen Variablen
+// Definition der globalen Variablen.
+
+//! Wird 1, wenn eine Ladung angefordert worden ist.
 int g_requestLoading = 0;
+
+//! Ladestrom, welcher angefragt wurde.
 int g_requestLoadingCurrent = 0;
 
+//! Zeitintervall in ms, welches angibt, in welchem Intervall die Visualisierungsdaten geschickt werden.
 int g_updateSpeed = 200;
 
+//! Gibt an, ob der Status-Code simuliert werden soll.
 int g_stateForce = 0;
+
+//! Status, welcher geforced werden soll.
 int g_stateForceState = 0;
 
+//! Aktueller Ladestrom
 int g_currentLoadingCurrent = 0;
 
-// USB-Timer
+//! USB-Timer, welcher die Daten nach dem Ablaufen des Timers die Daten an die Visualisierung sendet.
 Timer g_usbTimer;
 
 // Funktionsdeklarationen
@@ -34,8 +43,7 @@ void evseStateChange(eState newState);
 void send_usb_timer(Timer *t);
 
 
-// Setup wird beim initialisieren des Programmes aufgerufen
-// Hier werden unter anderem alle Objekte initialisiert, aber nicht konstruiert
+//! Initialisieren aller Komponenten, die für das Ladecontrollerprogramm wichtig sind.
 void setup()
 {
 	// Initialisieren der Pulsweitenmodulation
@@ -54,7 +62,7 @@ void setup()
 	g_usbTimer.start(g_updateSpeed, send_usb_timer, true);
 }
 
-// loop() wird in einer for(;;) - Schleife unendlich lange aufgerufen
+//! Aktualisieren aller Komponenten.
 void loop()
 {
 	// Updaten des Statusmanagers und Ladecontroller
@@ -65,16 +73,7 @@ void loop()
 	g_usbTimer.update();  
 }
 
-// Verarbeiten der Befehle, welche per USB empfangen werden
-// Mögliche Befehle
-// 		startloading --current [STROM]
-// 		stoploading
-// 		changecurrent --current [STROM]
-//   	config --pwm [PWM]
-//   	config --digitalWrite [PIN] --value [0/1]
-//   	config --updatespeed [SPEED in ms]
-//   	config --force [Index nach eState]
-//   	config --force disable
+//! Verarbeiten der Befehle, welche per USB empfangen werden.
 void commandHandler(const char *sz)
 {
 	if(strstr(sz, "startloading --current") != 0)
@@ -186,8 +185,7 @@ void commandHandler(const char *sz)
 	}
 }
 
-// Callback für den genormten EVSE Status
-// Wird aufgerufen, falls eine Änderung erfolgt
+//! Verarbeiten aller Status-Codes nach Norm.
 void evseStateChange(eState newState)
 {
 	if(newState == state_A)
@@ -225,6 +223,7 @@ void evseStateChange(eState newState)
 	}
 }
 
+//! Senden der Daten, welche für die Visualisierung relevant sind.
 void send_usb_timer(Timer *p)
 {
 	// Senden jener Daten, die für die Visualisierungen wichtig sind!

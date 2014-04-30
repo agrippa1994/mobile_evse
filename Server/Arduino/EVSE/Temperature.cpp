@@ -2,6 +2,8 @@
 #include "Temperature.h"
 #include "Pins.h"
 
+//! Berechnet die aktuelle Temperatur im Gehäuse.
+//! @return Gibt die Temperatur in °C zurück.
 double readTemperature()
 {
 	static int readCycles = 3;

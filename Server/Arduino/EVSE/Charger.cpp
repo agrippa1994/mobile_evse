@@ -5,17 +5,19 @@
 #include "EVSE.h"
 #include "StateManager.h"
 
-// aktuelle Ladezeit in ms
+//! aktuelle Ladezeit in ms.
 unsigned long g_chargingTime = 0;
 
-// Ladeinidikator
+//! Ladeinidikator.
 bool g_isLoading = false;
 
-// Timer, welcher zum Stoppen der Ladung verwendet wird
+//! Timer, welcher zum Stoppen der Ladung verwendet wird.
 Timer g_stopTimer;
 
 
-// Timer-Callback welcher aufgerufen wird, falls die Ladung deaktiviert wird
+
+//! Timer-Callback welcher aufgerufen wird, falls die Ladung deaktiviert wird.
+//! @param t Timer-Pointer zum Objekt, welches den Callback ausgelöst hat.
 void charger_stopChargingHandler(Timer *t)
 {
 	eState state = getEVSEState();
@@ -25,7 +27,7 @@ void charger_stopChargingHandler(Timer *t)
 	disableRelay();
 }
 
-// Initialisieren des Ladecontrollers
+//! Initialisieren des Ladecontrollers
 void charger_init()
 {
 	pinMode(PIN_RELAY,OUTPUT);
@@ -37,19 +39,21 @@ void charger_init()
 	g_chargingTime = 0;
 }
 
-// Updatedes Ladecontrollers
+//! Updatedes Ladecontrollers
 void charger_update()
 {
 	g_stopTimer.update();  
 }
 
-// Aktivieren der PWM
+//! Aktivieren der Ladung, indem eine Pulsweitenmodulation gestartet wird.
+//! @param amps Angabe der Ampere, mit der das Fahrzeug geladen werden soll.
 void enableCharging(int amps)
 {
 	setPWMAmpere(amps);
 }
 
-// Deaktivieren der PWM
+//! Beenden der Ladung, indem die Pulsweitenmodulation beendet wird. Reagiert das Fahrzeug nicht auf die Stopanfrage,
+//! dann wird die Ladung automatisch nach 4 Sekunden beendet. @see charger_stopChargingHandler()
 void disableCharging()
 {
 	if(g_isLoading) // Anfrage zum Stoppen
@@ -61,7 +65,7 @@ void disableCharging()
 	setPWM(PWM_POS_12V);
 }
 
-// Aktivieren des Relais
+//! Aktivieren des Relais
 void enableRelay()
 {
 	g_stopTimer.stop();
@@ -73,7 +77,7 @@ void enableRelay()
 	digitalWrite(PIN_RELAY, HIGH);
 }
 
-// Deaktivieren des Relais
+//! Deaktivieren des Relais
 void disableRelay()
 {
 	// Stoppen des Timers
@@ -85,7 +89,8 @@ void disableRelay()
 	digitalWrite(PIN_RELAY, LOW);
 }
 
-// Abändern des Ladestromes
+//! Abändern des Ladestromes
+//! @param amps Ladestrom in Ampere
 void changeLoadingCurrent(int amps)
 {
 	if((amps >= 6 || amps <= 20) && isLoading())
@@ -95,7 +100,8 @@ void changeLoadingCurrent(int amps)
 	}		
 }
 
-// Aktuelle Ladezeit
+//! Aktuelle Ladezeit.
+//! @return Gibt die aktuelle Ladezeit in ms zurück.
 unsigned long chargingTime()
 {
 	if(!g_isLoading)
@@ -104,7 +110,8 @@ unsigned long chargingTime()
 	return millis() - g_chargingTime;
 }
 
-// Ist Ladung aktiv?
+//! Ist die Ladung aktiv?
+//! @return Gibt zurück, ob die Ladung aktiv ist oder nicht.
 bool isLoading()
 {
 	return g_isLoading;

@@ -4,11 +4,11 @@
 #include <Arduino.h>
 
 // digitale Pins
-const int PIN_RELAY = 11;
-const int PIN_PWM = 10;		// PWM-Pin (Pin 10)
+const int PIN_RELAY = 11; 	///< Globale Definition des Relais-Pin
+const int PIN_PWM = 10;		///< PWM-Pin
 
 // analoge Pins
-const int PIN_CP_VOLTAGE_DROP = A0;	// Spannungsabfall CP-Kreis
-const int PIN_TEMPERATURE = A1;		// Spannungsabfall Temperatur
+const int PIN_CP_VOLTAGE_DROP = A0;	///< Analoger Pin, welcher den Spannungsabfall am CP-Kreis misst.
+const int PIN_TEMPERATURE = A1;		///< Analoger Pin, welcher Spannungsabfall am Temperatursensor misst.
 
 #endif
